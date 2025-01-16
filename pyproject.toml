@@ -1,0 +1,26 @@
+[tool.poetry]
+name = "trustifai"
+version = "0.1.0"
+description = ""
+authors = ["Sergey Redyuk <sergred@gmail.com>"]
+license = "Apache-2.0 license"
+readme = "README.md"
+packages = [{ include = "trustifai" }]
+
+[tool.poetry.dependencies]
+python = "^3.12,<3.13"
+lark = "^1.2.2"
+pipe = "^2.2"
+tqdm = "^4.67.1"
+yacman = "^0.9.3"
+neo4j = "^5.27.0"
+python-box = "^7.2.0"
+jupyter = "^1.1.1"
+pandas = "^2.2.3"
+numpy = "^2.2.1"
+pendulum = "^3.0.0"
+networkx = "^3.4.2"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
