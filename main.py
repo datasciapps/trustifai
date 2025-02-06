@@ -5,6 +5,8 @@ from lark import Lark, Tree
 from box import Box
 import difflib
 import asyncio
+import sys
+import inquirer
 
 from api.kg import Query, execute_query, queries, actions, from_camel, to_camel
 from api.events import Event, emit
@@ -59,19 +61,43 @@ async def debug(pipeline: Pipeline) -> None:
         },
         'tasks': list((await execute_query(queries['get tasks']))[0].get('nodes', []) | select(lambda n: from_camel(n['label']))),
     })
+
     emit(Event('OperatorsExtracted', {'operators': list(state.pipeline.steps)}))
 
     to_check, tasks = [], []
+
     for step in state.pipeline.steps:
-        # TODO: try to find the exact match first
-        # TODO: feedback loop to confirm match
-        matches = approx_match(step, state.tasks)
-        operator = matches[0]
+        approxmatches = None
+        exactmatch = None
+        answers = None
+        operator = None
+
+        #find the exact match first
+        exactmatch = exact_match(step, state.tasks)
+        if exactmatch != False and exactmatch is not None:
+            operator = exactmatch.lower()
+
+        else:
+            approxmatches = approx_match(step, state.tasks)
+
+            #list all the matches and ask the user to select the correct one
+            if not approxmatches:
+                emit(Event('No matches found', {'task': step}))
+            else:
+                #list the matches and ask the user to select the correct one
+                questions = [inquirer.List('task', message="Approximate matches found for step {}, please select the best option".format(step), choices=approxmatches + ["None of the above"])]
+                answers = inquirer.prompt(questions)
+        
+            operator = answers['task']
+            if operator == "None of the above":
+                emit(Event('TaskNotFound', {'task': step}))
+
         paths = cleanup((await execute_query(queries['get pathways'](operator, 'data_science_task'))), 'path')
         paths = [l.split(':') for l in set(":".join(el) for el in paths)]
         if paths:
             emit(Event('TaskRecognized', {'task': step, 'paths': paths}))
             tasks.append(operator)
+            print(tasks)
             to_check.extend(paths)
     
     emit(Event('TasksIdentified', {'tasks': tasks}))
@@ -97,6 +123,7 @@ async def debug(pipeline: Pipeline) -> None:
 async def main():
     return await debug(pipeline('DataLoading(path="data/test.csv") > TrainTestSplit(test_size=.2, random_state=42) > MinMaxScaler > OneHotEncoder > SVM'))
 
-
+def checkData():
+    pass
 if __name__ == "__main__":
     asyncio.run(main())

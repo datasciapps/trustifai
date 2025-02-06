@@ -164,3 +164,4 @@ cython_debug/
 poetry.lock
 data/
 config.yaml
+trustifaienv
