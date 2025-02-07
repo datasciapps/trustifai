@@ -7,9 +7,11 @@ import difflib
 import asyncio
 import sys
 import inquirer
-
+import pandas as pd
 from api.kg import Query, execute_query, queries, actions, from_camel, to_camel
 from api.events import Event, emit
+from time import sleep
+from termcolor import colored
 
 
 @dataclass
@@ -19,7 +21,7 @@ class Pipeline:
 
 
 lower = lambda ll: [l.lower() for l in ll]
-approx_match = lambda token, options: difflib.get_close_matches(token.lower(), lower(options), n=3, cutoff=0.2)
+approx_match = lambda token, options: difflib.get_close_matches(token.lower(), lower(options), n=5, cutoff=0.2)
 exact_match = lambda token, options: token if token.lower() in lower(options) else False
 cleanup = lambda obj, key: [[el['label'] if isinstance(el, dict) else el for el in path[key]] for path in obj]
 
@@ -85,7 +87,7 @@ async def debug(pipeline: Pipeline) -> None:
                 emit(Event('No matches found', {'task': step}))
             else:
                 #list the matches and ask the user to select the correct one
-                questions = [inquirer.List('task', message="Approximate matches found for step {}, please select the best option".format(step), choices=approxmatches + ["None of the above"])]
+                questions = [inquirer.List('task', message=colored("Approximate matches found for step {}, please select the best option".format(step), "magenta"), choices=approxmatches + ["None of the above"])]
                 answers = inquirer.prompt(questions)
         
             operator = answers['task']
@@ -123,7 +125,38 @@ async def debug(pipeline: Pipeline) -> None:
 async def main():
     return await debug(pipeline('DataLoading(path="data/test.csv") > TrainTestSplit(test_size=.2, random_state=42) > MinMaxScaler > OneHotEncoder > SVM'))
 
-def checkData():
-    pass
+async def checkData():
+    #load the dataset without the index column
+    #TODO: the protected features need to be in the knowledge base. For now, we will use the attributes of a person as a placeholder
+    data = pd.read_csv('credit.csv', index_col=0)
+    emit(Event('DataLoaded', {'data': data}))
+    sleep(2)
+    emit(Event('FeaturesNamesExtracted', {'features': list(data.columns)}))
+    sleep(2)
+    state = list((await execute_query(queries['get attributes of a person'])))#[0].get('nodes', []) | select(lambda n: from_camel(n['label'])))
+    attributes = [from_camel(n['nodes']['label']) for n in state]
+    features = list(data.columns)
+    protectedFeatures = []
+
+    for feature in features:
+        exactmatch = exact_match(feature, attributes)
+        if exactmatch != False and exactmatch is not None:
+            protectedFeature = exactmatch.lower()
+            protectedFeatures.append(protectedFeature)
+        else:
+            approxmatches = approx_match(feature, attributes)
+            if not approxmatches:
+                emit(Event('No matches found', {'task': feature}))
+            else:
+                questions = [inquirer.List('task', message=colored("Approximate matches found for feature {}, please select the best option".format(feature), "magenta"), choices=approxmatches + ["Not a protected feature"])]
+                answers = inquirer.prompt(questions)
+            protectedFeature = answers['task']
+            if protectedFeature != "Not a protected feature":
+                protectedFeatures.append(protectedFeature)
+            else:
+                emit(Event('NotAProtectedFeature', {'feature': feature}))
+    emit(Event('ProtectedFeaturesIdentified', {'features': protectedFeatures}))
+    
 if __name__ == "__main__":
+    asyncio.run(checkData())
     asyncio.run(main())

@@ -35,7 +35,10 @@ queries = {
             RETURN nodes, relationships', 
             {} ) YIELD value 
             RETURN value.nodes AS nodes, value.relationships AS relationships
-        """, parameters={'label': 'data_science_task'}),    
+        """, parameters={'label': 'data_science_task'}),   
+        #TODO: recursively scan for all the children of the data_science_task node 
+        #TODO: given two nodes return all the pathways between these two nodes
+
     'get requirements': Query("""
             CALL apoc.cypher.run( 
             'MATCH (p:' + $label + ')
@@ -109,6 +112,15 @@ queries = {
             'source': source,
             'destination': destination
         }),
+
+    'get attributes of a person': Query("""
+    CALL apoc.cypher.run(
+        'MATCH (n)-[r: `is_attribute_of`]->(p:`person`)
+         RETURN n
+        ', {}
+    ) YIELD value
+    RETURN value.n AS nodes
+""", parameters={}),
         # CALL apoc.cypher.run(
         #     'MATCH (n:' + $label + ')
         #     CALL apoc.path.expand( n, null, null, 0, $depth )

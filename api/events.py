@@ -3,6 +3,7 @@ from collections import defaultdict
 from dataclasses import dataclass, field
 from typing import Dict, Any, Sequence
 import asyncio
+from termcolor import colored
 
 
 @dataclass
@@ -12,7 +13,7 @@ class Event:
 
 
 def verbose(event: Event):
-    print(f'{event.type:<30}{event.data}')
+    print(colored(f'{event.type:<30}', "green") + f'{event.data}' + "\n")
 
 
 handlers = defaultdict(lambda: [verbose])

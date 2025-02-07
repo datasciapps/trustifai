@@ -17,8 +17,8 @@ async def populate(ontology):
     Assumes that the database is already empty. 
     If not, you can clear it by calling `delete_neo4j_database` first.
     """
-    async with AsyncGraphDatabase.driver(config.neo4j.uri, auth=(config.neo4j.username, config.neo4j.password)) as driver:
-        async with driver.session(database=config.neo4j.dbname) as session:
+    async with AsyncGraphDatabase.driver(config.knowledgeBase.uri, auth=(config.knowledgeBase.username, config.knowledgeBase.password)) as driver:
+        async with driver.session(database=config.knowledgeBase.dbname) as session:
             try:
                 tx = await session.begin_transaction()
                 await tx.run("MATCH (n) DETACH DELETE n")
