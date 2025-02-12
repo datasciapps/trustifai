@@ -30,12 +30,14 @@ queries = {
         }), 
     'get tasks': Query("""
             CALL apoc.cypher.run( 
-            'MATCH (p:' + $label + ')
+            'MATCH (p:`' +$label+ '`)
             CALL apoc.path.subgraphAll(p, {maxLevel: -1}) YIELD nodes, relationships 
             RETURN nodes, relationships', 
-            {} ) YIELD value 
+            {label: $label} ) YIELD value 
             RETURN value.nodes AS nodes, value.relationships AS relationships
-        """, parameters={'label': 'data_science_task'}),   
+        """, parameters={'label': 'Data Science Task'}),   
+
+
         #TODO: recursively scan for all the children of the data_science_task node 
         #TODO: given two nodes return all the pathways between these two nodes
 
@@ -47,6 +49,8 @@ queries = {
             {} ) YIELD value 
             RETURN value.nodes AS nodes, value.relationships AS relationships
         """, parameters={'label': 'requirement'}),
+
+
     'get operators': lambda parent: Query("""
             CALL apoc.cypher.run( 'MATCH (n:' + $label + ')
             CALL apoc.path.expand( n, null, null, 0, $depth )
@@ -54,6 +58,8 @@ queries = {
             UNWIND rels AS rel RETURN connected.label AS connected_node, type(rel) AS edge_name', {depth: $depth} )
             YIELD value RETURN value.connected_node AS connected_node, value.edge_name AS edge_name
         """, parameters={'label': parent, 'depth': 1}),
+
+
     'get threat': lambda operator: Query("""
             CALL apoc.cypher.run( 
                 'MATCH (start {label: $start_node}), (end {label: $end_node}) 
@@ -68,8 +74,12 @@ queries = {
             ) YIELD value 
             RETURN value.is_connected AS is_connected 
         """, parameters={'label': operator}),
+
+
     'get action': lambda threat: Query("""
         """, parameters={'label': threat}),
+
+
     'delete node': Query("""
         MATCH p=(:`test_source`)-[]->() DETACH DELETE p ;
     """,
@@ -99,10 +109,10 @@ queries = {
             'page_number': page,
         }
     ),
-    'get pathways': lambda source, destination: Query("""
+    'get undirected pathways': lambda source, destination: Query("""
         CALL apoc.cypher.run(
         '
-        MATCH p = (start {label: $source})-[*]->(end {label: $destination})
+        MATCH p = (start {label: $source})-[*1..5]-(end {label: $destination})
         RETURN p
         ',
         {source: $source, destination: $destination}
@@ -115,11 +125,10 @@ queries = {
 
     'get attributes of a person': Query("""
     CALL apoc.cypher.run(
-        'MATCH (n)-[r: `is_attribute_of`]->(p:`person`)
-         RETURN n
-        ', {}
+    "MATCH (n)-[:attributes_to]->(p:Person) RETURN n",
+    {}
     ) YIELD value
-    RETURN value.n AS nodes
+    RETURN value.n as nodes;
 """, parameters={}),
         # CALL apoc.cypher.run(
         #     'MATCH (n:' + $label + ')
@@ -158,9 +167,11 @@ actions = {
 
 
 async def execute_query(query: Query):
-    async with AsyncGraphDatabase.driver(config.neo4j.uri, auth=(config.neo4j.username, config.neo4j.password)) as driver:
-        async with driver.session(database=config.neo4j.dbname) as session:
+    async with AsyncGraphDatabase.driver(config.local.uri, auth=(config.local.username, config.local.password)) as driver:
+        async with driver.session(database=config.local.dbname) as session:
             try:
+                print("QUERY BODYA AND PARAMETERS")
+                print(query.body, query.parameters)
                 result = await session.run(query.body, query.parameters)
                 records = []
                 async for record in result:

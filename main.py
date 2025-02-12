@@ -134,7 +134,9 @@ async def checkData():
     emit(Event('FeaturesNamesExtracted', {'features': list(data.columns)}))
     sleep(2)
     state = list((await execute_query(queries['get attributes of a person'])))#[0].get('nodes', []) | select(lambda n: from_camel(n['label'])))
+    print(state)
     attributes = [from_camel(n['nodes']['label']) for n in state]
+    print("ATTRIBUTES: ", attributes)
     features = list(data.columns)
     protectedFeatures = []
 
@@ -156,7 +158,13 @@ async def checkData():
             else:
                 emit(Event('NotAProtectedFeature', {'feature': feature}))
     emit(Event('ProtectedFeaturesIdentified', {'features': protectedFeatures}))
+
+
+async def getPathways():
+    path =  await execute_query(queries['get undirected pathways']('Data Science Task', 'Bias'))
+    print(path)
     
 if __name__ == "__main__":
-    asyncio.run(checkData())
-    asyncio.run(main())
+    asyncio.run(getPathways())
+    #asyncio.run(checkData())
+    #asyncio.run(main())

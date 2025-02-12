@@ -28,7 +28,13 @@ async def populate(ontology):
                 #             """
                 # )
                 for n in ontology.nodes:
-                    await tx.run("CREATE (n:Node {name: $name})", name=n.type)
+                    await tx.run("CREATE (n:Node {name: $name, label: $name})", name=n.type)
+                    await tx.run("""
+                                    MATCH (n:Node)
+                                    WHERE n.name IS NOT NULL
+                                    CALL apoc.create.addLabels(n, [n.name]) YIELD node
+                                    RETURN node
+                                """)
 
                 for e in ontology.edges:
                     if e.type == 'hasname': continue
@@ -222,24 +228,24 @@ Equality is dimension of Fairness
 Equity is dimension of Fairness
 
 #Measures of fairness
-Fairness Measure is a Measure
-Demographic Parity is a Fairness Measure
+Fairness is a Measure
+Demographic Parity contributes to Fairness
 Statistical Parity is synonym of Demographic Parity
-Equalized odds is a Fairness Measure
-Equal Opportunity is a Fairness Measure
-Predictive Parity is a Fairness Measure
-Error-Rate Parity is a Fairness Measure
-Accuracy Parity is a Fairness Measure
-Individual Fairness is a Fairness Measure
+Equalized odds contributes to Fairness
+Equal Opportunity contributes to Fairness
+Predictive Parity contributes to Fairness
+Error-Rate Parity contributes to Fairness
+Accuracy Parity contributes to Fairness
+Individual Fairness contributes to Fairness
 Distance-based Fairness is synonym of Individual Fairness
-Counterfactual Fairness is a Fairness Measure
-Causal Fairness is a Fairness Measure
-Calibration Fairness is a Fairness Measure
-Ranking Fairness is a Fairness Measure
-Equal mis-opportunity is a Fairness Measure
+Counterfactual Fairness contributes to Fairness
+Causal Fairness contributes to Fairness
+Calibration Fairness contributes to Fairness
+Ranking Fairness contributes to Fairness
+Equal mis-opportunity contributes to Fairness
 Predictive Equality is synonym of Equal mis-opportunity
-Balanced Group is a Fairness Measure
-Average odds is a Fairness Measure
+Balanced Group contributes to Fairness
+Average odds contributes to Fairness
 
 #Metrics of Fairness
 
