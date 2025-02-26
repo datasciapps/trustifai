@@ -1,0 +1,4850 @@
+Module: aif360.algorithms
+-------------------------
+Interface: Transformer
+  Inherits from: abc.ApplyDecorator
+  Attributes:
+    - _abc_impl
+  Methods:
+    - fit (self, dataset)
+    - fit_predict (self, dataset)
+    - fit_transform (self, dataset)
+    - predict (self, dataset)
+    - transform (self, dataset)
+
+========================================
+
+Module: aif360.algorithms.inprocessing
+--------------------------------------
+Class: ARTClassifier
+  Inherits from: aif360.algorithms.transformer.Transformer
+  Attributes:
+    - _abc_impl
+  Methods:
+    - fit (self, dataset, batch_size=128, nb_epochs=20)
+    - fit_predict (self, dataset)
+    - fit_transform (self, dataset)
+    - predict (self, dataset, logits=False)
+    - transform (self, dataset)
+
+Class: AdversarialDebiasing
+  Inherits from: aif360.algorithms.transformer.Transformer
+  Attributes:
+    - _abc_impl
+  Methods:
+    - _adversary_model (self, pred_logits, true_labels)
+    - _classifier_model (self, features, features_dim, keep_prob)
+    - fit (self, dataset)
+    - fit_predict (self, dataset)
+    - fit_transform (self, dataset)
+    - predict (self, dataset)
+    - transform (self, dataset)
+
+Class: ExponentiatedGradientReduction
+  Inherits from: aif360.algorithms.transformer.Transformer
+  Attributes:
+    - _abc_impl
+  Methods:
+    - fit (self, dataset)
+    - fit_predict (self, dataset)
+    - fit_transform (self, dataset)
+    - predict (self, dataset)
+    - transform (self, dataset)
+
+Class: GerryFairClassifier
+  Inherits from: aif360.algorithms.transformer.Transformer
+  Attributes:
+    - _abc_impl
+  Methods:
+    - fit (self, dataset, early_termination=True)
+    - fit_predict (self, dataset)
+    - fit_transform (self, dataset)
+    - generate_heatmap (self, dataset, predictions, vmin=None, vmax=None, cols_index=[0, 1], eta=0.1)
+    - pareto (self, dataset, gamma_list)
+    - predict (self, dataset, threshold=0.5)
+    - print_outputs (self, iteration, error, group)
+    - save_heatmap (self, iteration, dataset, predictions, vmin, vmax)
+    - transform (self, dataset)
+
+Class: GridSearchReduction
+  Inherits from: aif360.algorithms.transformer.Transformer
+  Attributes:
+    - _abc_impl
+  Methods:
+    - fit (self, dataset)
+    - fit_predict (self, dataset)
+    - fit_transform (self, dataset)
+    - predict (self, dataset)
+    - transform (self, dataset)
+
+Class: MetaFairClassifier
+  Inherits from: aif360.algorithms.transformer.Transformer
+  Attributes:
+    - _abc_impl
+  Methods:
+    - fit (self, dataset)
+    - fit_predict (self, dataset)
+    - fit_transform (self, dataset)
+    - predict (self, dataset)
+    - transform (self, dataset)
+
+Class: PrejudiceRemover
+  Inherits from: aif360.algorithms.transformer.Transformer
+  Attributes:
+    - _abc_impl
+  Methods:
+    - _create_file_in_kamishima_format (self, df, class_attr, positive_class_val, sensitive_attrs, single_sensitive, privileged_vals)
+    - fit (self, dataset)
+    - fit_predict (self, dataset)
+    - fit_transform (self, dataset)
+    - predict (self, dataset)
+    - transform (self, dataset)
+
+========================================
+
+Module: aif360.algorithms.inprocessing.adversarial_debiasing
+------------------------------------------------------------
+Class: AdversarialDebiasing
+  Inherits from: aif360.algorithms.transformer.Transformer
+  Attributes:
+    - _abc_impl
+  Methods:
+    - _adversary_model (self, pred_logits, true_labels)
+    - _classifier_model (self, features, features_dim, keep_prob)
+    - fit (self, dataset)
+    - fit_predict (self, dataset)
+    - fit_transform (self, dataset)
+    - predict (self, dataset)
+    - transform (self, dataset)
+
+Interface: Transformer
+  Inherits from: abc.ApplyDecorator
+  Attributes:
+    - _abc_impl
+  Methods:
+    - fit (self, dataset)
+    - fit_predict (self, dataset)
+    - fit_transform (self, dataset)
+    - predict (self, dataset)
+    - transform (self, dataset)
+
+========================================
+
+Module: aif360.algorithms.inprocessing.art_classifier
+-----------------------------------------------------
+Class: ARTClassifier
+  Inherits from: aif360.algorithms.transformer.Transformer
+  Attributes:
+    - _abc_impl
+  Methods:
+    - fit (self, dataset, batch_size=128, nb_epochs=20)
+    - fit_predict (self, dataset)
+    - fit_transform (self, dataset)
+    - predict (self, dataset, logits=False)
+    - transform (self, dataset)
+
+Class: BinaryLabelDataset
+  Inherits from: aif360.datasets.structured_dataset.StructuredDataset
+  Attributes:
+    - _abc_impl
+  Methods:
+    - _de_dummy_code_df (df, sep='=', set_category=False)
+    - _parse_feature_names (feature_names, sep='=')
+    - align_datasets (self, other)
+    - convert_to_dataframe (self, de_dummy_code=False, sep='=', set_category=True)
+    - copy (self, deepcopy=False)
+    - export_dataset (self, export_metadata=False)
+    - import_dataset (self, import_metadata=False)
+    - split (self, num_or_size_splits, shuffle=False, seed=None)
+    - subset (self, indexes)
+    - temporarily_ignore (self, *fields)
+    - validate_dataset (self)
+
+Interface: Transformer
+  Inherits from: abc.ApplyDecorator
+  Attributes:
+    - _abc_impl
+  Methods:
+    - fit (self, dataset)
+    - fit_predict (self, dataset)
+    - fit_transform (self, dataset)
+    - predict (self, dataset)
+    - transform (self, dataset)
+
+========================================
+
+Module: aif360.algorithms.inprocessing.celisMeta
+------------------------------------------------
+Class: FalseDiscovery
+  Inherits from: aif360.algorithms.inprocessing.celisMeta.General.General
+  Attributes:
+    - _abc_impl
+    - num_params
+  Methods:
+    - gamma (self, y_true, y_pred, sens)
+    - getExpectedGrad (self, dist, a, b, params, samples, mu, z_prior)
+    - getFuncValue (self, dist, a, b, params, samples, z_prior)
+    - getModel (self, tau, X, y, sens, random_state=None)
+    - getValueForX (self, dist, a, b, params, z_prior, x, return_probs=False)
+    - gradientDescent (self, dist, a, b, samples, z_prior)
+    - init_params (self, i)
+    - prob (self, dist, x)
+    - range (self, eps, tau)
+
+Class: StatisticalRate
+  Inherits from: aif360.algorithms.inprocessing.celisMeta.General.General
+  Attributes:
+    - _abc_impl
+    - num_params
+  Methods:
+    - gamma (self, y_true, y_pred, sens)
+    - getExpectedGrad (self, dist, a, b, params, samples, mu, z_prior)
+    - getFuncValue (self, dist, a, b, params, samples, z_prior)
+    - getModel (self, tau, X, y, sens, random_state=None)
+    - getValueForX (self, dist, a, b, params, z_prior, x, return_cs=False)
+    - gradientDescent (self, dist, a, b, samples, z_prior)
+    - init_params (self, i)
+    - prob (self, dist, x)
+    - range (self, eps, tau)
+
+========================================
+
+Module: aif360.algorithms.inprocessing.celisMeta.FalseDiscovery
+---------------------------------------------------------------
+Class: FalseDiscovery
+  Inherits from: aif360.algorithms.inprocessing.celisMeta.General.General
+  Attributes:
+    - _abc_impl
+    - num_params
+  Methods:
+    - gamma (self, y_true, y_pred, sens)
+    - getExpectedGrad (self, dist, a, b, params, samples, mu, z_prior)
+    - getFuncValue (self, dist, a, b, params, samples, z_prior)
+    - getModel (self, tau, X, y, sens, random_state=None)
+    - getValueForX (self, dist, a, b, params, z_prior, x, return_probs=False)
+    - gradientDescent (self, dist, a, b, samples, z_prior)
+    - init_params (self, i)
+    - prob (self, dist, x)
+    - range (self, eps, tau)
+
+Interface: General
+  Inherits from: abc.ABC
+  Attributes:
+    - _abc_impl
+    - num_params
+  Methods:
+    - gamma (self, y_true, y_pred, sens)
+    - getExpectedGrad (self, dist, a, b, params, samples, mu, z_prior)
+    - getFuncValue (self, dist, a, b, params, samples, z_prior)
+    - getModel (self, tau, X, y, sens, random_state=None)
+    - getValueForX (self, dist, a, b, params, z_prior, x)
+    - gradientDescent (self, dist, a, b, samples, z_prior)
+    - init_params (self, i)
+    - prob (self, dist, x)
+    - range (self, eps, tau)
+
+========================================
+
+Module: aif360.algorithms.inprocessing.celisMeta.General
+--------------------------------------------------------
+Interface: General
+  Inherits from: abc.ABC
+  Attributes:
+    - _abc_impl
+    - num_params
+  Methods:
+    - gamma (self, y_true, y_pred, sens)
+    - getExpectedGrad (self, dist, a, b, params, samples, mu, z_prior)
+    - getFuncValue (self, dist, a, b, params, samples, z_prior)
+    - getModel (self, tau, X, y, sens, random_state=None)
+    - getValueForX (self, dist, a, b, params, z_prior, x)
+    - gradientDescent (self, dist, a, b, samples, z_prior)
+    - init_params (self, i)
+    - prob (self, dist, x)
+    - range (self, eps, tau)
+
+========================================
+
+Module: aif360.algorithms.inprocessing.celisMeta.StatisticalRate
+----------------------------------------------------------------
+Interface: General
+  Inherits from: abc.ABC
+  Attributes:
+    - _abc_impl
+    - num_params
+  Methods:
+    - gamma (self, y_true, y_pred, sens)
+    - getExpectedGrad (self, dist, a, b, params, samples, mu, z_prior)
+    - getFuncValue (self, dist, a, b, params, samples, z_prior)
+    - getModel (self, tau, X, y, sens, random_state=None)
+    - getValueForX (self, dist, a, b, params, z_prior, x)
+    - gradientDescent (self, dist, a, b, samples, z_prior)
+    - init_params (self, i)
+    - prob (self, dist, x)
+    - range (self, eps, tau)
+
+Class: StatisticalRate
+  Inherits from: aif360.algorithms.inprocessing.celisMeta.General.General
+  Attributes:
+    - _abc_impl
+    - num_params
+  Methods:
+    - gamma (self, y_true, y_pred, sens)
+    - getExpectedGrad (self, dist, a, b, params, samples, mu, z_prior)
+    - getFuncValue (self, dist, a, b, params, samples, z_prior)
+    - getModel (self, tau, X, y, sens, random_state=None)
+    - getValueForX (self, dist, a, b, params, z_prior, x, return_cs=False)
+    - gradientDescent (self, dist, a, b, samples, z_prior)
+    - init_params (self, i)
+    - prob (self, dist, x)
+    - range (self, eps, tau)
+
+========================================
+
+Module: aif360.algorithms.inprocessing.exponentiated_gradient_reduction
+-----------------------------------------------------------------------
+Class: ExponentiatedGradientReduction
+  Inherits from: aif360.algorithms.transformer.Transformer
+  Attributes:
+    - _abc_impl
+  Methods:
+    - fit (self, dataset)
+    - fit_predict (self, dataset)
+    - fit_transform (self, dataset)
+    - predict (self, dataset)
+    - transform (self, dataset)
+
+Interface: Transformer
+  Inherits from: abc.ApplyDecorator
+  Attributes:
+    - _abc_impl
+  Methods:
+    - fit (self, dataset)
+    - fit_predict (self, dataset)
+    - fit_transform (self, dataset)
+    - predict (self, dataset)
+    - transform (self, dataset)
+
+Class: skExpGradRed
+  Inherits from: sklearn.base.BaseEstimator, sklearn.base.ClassifierMixin
+  Attributes:
+    - _doc_link_module
+    - _doc_link_template
+    - _doc_link_url_param_generator
+    - _estimator_type
+    - _repr_html_
+  Methods:
+    - _build_request_for_signature (router, method)
+    - _check_feature_names (self, *args, **kwargs)
+    - _check_n_features (self, *args, **kwargs)
+    - _get_default_requests ()
+    - _get_doc_link (self)
+    - _get_metadata_request (self)
+    - _get_param_names ()
+    - _get_tags (self)
+    - _more_tags (self)
+    - _repr_html_inner (self)
+    - _repr_mimebundle_ (self, **kwargs)
+    - _validate_data (self, *args, **kwargs)
+    - _validate_params (self)
+    - fit (self, X, y)
+    - get_metadata_routing (self)
+    - get_params (self, deep=True)
+    - predict (self, X)
+    - predict_proba (self, X)
+    - score (self, X, y, sample_weight=None)
+    - set_params (self, **params)
+    - set_score_request (self: aif360.sklearn.inprocessing.exponentiated_gradient_reduction.ExponentiatedGradientReduction, *, sample_weight: Union[bool, NoneType, str] = '$UNCHANGED$') -> aif360.sklearn.inprocessing.exponentiated_gradient_reduction.ExponentiatedGradientReduction
+
+========================================
+
+Module: aif360.algorithms.inprocessing.gerryfair.auditor
+--------------------------------------------------------
+Class: Auditor
+  Inherits from: builtins.object
+  Methods:
+    - audit (self, predictions)
+    - get_baseline (self, y, predictions)
+    - get_group (self, predictions, metric_baseline)
+    - get_subset (self, predictions)
+    - initialize_costs (self, n)
+    - update_costs (self, c_0, c_1, group, C, iteration, gamma)
+
+Class: Group
+  Inherits from: builtins.object
+  Methods:
+    - return_f (self)
+
+Class: RegOracle
+  Inherits from: builtins.object
+  Methods:
+    - predict (self, X)
+
+========================================
+
+Module: aif360.algorithms.inprocessing.gerryfair.classifier_history
+-------------------------------------------------------------------
+Class: ClassifierHistory
+  Inherits from: builtins.object
+  Methods:
+    - append_classifier (self, classifier)
+    - get_most_recent (self)
+
+========================================
+
+Module: aif360.algorithms.inprocessing.gerryfair.heatmap
+--------------------------------------------------------
+Class: LinearThresh
+  Inherits from: builtins.object
+  Methods:
+    - predict (self, X)
+
+Class: RandomLinearThresh
+  Inherits from: builtins.object
+  Methods:
+    - predict (self, X)
+
+Class: RegOracle
+  Inherits from: builtins.object
+  Methods:
+    - predict (self, X)
+
+========================================
+
+Module: aif360.algorithms.inprocessing.gerryfair.learner
+--------------------------------------------------------
+Class: Learner
+  Inherits from: builtins.object
+  Methods:
+    - best_response (self, costs_0, costs_1)
+    - generate_predictions (self, q, predictions, iteration)
+
+Class: RegOracle
+  Inherits from: builtins.object
+  Methods:
+    - predict (self, X)
+
+========================================
+
+Module: aif360.algorithms.inprocessing.gerryfair.reg_oracle_class
+-----------------------------------------------------------------
+Class: LinearThresh
+  Inherits from: builtins.object
+  Methods:
+    - predict (self, X)
+
+Class: RandomLinearThresh
+  Inherits from: builtins.object
+  Methods:
+    - predict (self, X)
+
+Class: RegOracle
+  Inherits from: builtins.object
+  Methods:
+    - predict (self, X)
+
+========================================
+
+Module: aif360.algorithms.inprocessing.gerryfair_classifier
+-----------------------------------------------------------
+Class: Auditor
+  Inherits from: builtins.object
+  Methods:
+    - audit (self, predictions)
+    - get_baseline (self, y, predictions)
+    - get_group (self, predictions, metric_baseline)
+    - get_subset (self, predictions)
+    - initialize_costs (self, n)
+    - update_costs (self, c_0, c_1, group, C, iteration, gamma)
+
+Class: ClassifierHistory
+  Inherits from: builtins.object
+  Methods:
+    - append_classifier (self, classifier)
+    - get_most_recent (self)
+
+Class: GerryFairClassifier
+  Inherits from: aif360.algorithms.transformer.Transformer
+  Attributes:
+    - _abc_impl
+  Methods:
+    - fit (self, dataset, early_termination=True)
+    - fit_predict (self, dataset)
+    - fit_transform (self, dataset)
+    - generate_heatmap (self, dataset, predictions, vmin=None, vmax=None, cols_index=[0, 1], eta=0.1)
+    - pareto (self, dataset, gamma_list)
+    - predict (self, dataset, threshold=0.5)
+    - print_outputs (self, iteration, error, group)
+    - save_heatmap (self, iteration, dataset, predictions, vmin, vmax)
+    - transform (self, dataset)
+
+Class: Group
+  Inherits from: builtins.object
+  Methods:
+    - return_f (self)
+
+Class: Learner
+  Inherits from: builtins.object
+  Methods:
+    - best_response (self, costs_0, costs_1)
+    - generate_predictions (self, q, predictions, iteration)
+
+Class: RegOracle
+  Inherits from: builtins.object
+  Methods:
+    - predict (self, X)
+
+Interface: Transformer
+  Inherits from: abc.ApplyDecorator
+  Attributes:
+    - _abc_impl
+  Methods:
+    - fit (self, dataset)
+    - fit_predict (self, dataset)
+    - fit_transform (self, dataset)
+    - predict (self, dataset)
+    - transform (self, dataset)
+
+========================================
+
+Module: aif360.algorithms.inprocessing.grid_search_reduction
+------------------------------------------------------------
+Class: GridSearchReduction
+  Inherits from: aif360.algorithms.transformer.Transformer
+  Attributes:
+    - _abc_impl
+  Methods:
+    - fit (self, dataset)
+    - fit_predict (self, dataset)
+    - fit_transform (self, dataset)
+    - predict (self, dataset)
+    - transform (self, dataset)
+
+Interface: Transformer
+  Inherits from: abc.ApplyDecorator
+  Attributes:
+    - _abc_impl
+  Methods:
+    - fit (self, dataset)
+    - fit_predict (self, dataset)
+    - fit_transform (self, dataset)
+    - predict (self, dataset)
+    - transform (self, dataset)
+
+Class: skGridSearchRed
+  Inherits from: sklearn.base.BaseEstimator, sklearn.base.ClassifierMixin
+  Attributes:
+    - _doc_link_module
+    - _doc_link_template
+    - _doc_link_url_param_generator
+    - _estimator_type
+    - _repr_html_
+  Methods:
+    - _build_request_for_signature (router, method)
+    - _check_feature_names (self, *args, **kwargs)
+    - _check_n_features (self, *args, **kwargs)
+    - _get_default_requests ()
+    - _get_doc_link (self)
+    - _get_metadata_request (self)
+    - _get_param_names ()
+    - _get_tags (self)
+    - _more_tags (self)
+    - _repr_html_inner (self)
+    - _repr_mimebundle_ (self, **kwargs)
+    - _validate_data (self, *args, **kwargs)
+    - _validate_params (self)
+    - fit (self, X, y)
+    - get_metadata_routing (self)
+    - get_params (self, deep=True)
+    - predict (self, X)
+    - predict_proba (self, X)
+    - score (self, X, y, sample_weight=None)
+    - set_params (self, **params)
+    - set_score_request (self: aif360.sklearn.inprocessing.grid_search_reduction.GridSearchReduction, *, sample_weight: Union[bool, NoneType, str] = '$UNCHANGED$') -> aif360.sklearn.inprocessing.grid_search_reduction.GridSearchReduction
+
+========================================
+
+Module: aif360.algorithms.inprocessing.kamfadm-2012ecmlpkdd.fadm.lr.pr
+----------------------------------------------------------------------
+Class: LRwPR
+  Inherits from: sklearn.base.BaseEstimator, sklearn.base.ClassifierMixin
+  Attributes:
+    - _doc_link_module
+    - _doc_link_template
+    - _doc_link_url_param_generator
+    - _estimator_type
+    - _repr_html_
+  Methods:
+    - _build_request_for_signature (router, method)
+    - _check_feature_names (self, *args, **kwargs)
+    - _check_n_features (self, *args, **kwargs)
+    - _get_default_requests ()
+    - _get_doc_link (self)
+    - _get_metadata_request (self)
+    - _get_param_names ()
+    - _get_tags (self)
+    - _more_tags (self)
+    - _repr_html_inner (self)
+    - _repr_mimebundle_ (self, **kwargs)
+    - _validate_data (self, *args, **kwargs)
+    - _validate_params (self)
+    - get_metadata_routing (self)
+    - get_params (self, deep=True)
+    - predict (self, X)
+    - score (self, X, y, sample_weight=None)
+    - set_params (self, **params)
+    - set_score_request (self: aif360.algorithms.inprocessing.kamfadm-2012ecmlpkdd.fadm.lr.pr.LRwPR, *, sample_weight: Union[bool, NoneType, str] = '$UNCHANGED$') -> aif360.algorithms.inprocessing.kamfadm-2012ecmlpkdd.fadm.lr.pr.LRwPR
+
+Class: LRwPRFittingType1Mixin
+  Inherits from: aif360.algorithms.inprocessing.kamfadm-2012ecmlpkdd.fadm.lr.pr.LRwPR
+  Attributes:
+    - _doc_link_module
+    - _doc_link_template
+    - _doc_link_url_param_generator
+    - _estimator_type
+    - _repr_html_
+  Methods:
+    - _build_request_for_signature (router, method)
+    - _check_feature_names (self, *args, **kwargs)
+    - _check_n_features (self, *args, **kwargs)
+    - _get_default_requests ()
+    - _get_doc_link (self)
+    - _get_metadata_request (self)
+    - _get_param_names ()
+    - _get_tags (self)
+    - _more_tags (self)
+    - _repr_html_inner (self)
+    - _repr_mimebundle_ (self, **kwargs)
+    - _validate_data (self, *args, **kwargs)
+    - _validate_params (self)
+    - fit (self, X, y, ns=1, itype=0, **kwargs)
+    - get_metadata_routing (self)
+    - get_params (self, deep=True)
+    - init_coef (self, itype, X, y, s)
+    - predict (self, X)
+    - score (self, X, y, sample_weight=None)
+    - set_fit_request (self: aif360.algorithms.inprocessing.kamfadm-2012ecmlpkdd.fadm.lr.pr.LRwPRFittingType1Mixin, *, itype: Union[bool, NoneType, str] = '$UNCHANGED$', ns: Union[bool, NoneType, str] = '$UNCHANGED$') -> aif360.algorithms.inprocessing.kamfadm-2012ecmlpkdd.fadm.lr.pr.LRwPRFittingType1Mixin
+    - set_params (self, **params)
+    - set_score_request (self: aif360.algorithms.inprocessing.kamfadm-2012ecmlpkdd.fadm.lr.pr.LRwPRFittingType1Mixin, *, sample_weight: Union[bool, NoneType, str] = '$UNCHANGED$') -> aif360.algorithms.inprocessing.kamfadm-2012ecmlpkdd.fadm.lr.pr.LRwPRFittingType1Mixin
+
+Class: LRwPRObjetiveType4Mixin
+  Inherits from: aif360.algorithms.inprocessing.kamfadm-2012ecmlpkdd.fadm.lr.pr.LRwPR
+  Attributes:
+    - _doc_link_module
+    - _doc_link_template
+    - _doc_link_url_param_generator
+    - _estimator_type
+    - _repr_html_
+  Methods:
+    - _build_request_for_signature (router, method)
+    - _check_feature_names (self, *args, **kwargs)
+    - _check_n_features (self, *args, **kwargs)
+    - _get_default_requests ()
+    - _get_doc_link (self)
+    - _get_metadata_request (self)
+    - _get_param_names ()
+    - _get_tags (self)
+    - _more_tags (self)
+    - _repr_html_inner (self)
+    - _repr_mimebundle_ (self, **kwargs)
+    - _validate_data (self, *args, **kwargs)
+    - _validate_params (self)
+    - get_metadata_routing (self)
+    - get_params (self, deep=True)
+    - grad_loss (self, coef_, X, y, s)
+    - loss (self, coef_, X, y, s)
+    - predict (self, X)
+    - score (self, X, y, sample_weight=None)
+    - set_params (self, **params)
+    - set_score_request (self: aif360.algorithms.inprocessing.kamfadm-2012ecmlpkdd.fadm.lr.pr.LRwPRObjetiveType4Mixin, *, sample_weight: Union[bool, NoneType, str] = '$UNCHANGED$') -> aif360.algorithms.inprocessing.kamfadm-2012ecmlpkdd.fadm.lr.pr.LRwPRObjetiveType4Mixin
+
+Class: LRwPRPredictProbaType2Mixin
+  Inherits from: aif360.algorithms.inprocessing.kamfadm-2012ecmlpkdd.fadm.lr.pr.LRwPR
+  Attributes:
+    - _doc_link_module
+    - _doc_link_template
+    - _doc_link_url_param_generator
+    - _estimator_type
+    - _repr_html_
+  Methods:
+    - _build_request_for_signature (router, method)
+    - _check_feature_names (self, *args, **kwargs)
+    - _check_n_features (self, *args, **kwargs)
+    - _get_default_requests ()
+    - _get_doc_link (self)
+    - _get_metadata_request (self)
+    - _get_param_names ()
+    - _get_tags (self)
+    - _more_tags (self)
+    - _repr_html_inner (self)
+    - _repr_mimebundle_ (self, **kwargs)
+    - _validate_data (self, *args, **kwargs)
+    - _validate_params (self)
+    - get_metadata_routing (self)
+    - get_params (self, deep=True)
+    - predict (self, X)
+    - predict_proba (self, X)
+    - score (self, X, y, sample_weight=None)
+    - set_params (self, **params)
+    - set_score_request (self: aif360.algorithms.inprocessing.kamfadm-2012ecmlpkdd.fadm.lr.pr.LRwPRPredictProbaType2Mixin, *, sample_weight: Union[bool, NoneType, str] = '$UNCHANGED$') -> aif360.algorithms.inprocessing.kamfadm-2012ecmlpkdd.fadm.lr.pr.LRwPRPredictProbaType2Mixin
+
+Class: LRwPRType4
+  Inherits from: aif360.algorithms.inprocessing.kamfadm-2012ecmlpkdd.fadm.lr.pr.LRwPRObjetiveType4Mixin, aif360.algorithms.inprocessing.kamfadm-2012ecmlpkdd.fadm.lr.pr.LRwPRFittingType1Mixin, aif360.algorithms.inprocessing.kamfadm-2012ecmlpkdd.fadm.lr.pr.LRwPRPredictProbaType2Mixin
+  Attributes:
+    - _doc_link_module
+    - _doc_link_template
+    - _doc_link_url_param_generator
+    - _estimator_type
+    - _repr_html_
+  Methods:
+    - _build_request_for_signature (router, method)
+    - _check_feature_names (self, *args, **kwargs)
+    - _check_n_features (self, *args, **kwargs)
+    - _get_default_requests ()
+    - _get_doc_link (self)
+    - _get_metadata_request (self)
+    - _get_param_names ()
+    - _get_tags (self)
+    - _more_tags (self)
+    - _repr_html_inner (self)
+    - _repr_mimebundle_ (self, **kwargs)
+    - _validate_data (self, *args, **kwargs)
+    - _validate_params (self)
+    - fit (self, X, y, ns=1, itype=0, **kwargs)
+    - get_metadata_routing (self)
+    - get_params (self, deep=True)
+    - grad_loss (self, coef_, X, y, s)
+    - init_coef (self, itype, X, y, s)
+    - loss (self, coef_, X, y, s)
+    - predict (self, X)
+    - predict_proba (self, X)
+    - score (self, X, y, sample_weight=None)
+    - set_fit_request (self: aif360.algorithms.inprocessing.kamfadm-2012ecmlpkdd.fadm.lr.pr.LRwPRType4, *, itype: Union[bool, NoneType, str] = '$UNCHANGED$', ns: Union[bool, NoneType, str] = '$UNCHANGED$') -> aif360.algorithms.inprocessing.kamfadm-2012ecmlpkdd.fadm.lr.pr.LRwPRType4
+    - set_params (self, **params)
+    - set_score_request (self: aif360.algorithms.inprocessing.kamfadm-2012ecmlpkdd.fadm.lr.pr.LRwPRType4, *, sample_weight: Union[bool, NoneType, str] = '$UNCHANGED$') -> aif360.algorithms.inprocessing.kamfadm-2012ecmlpkdd.fadm.lr.pr.LRwPRType4
+
+========================================
+
+Module: aif360.algorithms.inprocessing.meta_fair_classifier
+-----------------------------------------------------------
+Class: FalseDiscovery
+  Inherits from: aif360.algorithms.inprocessing.celisMeta.General.General
+  Attributes:
+    - _abc_impl
+    - num_params
+  Methods:
+    - gamma (self, y_true, y_pred, sens)
+    - getExpectedGrad (self, dist, a, b, params, samples, mu, z_prior)
+    - getFuncValue (self, dist, a, b, params, samples, z_prior)
+    - getModel (self, tau, X, y, sens, random_state=None)
+    - getValueForX (self, dist, a, b, params, z_prior, x, return_probs=False)
+    - gradientDescent (self, dist, a, b, samples, z_prior)
+    - init_params (self, i)
+    - prob (self, dist, x)
+    - range (self, eps, tau)
+
+Class: MetaFairClassifier
+  Inherits from: aif360.algorithms.transformer.Transformer
+  Attributes:
+    - _abc_impl
+  Methods:
+    - fit (self, dataset)
+    - fit_predict (self, dataset)
+    - fit_transform (self, dataset)
+    - predict (self, dataset)
+    - transform (self, dataset)
+
+Class: StatisticalRate
+  Inherits from: aif360.algorithms.inprocessing.celisMeta.General.General
+  Attributes:
+    - _abc_impl
+    - num_params
+  Methods:
+    - gamma (self, y_true, y_pred, sens)
+    - getExpectedGrad (self, dist, a, b, params, samples, mu, z_prior)
+    - getFuncValue (self, dist, a, b, params, samples, z_prior)
+    - getModel (self, tau, X, y, sens, random_state=None)
+    - getValueForX (self, dist, a, b, params, z_prior, x, return_cs=False)
+    - gradientDescent (self, dist, a, b, samples, z_prior)
+    - init_params (self, i)
+    - prob (self, dist, x)
+    - range (self, eps, tau)
+
+Interface: Transformer
+  Inherits from: abc.ApplyDecorator
+  Attributes:
+    - _abc_impl
+  Methods:
+    - fit (self, dataset)
+    - fit_predict (self, dataset)
+    - fit_transform (self, dataset)
+    - predict (self, dataset)
+    - transform (self, dataset)
+
+========================================
+
+Module: aif360.algorithms.inprocessing.prejudice_remover
+--------------------------------------------------------
+Class: PrejudiceRemover
+  Inherits from: aif360.algorithms.transformer.Transformer
+  Attributes:
+    - _abc_impl
+  Methods:
+    - _create_file_in_kamishima_format (self, df, class_attr, positive_class_val, sensitive_attrs, single_sensitive, privileged_vals)
+    - fit (self, dataset)
+    - fit_predict (self, dataset)
+    - fit_transform (self, dataset)
+    - predict (self, dataset)
+    - transform (self, dataset)
+
+Interface: Transformer
+  Inherits from: abc.ApplyDecorator
+  Attributes:
+    - _abc_impl
+  Methods:
+    - fit (self, dataset)
+    - fit_predict (self, dataset)
+    - fit_transform (self, dataset)
+    - predict (self, dataset)
+    - transform (self, dataset)
+
+========================================
+
+Module: aif360.algorithms.postprocessing
+----------------------------------------
+Class: CalibratedEqOddsPostprocessing
+  Inherits from: aif360.algorithms.transformer.Transformer
+  Attributes:
+    - _abc_impl
+  Methods:
+    - fit (self, dataset_true, dataset_pred)
+    - fit_predict (self, dataset_true, dataset_pred, threshold=0.5)
+    - fit_transform (self, dataset)
+    - predict (self, dataset, threshold=0.5)
+    - transform (self, dataset)
+
+Class: DeterministicReranking
+  Inherits from: aif360.algorithms.transformer.Transformer
+  Attributes:
+    - _abc_impl
+  Methods:
+    - fit (self, dataset: aif360.datasets.regression_dataset.RegressionDataset)
+    - fit_predict (self, dataset: aif360.datasets.regression_dataset.RegressionDataset, rec_size: int, target_prop: dict, rerank_type: str = 'Constrained', renormalize_scores: bool = False) -> aif360.datasets.regression_dataset.RegressionDataset
+    - fit_transform (self, dataset)
+    - predict (self, dataset: aif360.datasets.regression_dataset.RegressionDataset, rec_size: int, target_prop: list, rerank_type: str = 'Constrained', renormalize_scores: bool = False) -> aif360.datasets.regression_dataset.RegressionDataset
+    - transform (self, dataset)
+
+Class: EqOddsPostprocessing
+  Inherits from: aif360.algorithms.transformer.Transformer
+  Attributes:
+    - _abc_impl
+  Methods:
+    - fit (self, dataset_true, dataset_pred)
+    - fit_predict (self, dataset_true, dataset_pred)
+    - fit_transform (self, dataset)
+    - predict (self, dataset)
+    - transform (self, dataset)
+
+Class: RejectOptionClassification
+  Inherits from: aif360.algorithms.transformer.Transformer
+  Attributes:
+    - _abc_impl
+  Methods:
+    - fit (self, dataset_true, dataset_pred)
+    - fit_predict (self, dataset_true, dataset_pred)
+    - fit_transform (self, dataset)
+    - predict (self, dataset)
+    - transform (self, dataset)
+
+========================================
+
+Module: aif360.algorithms.postprocessing.calibrated_eq_odds_postprocessing
+--------------------------------------------------------------------------
+Class: CalibratedEqOddsPostprocessing
+  Inherits from: aif360.algorithms.transformer.Transformer
+  Attributes:
+    - _abc_impl
+  Methods:
+    - fit (self, dataset_true, dataset_pred)
+    - fit_predict (self, dataset_true, dataset_pred, threshold=0.5)
+    - fit_transform (self, dataset)
+    - predict (self, dataset, threshold=0.5)
+    - transform (self, dataset)
+
+Class: ClassificationMetric
+  Inherits from: aif360.metrics.binary_label_dataset_metric.BinaryLabelDatasetMetric
+  Attributes:
+    - _abc_impl
+  Methods:
+    - _between_group_generalized_entropy_index (self, groups, alpha=2)
+    - _smoothed_base_rates (self, labels, concentration=1.0)
+    - _to_condition (self, privileged)
+    - accuracy (self, privileged=None)
+    - average_abs_odds_difference (self)
+    - average_odds_difference (self)
+    - average_predictive_value_difference (self)
+    - base_rate (self, privileged=None)
+    - between_all_groups_coefficient_of_variation (self)
+    - between_all_groups_generalized_entropy_index (self, alpha=2)
+    - between_all_groups_theil_index (self)
+    - between_group_coefficient_of_variation (self)
+    - between_group_generalized_entropy_index (self, alpha=2)
+    - between_group_theil_index (self)
+    - binary_confusion_matrix (self, privileged=None)
+    - coefficient_of_variation (self)
+    - consistency (self, n_neighbors=5)
+    - difference (self, metric_fun)
+    - differential_fairness_bias_amplification (self, concentration=1.0)
+    - disparate_impact (self)
+    - equal_opportunity_difference (self)
+    - equalized_odds_difference (self)
+    - error_rate (self, privileged=None)
+    - error_rate_difference (self)
+    - error_rate_ratio (self)
+    - false_discovery_rate (self, privileged=None)
+    - false_discovery_rate_difference (self)
+    - false_discovery_rate_ratio (self)
+    - false_negative_rate (self, privileged=None)
+    - false_negative_rate_difference (self)
+    - false_negative_rate_ratio (self)
+    - false_omission_rate (self, privileged=None)
+    - false_omission_rate_difference (self)
+    - false_omission_rate_ratio (self)
+    - false_positive_rate (self, privileged=None)
+    - false_positive_rate_difference (self)
+    - false_positive_rate_ratio (self)
+    - generalized_binary_confusion_matrix (self, privileged=None)
+    - generalized_entropy_index (self, alpha=2)
+    - generalized_equalized_odds_difference (self)
+    - generalized_false_negative_rate (self, privileged=None)
+    - generalized_false_positive_rate (self, privileged=None)
+    - generalized_true_negative_rate (self, privileged=None)
+    - generalized_true_positive_rate (self, privileged=None)
+    - mean_difference (self)
+    - negative_predictive_value (self, privileged=None)
+    - num_false_negatives (self, privileged=None)
+    - num_false_positives (self, privileged=None)
+    - num_generalized_false_negatives (self, privileged=None)
+    - num_generalized_false_positives (self, privileged=None)
+    - num_generalized_true_negatives (self, privileged=None)
+    - num_generalized_true_positives (self, privileged=None)
+    - num_instances (self, privileged=None)
+    - num_negatives (self, privileged=None)
+    - num_positives (self, privileged=None)
+    - num_pred_negatives (self, privileged=None)
+    - num_pred_positives (self, privileged=None)
+    - num_true_negatives (self, privileged=None)
+    - num_true_positives (self, privileged=None)
+    - performance_measures (self, privileged=None)
+    - positive_predictive_value (self, privileged=None)
+    - power (self, privileged=None)
+    - precision (self, privileged=None)
+    - ratio (self, metric_fun)
+    - recall (self, privileged=None)
+    - rich_subgroup (self, predictions, fairness_def='FP')
+    - selection_rate (self, privileged=None)
+    - sensitivity (self, privileged=None)
+    - smoothed_empirical_differential_fairness (self, concentration=1.0)
+    - specificity (self, privileged=None)
+    - statistical_parity_difference (self)
+    - theil_index (self)
+    - true_negative_rate (self, privileged=None)
+    - true_positive_rate (self, privileged=None)
+    - true_positive_rate_difference (self)
+
+Interface: Transformer
+  Inherits from: abc.ApplyDecorator
+  Attributes:
+    - _abc_impl
+  Methods:
+    - fit (self, dataset)
+    - fit_predict (self, dataset)
+    - fit_transform (self, dataset)
+    - predict (self, dataset)
+    - transform (self, dataset)
+
+========================================
+
+Module: aif360.algorithms.postprocessing.deterministic_reranking
+----------------------------------------------------------------
+Class: DeterministicReranking
+  Inherits from: aif360.algorithms.transformer.Transformer
+  Attributes:
+    - _abc_impl
+  Methods:
+    - fit (self, dataset: aif360.datasets.regression_dataset.RegressionDataset)
+    - fit_predict (self, dataset: aif360.datasets.regression_dataset.RegressionDataset, rec_size: int, target_prop: dict, rerank_type: str = 'Constrained', renormalize_scores: bool = False) -> aif360.datasets.regression_dataset.RegressionDataset
+    - fit_transform (self, dataset)
+    - predict (self, dataset: aif360.datasets.regression_dataset.RegressionDataset, rec_size: int, target_prop: list, rerank_type: str = 'Constrained', renormalize_scores: bool = False) -> aif360.datasets.regression_dataset.RegressionDataset
+    - transform (self, dataset)
+
+Class: RegressionDataset
+  Inherits from: aif360.datasets.structured_dataset.StructuredDataset
+  Attributes:
+    - _abc_impl
+  Methods:
+    - _de_dummy_code_df (df, sep='=', set_category=False)
+    - _parse_feature_names (feature_names, sep='=')
+    - align_datasets (self, other)
+    - convert_to_dataframe (self, de_dummy_code=False, sep='=', set_category=True)
+    - copy (self, deepcopy=False)
+    - export_dataset (self, export_metadata=False)
+    - import_dataset (self, import_metadata=False)
+    - split (self, num_or_size_splits, shuffle=False, seed=None)
+    - subset (self, indexes)
+    - temporarily_ignore (self, *fields)
+    - validate_dataset (self)
+
+Class: StructuredDataset
+  Inherits from: aif360.datasets.dataset.Dataset
+  Attributes:
+    - _abc_impl
+  Methods:
+    - _de_dummy_code_df (df, sep='=', set_category=False)
+    - _parse_feature_names (feature_names, sep='=')
+    - align_datasets (self, other)
+    - convert_to_dataframe (self, de_dummy_code=False, sep='=', set_category=True)
+    - copy (self, deepcopy=False)
+    - export_dataset (self, export_metadata=False)
+    - import_dataset (self, import_metadata=False)
+    - split (self, num_or_size_splits, shuffle=False, seed=None)
+    - subset (self, indexes)
+    - temporarily_ignore (self, *fields)
+    - validate_dataset (self)
+
+Interface: Transformer
+  Inherits from: abc.ApplyDecorator
+  Attributes:
+    - _abc_impl
+  Methods:
+    - fit (self, dataset)
+    - fit_predict (self, dataset)
+    - fit_transform (self, dataset)
+    - predict (self, dataset)
+    - transform (self, dataset)
+
+========================================
+
+Module: aif360.algorithms.postprocessing.eq_odds_postprocessing
+---------------------------------------------------------------
+Class: ClassificationMetric
+  Inherits from: aif360.metrics.binary_label_dataset_metric.BinaryLabelDatasetMetric
+  Attributes:
+    - _abc_impl
+  Methods:
+    - _between_group_generalized_entropy_index (self, groups, alpha=2)
+    - _smoothed_base_rates (self, labels, concentration=1.0)
+    - _to_condition (self, privileged)
+    - accuracy (self, privileged=None)
+    - average_abs_odds_difference (self)
+    - average_odds_difference (self)
+    - average_predictive_value_difference (self)
+    - base_rate (self, privileged=None)
+    - between_all_groups_coefficient_of_variation (self)
+    - between_all_groups_generalized_entropy_index (self, alpha=2)
+    - between_all_groups_theil_index (self)
+    - between_group_coefficient_of_variation (self)
+    - between_group_generalized_entropy_index (self, alpha=2)
+    - between_group_theil_index (self)
+    - binary_confusion_matrix (self, privileged=None)
+    - coefficient_of_variation (self)
+    - consistency (self, n_neighbors=5)
+    - difference (self, metric_fun)
+    - differential_fairness_bias_amplification (self, concentration=1.0)
+    - disparate_impact (self)
+    - equal_opportunity_difference (self)
+    - equalized_odds_difference (self)
+    - error_rate (self, privileged=None)
+    - error_rate_difference (self)
+    - error_rate_ratio (self)
+    - false_discovery_rate (self, privileged=None)
+    - false_discovery_rate_difference (self)
+    - false_discovery_rate_ratio (self)
+    - false_negative_rate (self, privileged=None)
+    - false_negative_rate_difference (self)
+    - false_negative_rate_ratio (self)
+    - false_omission_rate (self, privileged=None)
+    - false_omission_rate_difference (self)
+    - false_omission_rate_ratio (self)
+    - false_positive_rate (self, privileged=None)
+    - false_positive_rate_difference (self)
+    - false_positive_rate_ratio (self)
+    - generalized_binary_confusion_matrix (self, privileged=None)
+    - generalized_entropy_index (self, alpha=2)
+    - generalized_equalized_odds_difference (self)
+    - generalized_false_negative_rate (self, privileged=None)
+    - generalized_false_positive_rate (self, privileged=None)
+    - generalized_true_negative_rate (self, privileged=None)
+    - generalized_true_positive_rate (self, privileged=None)
+    - mean_difference (self)
+    - negative_predictive_value (self, privileged=None)
+    - num_false_negatives (self, privileged=None)
+    - num_false_positives (self, privileged=None)
+    - num_generalized_false_negatives (self, privileged=None)
+    - num_generalized_false_positives (self, privileged=None)
+    - num_generalized_true_negatives (self, privileged=None)
+    - num_generalized_true_positives (self, privileged=None)
+    - num_instances (self, privileged=None)
+    - num_negatives (self, privileged=None)
+    - num_positives (self, privileged=None)
+    - num_pred_negatives (self, privileged=None)
+    - num_pred_positives (self, privileged=None)
+    - num_true_negatives (self, privileged=None)
+    - num_true_positives (self, privileged=None)
+    - performance_measures (self, privileged=None)
+    - positive_predictive_value (self, privileged=None)
+    - power (self, privileged=None)
+    - precision (self, privileged=None)
+    - ratio (self, metric_fun)
+    - recall (self, privileged=None)
+    - rich_subgroup (self, predictions, fairness_def='FP')
+    - selection_rate (self, privileged=None)
+    - sensitivity (self, privileged=None)
+    - smoothed_empirical_differential_fairness (self, concentration=1.0)
+    - specificity (self, privileged=None)
+    - statistical_parity_difference (self)
+    - theil_index (self)
+    - true_negative_rate (self, privileged=None)
+    - true_positive_rate (self, privileged=None)
+    - true_positive_rate_difference (self)
+
+Class: EqOddsPostprocessing
+  Inherits from: aif360.algorithms.transformer.Transformer
+  Attributes:
+    - _abc_impl
+  Methods:
+    - fit (self, dataset_true, dataset_pred)
+    - fit_predict (self, dataset_true, dataset_pred)
+    - fit_transform (self, dataset)
+    - predict (self, dataset)
+    - transform (self, dataset)
+
+Interface: Transformer
+  Inherits from: abc.ApplyDecorator
+  Attributes:
+    - _abc_impl
+  Methods:
+    - fit (self, dataset)
+    - fit_predict (self, dataset)
+    - fit_transform (self, dataset)
+    - predict (self, dataset)
+    - transform (self, dataset)
+
+========================================
+
+Module: aif360.algorithms.postprocessing.reject_option_classification
+---------------------------------------------------------------------
+Class: BinaryLabelDatasetMetric
+  Inherits from: aif360.metrics.dataset_metric.DatasetMetric
+  Attributes:
+    - _abc_impl
+  Methods:
+    - _smoothed_base_rates (self, labels, concentration=1.0)
+    - _to_condition (self, privileged)
+    - base_rate (self, privileged=None)
+    - consistency (self, n_neighbors=5)
+    - difference (self, metric_fun)
+    - disparate_impact (self)
+    - mean_difference (self)
+    - num_instances (self, privileged=None)
+    - num_negatives (self, privileged=None)
+    - num_positives (self, privileged=None)
+    - ratio (self, metric_fun)
+    - rich_subgroup (self, predictions, fairness_def='FP')
+    - smoothed_empirical_differential_fairness (self, concentration=1.0)
+    - statistical_parity_difference (self)
+
+Class: ClassificationMetric
+  Inherits from: aif360.metrics.binary_label_dataset_metric.BinaryLabelDatasetMetric
+  Attributes:
+    - _abc_impl
+  Methods:
+    - _between_group_generalized_entropy_index (self, groups, alpha=2)
+    - _smoothed_base_rates (self, labels, concentration=1.0)
+    - _to_condition (self, privileged)
+    - accuracy (self, privileged=None)
+    - average_abs_odds_difference (self)
+    - average_odds_difference (self)
+    - average_predictive_value_difference (self)
+    - base_rate (self, privileged=None)
+    - between_all_groups_coefficient_of_variation (self)
+    - between_all_groups_generalized_entropy_index (self, alpha=2)
+    - between_all_groups_theil_index (self)
+    - between_group_coefficient_of_variation (self)
+    - between_group_generalized_entropy_index (self, alpha=2)
+    - between_group_theil_index (self)
+    - binary_confusion_matrix (self, privileged=None)
+    - coefficient_of_variation (self)
+    - consistency (self, n_neighbors=5)
+    - difference (self, metric_fun)
+    - differential_fairness_bias_amplification (self, concentration=1.0)
+    - disparate_impact (self)
+    - equal_opportunity_difference (self)
+    - equalized_odds_difference (self)
+    - error_rate (self, privileged=None)
+    - error_rate_difference (self)
+    - error_rate_ratio (self)
+    - false_discovery_rate (self, privileged=None)
+    - false_discovery_rate_difference (self)
+    - false_discovery_rate_ratio (self)
+    - false_negative_rate (self, privileged=None)
+    - false_negative_rate_difference (self)
+    - false_negative_rate_ratio (self)
+    - false_omission_rate (self, privileged=None)
+    - false_omission_rate_difference (self)
+    - false_omission_rate_ratio (self)
+    - false_positive_rate (self, privileged=None)
+    - false_positive_rate_difference (self)
+    - false_positive_rate_ratio (self)
+    - generalized_binary_confusion_matrix (self, privileged=None)
+    - generalized_entropy_index (self, alpha=2)
+    - generalized_equalized_odds_difference (self)
+    - generalized_false_negative_rate (self, privileged=None)
+    - generalized_false_positive_rate (self, privileged=None)
+    - generalized_true_negative_rate (self, privileged=None)
+    - generalized_true_positive_rate (self, privileged=None)
+    - mean_difference (self)
+    - negative_predictive_value (self, privileged=None)
+    - num_false_negatives (self, privileged=None)
+    - num_false_positives (self, privileged=None)
+    - num_generalized_false_negatives (self, privileged=None)
+    - num_generalized_false_positives (self, privileged=None)
+    - num_generalized_true_negatives (self, privileged=None)
+    - num_generalized_true_positives (self, privileged=None)
+    - num_instances (self, privileged=None)
+    - num_negatives (self, privileged=None)
+    - num_positives (self, privileged=None)
+    - num_pred_negatives (self, privileged=None)
+    - num_pred_positives (self, privileged=None)
+    - num_true_negatives (self, privileged=None)
+    - num_true_positives (self, privileged=None)
+    - performance_measures (self, privileged=None)
+    - positive_predictive_value (self, privileged=None)
+    - power (self, privileged=None)
+    - precision (self, privileged=None)
+    - ratio (self, metric_fun)
+    - recall (self, privileged=None)
+    - rich_subgroup (self, predictions, fairness_def='FP')
+    - selection_rate (self, privileged=None)
+    - sensitivity (self, privileged=None)
+    - smoothed_empirical_differential_fairness (self, concentration=1.0)
+    - specificity (self, privileged=None)
+    - statistical_parity_difference (self)
+    - theil_index (self)
+    - true_negative_rate (self, privileged=None)
+    - true_positive_rate (self, privileged=None)
+    - true_positive_rate_difference (self)
+
+Class: RejectOptionClassification
+  Inherits from: aif360.algorithms.transformer.Transformer
+  Attributes:
+    - _abc_impl
+  Methods:
+    - fit (self, dataset_true, dataset_pred)
+    - fit_predict (self, dataset_true, dataset_pred)
+    - fit_transform (self, dataset)
+    - predict (self, dataset)
+    - transform (self, dataset)
+
+Interface: Transformer
+  Inherits from: abc.ApplyDecorator
+  Attributes:
+    - _abc_impl
+  Methods:
+    - fit (self, dataset)
+    - fit_predict (self, dataset)
+    - fit_transform (self, dataset)
+    - predict (self, dataset)
+    - transform (self, dataset)
+
+========================================
+
+Module: aif360.algorithms.preprocessing
+---------------------------------------
+Class: DisparateImpactRemover
+  Inherits from: aif360.algorithms.transformer.Transformer
+  Attributes:
+    - _abc_impl
+  Methods:
+    - fit (self, dataset)
+    - fit_predict (self, dataset)
+    - fit_transform (self, dataset)
+    - predict (self, dataset)
+    - transform (self, dataset)
+
+Class: LFR
+  Inherits from: aif360.algorithms.transformer.Transformer
+  Attributes:
+    - _abc_impl
+  Methods:
+    - fit (self, dataset, maxiter=5000, maxfun=5000)
+    - fit_predict (self, dataset)
+    - fit_transform (self, dataset, maxiter=5000, maxfun=5000, threshold=0.5)
+    - predict (self, dataset)
+    - transform (self, dataset, threshold=0.5)
+
+Class: OptimPreproc
+  Inherits from: aif360.algorithms.transformer.Transformer
+  Attributes:
+    - _abc_impl
+  Methods:
+    - fit (self, dataset, sep='=')
+    - fit_predict (self, dataset)
+    - fit_transform (self, dataset, sep='=', transform_Y=True)
+    - predict (self, dataset)
+    - transform (self, dataset, sep='=', transform_Y=True)
+
+Class: Reweighing
+  Inherits from: aif360.algorithms.transformer.Transformer
+  Attributes:
+    - _abc_impl
+  Methods:
+    - _obtain_conditionings (self, dataset)
+    - fit (self, dataset)
+    - fit_predict (self, dataset)
+    - fit_transform (self, dataset)
+    - predict (self, dataset)
+    - transform (self, dataset)
+
+========================================
+
+Module: aif360.algorithms.preprocessing.disparate_impact_remover
+----------------------------------------------------------------
+Class: DisparateImpactRemover
+  Inherits from: aif360.algorithms.transformer.Transformer
+  Attributes:
+    - _abc_impl
+  Methods:
+    - fit (self, dataset)
+    - fit_predict (self, dataset)
+    - fit_transform (self, dataset)
+    - predict (self, dataset)
+    - transform (self, dataset)
+
+Interface: Transformer
+  Inherits from: abc.ApplyDecorator
+  Attributes:
+    - _abc_impl
+  Methods:
+    - fit (self, dataset)
+    - fit_predict (self, dataset)
+    - fit_transform (self, dataset)
+    - predict (self, dataset)
+    - transform (self, dataset)
+
+========================================
+
+Module: aif360.algorithms.preprocessing.lfr
+-------------------------------------------
+Class: LFR
+  Inherits from: aif360.algorithms.transformer.Transformer
+  Attributes:
+    - _abc_impl
+  Methods:
+    - fit (self, dataset, maxiter=5000, maxfun=5000)
+    - fit_predict (self, dataset)
+    - fit_transform (self, dataset, maxiter=5000, maxfun=5000, threshold=0.5)
+    - predict (self, dataset)
+    - transform (self, dataset, threshold=0.5)
+
+Interface: Transformer
+  Inherits from: abc.ApplyDecorator
+  Attributes:
+    - _abc_impl
+  Methods:
+    - fit (self, dataset)
+    - fit_predict (self, dataset)
+    - fit_transform (self, dataset)
+    - predict (self, dataset)
+    - transform (self, dataset)
+
+========================================
+
+Module: aif360.algorithms.preprocessing.optim_preproc
+-----------------------------------------------------
+Class: BinaryLabelDataset
+  Inherits from: aif360.datasets.structured_dataset.StructuredDataset
+  Attributes:
+    - _abc_impl
+  Methods:
+    - _de_dummy_code_df (df, sep='=', set_category=False)
+    - _parse_feature_names (feature_names, sep='=')
+    - align_datasets (self, other)
+    - convert_to_dataframe (self, de_dummy_code=False, sep='=', set_category=True)
+    - copy (self, deepcopy=False)
+    - export_dataset (self, export_metadata=False)
+    - import_dataset (self, import_metadata=False)
+    - split (self, num_or_size_splits, shuffle=False, seed=None)
+    - subset (self, indexes)
+    - temporarily_ignore (self, *fields)
+    - validate_dataset (self)
+
+Class: OptimPreproc
+  Inherits from: aif360.algorithms.transformer.Transformer
+  Attributes:
+    - _abc_impl
+  Methods:
+    - fit (self, dataset, sep='=')
+    - fit_predict (self, dataset)
+    - fit_transform (self, dataset, sep='=', transform_Y=True)
+    - predict (self, dataset)
+    - transform (self, dataset, sep='=', transform_Y=True)
+
+Interface: Transformer
+  Inherits from: abc.ApplyDecorator
+  Attributes:
+    - _abc_impl
+  Methods:
+    - fit (self, dataset)
+    - fit_predict (self, dataset)
+    - fit_transform (self, dataset)
+    - predict (self, dataset)
+    - transform (self, dataset)
+
+========================================
+
+Module: aif360.algorithms.preprocessing.optim_preproc_helpers.data_preproc_functions
+------------------------------------------------------------------------------------
+Class: AdultDataset
+  Inherits from: aif360.datasets.standard_dataset.StandardDataset
+  Attributes:
+    - _abc_impl
+  Methods:
+    - _de_dummy_code_df (df, sep='=', set_category=False)
+    - _parse_feature_names (feature_names, sep='=')
+    - align_datasets (self, other)
+    - convert_to_dataframe (self, de_dummy_code=False, sep='=', set_category=True)
+    - copy (self, deepcopy=False)
+    - export_dataset (self, export_metadata=False)
+    - import_dataset (self, import_metadata=False)
+    - split (self, num_or_size_splits, shuffle=False, seed=None)
+    - subset (self, indexes)
+    - temporarily_ignore (self, *fields)
+    - validate_dataset (self)
+
+Class: CompasDataset
+  Inherits from: aif360.datasets.standard_dataset.StandardDataset
+  Attributes:
+    - _abc_impl
+  Methods:
+    - _de_dummy_code_df (df, sep='=', set_category=False)
+    - _parse_feature_names (feature_names, sep='=')
+    - align_datasets (self, other)
+    - convert_to_dataframe (self, de_dummy_code=False, sep='=', set_category=True)
+    - copy (self, deepcopy=False)
+    - export_dataset (self, export_metadata=False)
+    - import_dataset (self, import_metadata=False)
+    - split (self, num_or_size_splits, shuffle=False, seed=None)
+    - subset (self, indexes)
+    - temporarily_ignore (self, *fields)
+    - validate_dataset (self)
+
+Class: GermanDataset
+  Inherits from: aif360.datasets.standard_dataset.StandardDataset
+  Attributes:
+    - _abc_impl
+  Methods:
+    - _de_dummy_code_df (df, sep='=', set_category=False)
+    - _parse_feature_names (feature_names, sep='=')
+    - align_datasets (self, other)
+    - convert_to_dataframe (self, de_dummy_code=False, sep='=', set_category=True)
+    - copy (self, deepcopy=False)
+    - export_dataset (self, export_metadata=False)
+    - import_dataset (self, import_metadata=False)
+    - split (self, num_or_size_splits, shuffle=False, seed=None)
+    - subset (self, indexes)
+    - temporarily_ignore (self, *fields)
+    - validate_dataset (self)
+
+========================================
+
+Module: aif360.algorithms.preprocessing.reweighing
+--------------------------------------------------
+Class: Reweighing
+  Inherits from: aif360.algorithms.transformer.Transformer
+  Attributes:
+    - _abc_impl
+  Methods:
+    - _obtain_conditionings (self, dataset)
+    - fit (self, dataset)
+    - fit_predict (self, dataset)
+    - fit_transform (self, dataset)
+    - predict (self, dataset)
+    - transform (self, dataset)
+
+Interface: Transformer
+  Inherits from: abc.ApplyDecorator
+  Attributes:
+    - _abc_impl
+  Methods:
+    - fit (self, dataset)
+    - fit_predict (self, dataset)
+    - fit_transform (self, dataset)
+    - predict (self, dataset)
+    - transform (self, dataset)
+
+========================================
+
+Module: aif360.algorithms.transformer
+-------------------------------------
+Interface: Dataset
+  Inherits from: abc.ABC
+  Attributes:
+    - _abc_impl
+  Methods:
+    - copy (self, deepcopy=False)
+    - export_dataset (self)
+    - split (self, num_or_size_splits, shuffle=False)
+    - validate_dataset (self)
+
+Class: NotFittedError
+  Inherits from: builtins.ValueError, builtins.AttributeError
+  Attributes:
+    - args
+    - name
+    - obj
+  Methods:
+    - add_note (self, object, /)
+    - with_traceback (self, object, /)
+
+Interface: Transformer
+  Inherits from: abc.ApplyDecorator
+  Attributes:
+    - _abc_impl
+  Methods:
+    - fit (self, dataset)
+    - fit_predict (self, dataset)
+    - fit_transform (self, dataset)
+    - predict (self, dataset)
+    - transform (self, dataset)
+
+========================================
+
+Module: aif360.datasets
+-----------------------
+Class: AdultDataset
+  Inherits from: aif360.datasets.standard_dataset.StandardDataset
+  Attributes:
+    - _abc_impl
+  Methods:
+    - _de_dummy_code_df (df, sep='=', set_category=False)
+    - _parse_feature_names (feature_names, sep='=')
+    - align_datasets (self, other)
+    - convert_to_dataframe (self, de_dummy_code=False, sep='=', set_category=True)
+    - copy (self, deepcopy=False)
+    - export_dataset (self, export_metadata=False)
+    - import_dataset (self, import_metadata=False)
+    - split (self, num_or_size_splits, shuffle=False, seed=None)
+    - subset (self, indexes)
+    - temporarily_ignore (self, *fields)
+    - validate_dataset (self)
+
+Class: BankDataset
+  Inherits from: aif360.datasets.standard_dataset.StandardDataset
+  Attributes:
+    - _abc_impl
+  Methods:
+    - _de_dummy_code_df (df, sep='=', set_category=False)
+    - _parse_feature_names (feature_names, sep='=')
+    - align_datasets (self, other)
+    - convert_to_dataframe (self, de_dummy_code=False, sep='=', set_category=True)
+    - copy (self, deepcopy=False)
+    - export_dataset (self, export_metadata=False)
+    - import_dataset (self, import_metadata=False)
+    - split (self, num_or_size_splits, shuffle=False, seed=None)
+    - subset (self, indexes)
+    - temporarily_ignore (self, *fields)
+    - validate_dataset (self)
+
+Class: BinaryLabelDataset
+  Inherits from: aif360.datasets.structured_dataset.StructuredDataset
+  Attributes:
+    - _abc_impl
+  Methods:
+    - _de_dummy_code_df (df, sep='=', set_category=False)
+    - _parse_feature_names (feature_names, sep='=')
+    - align_datasets (self, other)
+    - convert_to_dataframe (self, de_dummy_code=False, sep='=', set_category=True)
+    - copy (self, deepcopy=False)
+    - export_dataset (self, export_metadata=False)
+    - import_dataset (self, import_metadata=False)
+    - split (self, num_or_size_splits, shuffle=False, seed=None)
+    - subset (self, indexes)
+    - temporarily_ignore (self, *fields)
+    - validate_dataset (self)
+
+Class: CompasDataset
+  Inherits from: aif360.datasets.standard_dataset.StandardDataset
+  Attributes:
+    - _abc_impl
+  Methods:
+    - _de_dummy_code_df (df, sep='=', set_category=False)
+    - _parse_feature_names (feature_names, sep='=')
+    - align_datasets (self, other)
+    - convert_to_dataframe (self, de_dummy_code=False, sep='=', set_category=True)
+    - copy (self, deepcopy=False)
+    - export_dataset (self, export_metadata=False)
+    - import_dataset (self, import_metadata=False)
+    - split (self, num_or_size_splits, shuffle=False, seed=None)
+    - subset (self, indexes)
+    - temporarily_ignore (self, *fields)
+    - validate_dataset (self)
+
+Interface: Dataset
+  Inherits from: abc.ABC
+  Attributes:
+    - _abc_impl
+  Methods:
+    - copy (self, deepcopy=False)
+    - export_dataset (self)
+    - split (self, num_or_size_splits, shuffle=False)
+    - validate_dataset (self)
+
+Class: GermanDataset
+  Inherits from: aif360.datasets.standard_dataset.StandardDataset
+  Attributes:
+    - _abc_impl
+  Methods:
+    - _de_dummy_code_df (df, sep='=', set_category=False)
+    - _parse_feature_names (feature_names, sep='=')
+    - align_datasets (self, other)
+    - convert_to_dataframe (self, de_dummy_code=False, sep='=', set_category=True)
+    - copy (self, deepcopy=False)
+    - export_dataset (self, export_metadata=False)
+    - import_dataset (self, import_metadata=False)
+    - split (self, num_or_size_splits, shuffle=False, seed=None)
+    - subset (self, indexes)
+    - temporarily_ignore (self, *fields)
+    - validate_dataset (self)
+
+Class: LawSchoolGPADataset
+  Inherits from: aif360.datasets.regression_dataset.RegressionDataset
+  Attributes:
+    - _abc_impl
+  Methods:
+    - _de_dummy_code_df (df, sep='=', set_category=False)
+    - _parse_feature_names (feature_names, sep='=')
+    - align_datasets (self, other)
+    - convert_to_dataframe (self, de_dummy_code=False, sep='=', set_category=True)
+    - copy (self, deepcopy=False)
+    - export_dataset (self, export_metadata=False)
+    - import_dataset (self, import_metadata=False)
+    - split (self, num_or_size_splits, shuffle=False, seed=None)
+    - subset (self, indexes)
+    - temporarily_ignore (self, *fields)
+    - validate_dataset (self)
+
+Class: MEPSDataset19
+  Inherits from: aif360.datasets.standard_dataset.StandardDataset
+  Attributes:
+    - _abc_impl
+  Methods:
+    - _de_dummy_code_df (df, sep='=', set_category=False)
+    - _parse_feature_names (feature_names, sep='=')
+    - align_datasets (self, other)
+    - convert_to_dataframe (self, de_dummy_code=False, sep='=', set_category=True)
+    - copy (self, deepcopy=False)
+    - export_dataset (self, export_metadata=False)
+    - import_dataset (self, import_metadata=False)
+    - split (self, num_or_size_splits, shuffle=False, seed=None)
+    - subset (self, indexes)
+    - temporarily_ignore (self, *fields)
+    - validate_dataset (self)
+
+Class: MEPSDataset20
+  Inherits from: aif360.datasets.standard_dataset.StandardDataset
+  Attributes:
+    - _abc_impl
+  Methods:
+    - _de_dummy_code_df (df, sep='=', set_category=False)
+    - _parse_feature_names (feature_names, sep='=')
+    - align_datasets (self, other)
+    - convert_to_dataframe (self, de_dummy_code=False, sep='=', set_category=True)
+    - copy (self, deepcopy=False)
+    - export_dataset (self, export_metadata=False)
+    - import_dataset (self, import_metadata=False)
+    - split (self, num_or_size_splits, shuffle=False, seed=None)
+    - subset (self, indexes)
+    - temporarily_ignore (self, *fields)
+    - validate_dataset (self)
+
+Class: MEPSDataset21
+  Inherits from: aif360.datasets.standard_dataset.StandardDataset
+  Attributes:
+    - _abc_impl
+  Methods:
+    - _de_dummy_code_df (df, sep='=', set_category=False)
+    - _parse_feature_names (feature_names, sep='=')
+    - align_datasets (self, other)
+    - convert_to_dataframe (self, de_dummy_code=False, sep='=', set_category=True)
+    - copy (self, deepcopy=False)
+    - export_dataset (self, export_metadata=False)
+    - import_dataset (self, import_metadata=False)
+    - split (self, num_or_size_splits, shuffle=False, seed=None)
+    - subset (self, indexes)
+    - temporarily_ignore (self, *fields)
+    - validate_dataset (self)
+
+Class: RegressionDataset
+  Inherits from: aif360.datasets.structured_dataset.StructuredDataset
+  Attributes:
+    - _abc_impl
+  Methods:
+    - _de_dummy_code_df (df, sep='=', set_category=False)
+    - _parse_feature_names (feature_names, sep='=')
+    - align_datasets (self, other)
+    - convert_to_dataframe (self, de_dummy_code=False, sep='=', set_category=True)
+    - copy (self, deepcopy=False)
+    - export_dataset (self, export_metadata=False)
+    - import_dataset (self, import_metadata=False)
+    - split (self, num_or_size_splits, shuffle=False, seed=None)
+    - subset (self, indexes)
+    - temporarily_ignore (self, *fields)
+    - validate_dataset (self)
+
+Class: StandardDataset
+  Inherits from: aif360.datasets.binary_label_dataset.BinaryLabelDataset
+  Attributes:
+    - _abc_impl
+  Methods:
+    - _de_dummy_code_df (df, sep='=', set_category=False)
+    - _parse_feature_names (feature_names, sep='=')
+    - align_datasets (self, other)
+    - convert_to_dataframe (self, de_dummy_code=False, sep='=', set_category=True)
+    - copy (self, deepcopy=False)
+    - export_dataset (self, export_metadata=False)
+    - import_dataset (self, import_metadata=False)
+    - split (self, num_or_size_splits, shuffle=False, seed=None)
+    - subset (self, indexes)
+    - temporarily_ignore (self, *fields)
+    - validate_dataset (self)
+
+Class: StructuredDataset
+  Inherits from: aif360.datasets.dataset.Dataset
+  Attributes:
+    - _abc_impl
+  Methods:
+    - _de_dummy_code_df (df, sep='=', set_category=False)
+    - _parse_feature_names (feature_names, sep='=')
+    - align_datasets (self, other)
+    - convert_to_dataframe (self, de_dummy_code=False, sep='=', set_category=True)
+    - copy (self, deepcopy=False)
+    - export_dataset (self, export_metadata=False)
+    - import_dataset (self, import_metadata=False)
+    - split (self, num_or_size_splits, shuffle=False, seed=None)
+    - subset (self, indexes)
+    - temporarily_ignore (self, *fields)
+    - validate_dataset (self)
+
+========================================
+
+Module: aif360.datasets.adult_dataset
+-------------------------------------
+Class: AdultDataset
+  Inherits from: aif360.datasets.standard_dataset.StandardDataset
+  Attributes:
+    - _abc_impl
+  Methods:
+    - _de_dummy_code_df (df, sep='=', set_category=False)
+    - _parse_feature_names (feature_names, sep='=')
+    - align_datasets (self, other)
+    - convert_to_dataframe (self, de_dummy_code=False, sep='=', set_category=True)
+    - copy (self, deepcopy=False)
+    - export_dataset (self, export_metadata=False)
+    - import_dataset (self, import_metadata=False)
+    - split (self, num_or_size_splits, shuffle=False, seed=None)
+    - subset (self, indexes)
+    - temporarily_ignore (self, *fields)
+    - validate_dataset (self)
+
+Class: StandardDataset
+  Inherits from: aif360.datasets.binary_label_dataset.BinaryLabelDataset
+  Attributes:
+    - _abc_impl
+  Methods:
+    - _de_dummy_code_df (df, sep='=', set_category=False)
+    - _parse_feature_names (feature_names, sep='=')
+    - align_datasets (self, other)
+    - convert_to_dataframe (self, de_dummy_code=False, sep='=', set_category=True)
+    - copy (self, deepcopy=False)
+    - export_dataset (self, export_metadata=False)
+    - import_dataset (self, import_metadata=False)
+    - split (self, num_or_size_splits, shuffle=False, seed=None)
+    - subset (self, indexes)
+    - temporarily_ignore (self, *fields)
+    - validate_dataset (self)
+
+========================================
+
+Module: aif360.datasets.bank_dataset
+------------------------------------
+Class: BankDataset
+  Inherits from: aif360.datasets.standard_dataset.StandardDataset
+  Attributes:
+    - _abc_impl
+  Methods:
+    - _de_dummy_code_df (df, sep='=', set_category=False)
+    - _parse_feature_names (feature_names, sep='=')
+    - align_datasets (self, other)
+    - convert_to_dataframe (self, de_dummy_code=False, sep='=', set_category=True)
+    - copy (self, deepcopy=False)
+    - export_dataset (self, export_metadata=False)
+    - import_dataset (self, import_metadata=False)
+    - split (self, num_or_size_splits, shuffle=False, seed=None)
+    - subset (self, indexes)
+    - temporarily_ignore (self, *fields)
+    - validate_dataset (self)
+
+Class: StandardDataset
+  Inherits from: aif360.datasets.binary_label_dataset.BinaryLabelDataset
+  Attributes:
+    - _abc_impl
+  Methods:
+    - _de_dummy_code_df (df, sep='=', set_category=False)
+    - _parse_feature_names (feature_names, sep='=')
+    - align_datasets (self, other)
+    - convert_to_dataframe (self, de_dummy_code=False, sep='=', set_category=True)
+    - copy (self, deepcopy=False)
+    - export_dataset (self, export_metadata=False)
+    - import_dataset (self, import_metadata=False)
+    - split (self, num_or_size_splits, shuffle=False, seed=None)
+    - subset (self, indexes)
+    - temporarily_ignore (self, *fields)
+    - validate_dataset (self)
+
+========================================
+
+Module: aif360.datasets.binary_label_dataset
+--------------------------------------------
+Class: BinaryLabelDataset
+  Inherits from: aif360.datasets.structured_dataset.StructuredDataset
+  Attributes:
+    - _abc_impl
+  Methods:
+    - _de_dummy_code_df (df, sep='=', set_category=False)
+    - _parse_feature_names (feature_names, sep='=')
+    - align_datasets (self, other)
+    - convert_to_dataframe (self, de_dummy_code=False, sep='=', set_category=True)
+    - copy (self, deepcopy=False)
+    - export_dataset (self, export_metadata=False)
+    - import_dataset (self, import_metadata=False)
+    - split (self, num_or_size_splits, shuffle=False, seed=None)
+    - subset (self, indexes)
+    - temporarily_ignore (self, *fields)
+    - validate_dataset (self)
+
+Class: StructuredDataset
+  Inherits from: aif360.datasets.dataset.Dataset
+  Attributes:
+    - _abc_impl
+  Methods:
+    - _de_dummy_code_df (df, sep='=', set_category=False)
+    - _parse_feature_names (feature_names, sep='=')
+    - align_datasets (self, other)
+    - convert_to_dataframe (self, de_dummy_code=False, sep='=', set_category=True)
+    - copy (self, deepcopy=False)
+    - export_dataset (self, export_metadata=False)
+    - import_dataset (self, import_metadata=False)
+    - split (self, num_or_size_splits, shuffle=False, seed=None)
+    - subset (self, indexes)
+    - temporarily_ignore (self, *fields)
+    - validate_dataset (self)
+
+========================================
+
+Module: aif360.datasets.compas_dataset
+--------------------------------------
+Class: CompasDataset
+  Inherits from: aif360.datasets.standard_dataset.StandardDataset
+  Attributes:
+    - _abc_impl
+  Methods:
+    - _de_dummy_code_df (df, sep='=', set_category=False)
+    - _parse_feature_names (feature_names, sep='=')
+    - align_datasets (self, other)
+    - convert_to_dataframe (self, de_dummy_code=False, sep='=', set_category=True)
+    - copy (self, deepcopy=False)
+    - export_dataset (self, export_metadata=False)
+    - import_dataset (self, import_metadata=False)
+    - split (self, num_or_size_splits, shuffle=False, seed=None)
+    - subset (self, indexes)
+    - temporarily_ignore (self, *fields)
+    - validate_dataset (self)
+
+Class: StandardDataset
+  Inherits from: aif360.datasets.binary_label_dataset.BinaryLabelDataset
+  Attributes:
+    - _abc_impl
+  Methods:
+    - _de_dummy_code_df (df, sep='=', set_category=False)
+    - _parse_feature_names (feature_names, sep='=')
+    - align_datasets (self, other)
+    - convert_to_dataframe (self, de_dummy_code=False, sep='=', set_category=True)
+    - copy (self, deepcopy=False)
+    - export_dataset (self, export_metadata=False)
+    - import_dataset (self, import_metadata=False)
+    - split (self, num_or_size_splits, shuffle=False, seed=None)
+    - subset (self, indexes)
+    - temporarily_ignore (self, *fields)
+    - validate_dataset (self)
+
+========================================
+
+Module: aif360.datasets.dataset
+-------------------------------
+Interface: Dataset
+  Inherits from: abc.ABC
+  Attributes:
+    - _abc_impl
+  Methods:
+    - copy (self, deepcopy=False)
+    - export_dataset (self)
+    - split (self, num_or_size_splits, shuffle=False)
+    - validate_dataset (self)
+
+========================================
+
+Module: aif360.datasets.german_dataset
+--------------------------------------
+Class: GermanDataset
+  Inherits from: aif360.datasets.standard_dataset.StandardDataset
+  Attributes:
+    - _abc_impl
+  Methods:
+    - _de_dummy_code_df (df, sep='=', set_category=False)
+    - _parse_feature_names (feature_names, sep='=')
+    - align_datasets (self, other)
+    - convert_to_dataframe (self, de_dummy_code=False, sep='=', set_category=True)
+    - copy (self, deepcopy=False)
+    - export_dataset (self, export_metadata=False)
+    - import_dataset (self, import_metadata=False)
+    - split (self, num_or_size_splits, shuffle=False, seed=None)
+    - subset (self, indexes)
+    - temporarily_ignore (self, *fields)
+    - validate_dataset (self)
+
+Class: StandardDataset
+  Inherits from: aif360.datasets.binary_label_dataset.BinaryLabelDataset
+  Attributes:
+    - _abc_impl
+  Methods:
+    - _de_dummy_code_df (df, sep='=', set_category=False)
+    - _parse_feature_names (feature_names, sep='=')
+    - align_datasets (self, other)
+    - convert_to_dataframe (self, de_dummy_code=False, sep='=', set_category=True)
+    - copy (self, deepcopy=False)
+    - export_dataset (self, export_metadata=False)
+    - import_dataset (self, import_metadata=False)
+    - split (self, num_or_size_splits, shuffle=False, seed=None)
+    - subset (self, indexes)
+    - temporarily_ignore (self, *fields)
+    - validate_dataset (self)
+
+========================================
+
+Module: aif360.datasets.law_school_gpa_dataset
+----------------------------------------------
+Class: LawSchoolGPADataset
+  Inherits from: aif360.datasets.regression_dataset.RegressionDataset
+  Attributes:
+    - _abc_impl
+  Methods:
+    - _de_dummy_code_df (df, sep='=', set_category=False)
+    - _parse_feature_names (feature_names, sep='=')
+    - align_datasets (self, other)
+    - convert_to_dataframe (self, de_dummy_code=False, sep='=', set_category=True)
+    - copy (self, deepcopy=False)
+    - export_dataset (self, export_metadata=False)
+    - import_dataset (self, import_metadata=False)
+    - split (self, num_or_size_splits, shuffle=False, seed=None)
+    - subset (self, indexes)
+    - temporarily_ignore (self, *fields)
+    - validate_dataset (self)
+
+Class: RegressionDataset
+  Inherits from: aif360.datasets.structured_dataset.StructuredDataset
+  Attributes:
+    - _abc_impl
+  Methods:
+    - _de_dummy_code_df (df, sep='=', set_category=False)
+    - _parse_feature_names (feature_names, sep='=')
+    - align_datasets (self, other)
+    - convert_to_dataframe (self, de_dummy_code=False, sep='=', set_category=True)
+    - copy (self, deepcopy=False)
+    - export_dataset (self, export_metadata=False)
+    - import_dataset (self, import_metadata=False)
+    - split (self, num_or_size_splits, shuffle=False, seed=None)
+    - subset (self, indexes)
+    - temporarily_ignore (self, *fields)
+    - validate_dataset (self)
+
+========================================
+
+Module: aif360.datasets.lime_encoder
+------------------------------------
+Class: LimeEncoder
+  Inherits from: aif360.algorithms.transformer.Transformer
+  Attributes:
+    - _abc_impl
+  Methods:
+    - fit (self, dataset)
+    - fit_predict (self, dataset)
+    - fit_transform (self, dataset)
+    - inverse_transform (self, limedata)
+    - predict (self, dataset)
+    - transform (self, aif360data)
+
+Interface: Transformer
+  Inherits from: abc.ApplyDecorator
+  Attributes:
+    - _abc_impl
+  Methods:
+    - fit (self, dataset)
+    - fit_predict (self, dataset)
+    - fit_transform (self, dataset)
+    - predict (self, dataset)
+    - transform (self, dataset)
+
+========================================
+
+Module: aif360.datasets.meps_dataset_panel19_fy2015
+---------------------------------------------------
+Class: MEPSDataset19
+  Inherits from: aif360.datasets.standard_dataset.StandardDataset
+  Attributes:
+    - _abc_impl
+  Methods:
+    - _de_dummy_code_df (df, sep='=', set_category=False)
+    - _parse_feature_names (feature_names, sep='=')
+    - align_datasets (self, other)
+    - convert_to_dataframe (self, de_dummy_code=False, sep='=', set_category=True)
+    - copy (self, deepcopy=False)
+    - export_dataset (self, export_metadata=False)
+    - import_dataset (self, import_metadata=False)
+    - split (self, num_or_size_splits, shuffle=False, seed=None)
+    - subset (self, indexes)
+    - temporarily_ignore (self, *fields)
+    - validate_dataset (self)
+
+Class: StandardDataset
+  Inherits from: aif360.datasets.binary_label_dataset.BinaryLabelDataset
+  Attributes:
+    - _abc_impl
+  Methods:
+    - _de_dummy_code_df (df, sep='=', set_category=False)
+    - _parse_feature_names (feature_names, sep='=')
+    - align_datasets (self, other)
+    - convert_to_dataframe (self, de_dummy_code=False, sep='=', set_category=True)
+    - copy (self, deepcopy=False)
+    - export_dataset (self, export_metadata=False)
+    - import_dataset (self, import_metadata=False)
+    - split (self, num_or_size_splits, shuffle=False, seed=None)
+    - subset (self, indexes)
+    - temporarily_ignore (self, *fields)
+    - validate_dataset (self)
+
+========================================
+
+Module: aif360.datasets.meps_dataset_panel20_fy2015
+---------------------------------------------------
+Class: MEPSDataset20
+  Inherits from: aif360.datasets.standard_dataset.StandardDataset
+  Attributes:
+    - _abc_impl
+  Methods:
+    - _de_dummy_code_df (df, sep='=', set_category=False)
+    - _parse_feature_names (feature_names, sep='=')
+    - align_datasets (self, other)
+    - convert_to_dataframe (self, de_dummy_code=False, sep='=', set_category=True)
+    - copy (self, deepcopy=False)
+    - export_dataset (self, export_metadata=False)
+    - import_dataset (self, import_metadata=False)
+    - split (self, num_or_size_splits, shuffle=False, seed=None)
+    - subset (self, indexes)
+    - temporarily_ignore (self, *fields)
+    - validate_dataset (self)
+
+Class: StandardDataset
+  Inherits from: aif360.datasets.binary_label_dataset.BinaryLabelDataset
+  Attributes:
+    - _abc_impl
+  Methods:
+    - _de_dummy_code_df (df, sep='=', set_category=False)
+    - _parse_feature_names (feature_names, sep='=')
+    - align_datasets (self, other)
+    - convert_to_dataframe (self, de_dummy_code=False, sep='=', set_category=True)
+    - copy (self, deepcopy=False)
+    - export_dataset (self, export_metadata=False)
+    - import_dataset (self, import_metadata=False)
+    - split (self, num_or_size_splits, shuffle=False, seed=None)
+    - subset (self, indexes)
+    - temporarily_ignore (self, *fields)
+    - validate_dataset (self)
+
+========================================
+
+Module: aif360.datasets.meps_dataset_panel21_fy2016
+---------------------------------------------------
+Class: MEPSDataset21
+  Inherits from: aif360.datasets.standard_dataset.StandardDataset
+  Attributes:
+    - _abc_impl
+  Methods:
+    - _de_dummy_code_df (df, sep='=', set_category=False)
+    - _parse_feature_names (feature_names, sep='=')
+    - align_datasets (self, other)
+    - convert_to_dataframe (self, de_dummy_code=False, sep='=', set_category=True)
+    - copy (self, deepcopy=False)
+    - export_dataset (self, export_metadata=False)
+    - import_dataset (self, import_metadata=False)
+    - split (self, num_or_size_splits, shuffle=False, seed=None)
+    - subset (self, indexes)
+    - temporarily_ignore (self, *fields)
+    - validate_dataset (self)
+
+Class: StandardDataset
+  Inherits from: aif360.datasets.binary_label_dataset.BinaryLabelDataset
+  Attributes:
+    - _abc_impl
+  Methods:
+    - _de_dummy_code_df (df, sep='=', set_category=False)
+    - _parse_feature_names (feature_names, sep='=')
+    - align_datasets (self, other)
+    - convert_to_dataframe (self, de_dummy_code=False, sep='=', set_category=True)
+    - copy (self, deepcopy=False)
+    - export_dataset (self, export_metadata=False)
+    - import_dataset (self, import_metadata=False)
+    - split (self, num_or_size_splits, shuffle=False, seed=None)
+    - subset (self, indexes)
+    - temporarily_ignore (self, *fields)
+    - validate_dataset (self)
+
+========================================
+
+Module: aif360.datasets.multiclass_label_dataset
+------------------------------------------------
+Class: MulticlassLabelDataset
+  Inherits from: aif360.datasets.structured_dataset.StructuredDataset
+  Attributes:
+    - _abc_impl
+  Methods:
+    - _de_dummy_code_df (df, sep='=', set_category=False)
+    - _parse_feature_names (feature_names, sep='=')
+    - align_datasets (self, other)
+    - convert_to_dataframe (self, de_dummy_code=False, sep='=', set_category=True)
+    - copy (self, deepcopy=False)
+    - export_dataset (self, export_metadata=False)
+    - import_dataset (self, import_metadata=False)
+    - split (self, num_or_size_splits, shuffle=False, seed=None)
+    - subset (self, indexes)
+    - temporarily_ignore (self, *fields)
+    - validate_dataset (self)
+
+Class: StructuredDataset
+  Inherits from: aif360.datasets.dataset.Dataset
+  Attributes:
+    - _abc_impl
+  Methods:
+    - _de_dummy_code_df (df, sep='=', set_category=False)
+    - _parse_feature_names (feature_names, sep='=')
+    - align_datasets (self, other)
+    - convert_to_dataframe (self, de_dummy_code=False, sep='=', set_category=True)
+    - copy (self, deepcopy=False)
+    - export_dataset (self, export_metadata=False)
+    - import_dataset (self, import_metadata=False)
+    - split (self, num_or_size_splits, shuffle=False, seed=None)
+    - subset (self, indexes)
+    - temporarily_ignore (self, *fields)
+    - validate_dataset (self)
+
+========================================
+
+Module: aif360.datasets.regression_dataset
+------------------------------------------
+Class: RegressionDataset
+  Inherits from: aif360.datasets.structured_dataset.StructuredDataset
+  Attributes:
+    - _abc_impl
+  Methods:
+    - _de_dummy_code_df (df, sep='=', set_category=False)
+    - _parse_feature_names (feature_names, sep='=')
+    - align_datasets (self, other)
+    - convert_to_dataframe (self, de_dummy_code=False, sep='=', set_category=True)
+    - copy (self, deepcopy=False)
+    - export_dataset (self, export_metadata=False)
+    - import_dataset (self, import_metadata=False)
+    - split (self, num_or_size_splits, shuffle=False, seed=None)
+    - subset (self, indexes)
+    - temporarily_ignore (self, *fields)
+    - validate_dataset (self)
+
+Class: StructuredDataset
+  Inherits from: aif360.datasets.dataset.Dataset
+  Attributes:
+    - _abc_impl
+  Methods:
+    - _de_dummy_code_df (df, sep='=', set_category=False)
+    - _parse_feature_names (feature_names, sep='=')
+    - align_datasets (self, other)
+    - convert_to_dataframe (self, de_dummy_code=False, sep='=', set_category=True)
+    - copy (self, deepcopy=False)
+    - export_dataset (self, export_metadata=False)
+    - import_dataset (self, import_metadata=False)
+    - split (self, num_or_size_splits, shuffle=False, seed=None)
+    - subset (self, indexes)
+    - temporarily_ignore (self, *fields)
+    - validate_dataset (self)
+
+========================================
+
+Module: aif360.datasets.standard_dataset
+----------------------------------------
+Class: BinaryLabelDataset
+  Inherits from: aif360.datasets.structured_dataset.StructuredDataset
+  Attributes:
+    - _abc_impl
+  Methods:
+    - _de_dummy_code_df (df, sep='=', set_category=False)
+    - _parse_feature_names (feature_names, sep='=')
+    - align_datasets (self, other)
+    - convert_to_dataframe (self, de_dummy_code=False, sep='=', set_category=True)
+    - copy (self, deepcopy=False)
+    - export_dataset (self, export_metadata=False)
+    - import_dataset (self, import_metadata=False)
+    - split (self, num_or_size_splits, shuffle=False, seed=None)
+    - subset (self, indexes)
+    - temporarily_ignore (self, *fields)
+    - validate_dataset (self)
+
+Class: StandardDataset
+  Inherits from: aif360.datasets.binary_label_dataset.BinaryLabelDataset
+  Attributes:
+    - _abc_impl
+  Methods:
+    - _de_dummy_code_df (df, sep='=', set_category=False)
+    - _parse_feature_names (feature_names, sep='=')
+    - align_datasets (self, other)
+    - convert_to_dataframe (self, de_dummy_code=False, sep='=', set_category=True)
+    - copy (self, deepcopy=False)
+    - export_dataset (self, export_metadata=False)
+    - import_dataset (self, import_metadata=False)
+    - split (self, num_or_size_splits, shuffle=False, seed=None)
+    - subset (self, indexes)
+    - temporarily_ignore (self, *fields)
+    - validate_dataset (self)
+
+========================================
+
+Module: aif360.datasets.structured_dataset
+------------------------------------------
+Interface: Dataset
+  Inherits from: abc.ABC
+  Attributes:
+    - _abc_impl
+  Methods:
+    - copy (self, deepcopy=False)
+    - export_dataset (self)
+    - split (self, num_or_size_splits, shuffle=False)
+    - validate_dataset (self)
+
+Class: StructuredDataset
+  Inherits from: aif360.datasets.dataset.Dataset
+  Attributes:
+    - _abc_impl
+  Methods:
+    - _de_dummy_code_df (df, sep='=', set_category=False)
+    - _parse_feature_names (feature_names, sep='=')
+    - align_datasets (self, other)
+    - convert_to_dataframe (self, de_dummy_code=False, sep='=', set_category=True)
+    - copy (self, deepcopy=False)
+    - export_dataset (self, export_metadata=False)
+    - import_dataset (self, import_metadata=False)
+    - split (self, num_or_size_splits, shuffle=False, seed=None)
+    - subset (self, indexes)
+    - temporarily_ignore (self, *fields)
+    - validate_dataset (self)
+
+========================================
+
+Module: aif360.detectors
+------------------------
+Class: MDSS
+  Inherits from: builtins.object
+  Methods:
+    - choose_aggregates (self, aggregates: dict, thresholds: list, penalty: float, all_observed_sum: float, all_expectations: list)
+    - get_aggregates (self, coordinates: pandas.core.frame.DataFrame, outcomes: pandas.core.series.Series, expectations: pandas.core.series.Series, current_subset: dict, column_name: str, penalty: float)
+    - scan (self, coordinates: pandas.core.frame.DataFrame, expectations: pandas.core.series.Series, outcomes: pandas.core.series.Series, penalty: float, num_iters: int, verbose: bool = False, seed: int = 0, mode: str = 'binary')
+    - score_current_subset (self, coordinates: pandas.core.frame.DataFrame, expectations: pandas.core.series.Series, outcomes: pandas.core.series.Series, current_subset: dict, penalty: float)
+
+========================================
+
+Module: aif360.detectors.mdss.MDSS
+----------------------------------
+Class: BerkJones
+  Inherits from: aif360.detectors.mdss.ScoringFunctions.ScoringFunction.ScoringFunction
+  Methods:
+    - compute_qs (self, observed_sum: float, expectations: <built-in function array>, penalty: float)
+    - dscore (self, observed_sum: float, expectations: <built-in function array>, q: float)
+    - q_dscore (self, observed_sum: float, expectations: <built-in function array>, q: float)
+    - qmle (self, observed_sum: float, expectations: <built-in function array>)
+    - score (self, observed_sum: float, expectations: <built-in function array>, penalty: float, q: float)
+
+Class: Bernoulli
+  Inherits from: aif360.detectors.mdss.ScoringFunctions.ScoringFunction.ScoringFunction
+  Methods:
+    - compute_qs (self, observed_sum: float, expectations: <built-in function array>, penalty: float)
+    - dscore (self, observed_sum: float, expectations: <built-in function array>, q: float)
+    - q_dscore (self, observed_sum: float, expectations: <built-in function array>, q: float)
+    - qmle (self, observed_sum: float, expectations: <built-in function array>)
+    - score (self, observed_sum: float, expectations: <built-in function array>, penalty: float, q: float)
+
+Class: Gaussian
+  Inherits from: aif360.detectors.mdss.ScoringFunctions.ScoringFunction.ScoringFunction
+  Methods:
+    - compute_qs (self, observed_sum: float, expectations: <built-in function array>, penalty: float)
+    - dscore (self, observed_sum: float, expectations: <built-in function array>, q: float)
+    - q_dscore (self, observed_sum: float, expectations: <built-in function array>, q: float)
+    - qmle (self, observed_sum: float, expectations: <built-in function array>)
+    - score (self, observed_sum: float, expectations: <built-in function array>, penalty: float, q: float)
+
+Class: MDSS
+  Inherits from: builtins.object
+  Methods:
+    - choose_aggregates (self, aggregates: dict, thresholds: list, penalty: float, all_observed_sum: float, all_expectations: list)
+    - get_aggregates (self, coordinates: pandas.core.frame.DataFrame, outcomes: pandas.core.series.Series, expectations: pandas.core.series.Series, current_subset: dict, column_name: str, penalty: float)
+    - scan (self, coordinates: pandas.core.frame.DataFrame, expectations: pandas.core.series.Series, outcomes: pandas.core.series.Series, penalty: float, num_iters: int, verbose: bool = False, seed: int = 0, mode: str = 'binary')
+    - score_current_subset (self, coordinates: pandas.core.frame.DataFrame, expectations: pandas.core.series.Series, outcomes: pandas.core.series.Series, current_subset: dict, penalty: float)
+
+Class: Poisson
+  Inherits from: aif360.detectors.mdss.ScoringFunctions.ScoringFunction.ScoringFunction
+  Methods:
+    - compute_qs (self, observed_sum: float, expectations: <built-in function array>, penalty: float)
+    - dscore (self, observed_sum: float, expectations: <built-in function array>, q: float)
+    - q_dscore (self, observed_sum, expectations, q)
+    - qmle (self, observed_sum: float, expectations: <built-in function array>)
+    - score (self, observed_sum: float, expectations: <built-in function array>, penalty: float, q: float)
+
+Class: ScoringFunction
+  Inherits from: builtins.object
+  Methods:
+    - compute_qs (self, observed_sum: float, expectations: <built-in function array>, penalty: float)
+    - dscore (self, observed_sum: float, expectations: <built-in function array>, q: float)
+    - q_dscore (self, observed_sum: float, expectations: <built-in function array>, q: float)
+    - qmle (self, observed_sum: float, expectations: <built-in function array>)
+    - score (self, observed_sum: float, expectations: <built-in function array>, penalty: float, q: float)
+
+========================================
+
+Module: aif360.detectors.mdss.ScoringFunctions
+----------------------------------------------
+Class: BerkJones
+  Inherits from: aif360.detectors.mdss.ScoringFunctions.ScoringFunction.ScoringFunction
+  Methods:
+    - compute_qs (self, observed_sum: float, expectations: <built-in function array>, penalty: float)
+    - dscore (self, observed_sum: float, expectations: <built-in function array>, q: float)
+    - q_dscore (self, observed_sum: float, expectations: <built-in function array>, q: float)
+    - qmle (self, observed_sum: float, expectations: <built-in function array>)
+    - score (self, observed_sum: float, expectations: <built-in function array>, penalty: float, q: float)
+
+Class: Bernoulli
+  Inherits from: aif360.detectors.mdss.ScoringFunctions.ScoringFunction.ScoringFunction
+  Methods:
+    - compute_qs (self, observed_sum: float, expectations: <built-in function array>, penalty: float)
+    - dscore (self, observed_sum: float, expectations: <built-in function array>, q: float)
+    - q_dscore (self, observed_sum: float, expectations: <built-in function array>, q: float)
+    - qmle (self, observed_sum: float, expectations: <built-in function array>)
+    - score (self, observed_sum: float, expectations: <built-in function array>, penalty: float, q: float)
+
+Class: Gaussian
+  Inherits from: aif360.detectors.mdss.ScoringFunctions.ScoringFunction.ScoringFunction
+  Methods:
+    - compute_qs (self, observed_sum: float, expectations: <built-in function array>, penalty: float)
+    - dscore (self, observed_sum: float, expectations: <built-in function array>, q: float)
+    - q_dscore (self, observed_sum: float, expectations: <built-in function array>, q: float)
+    - qmle (self, observed_sum: float, expectations: <built-in function array>)
+    - score (self, observed_sum: float, expectations: <built-in function array>, penalty: float, q: float)
+
+Class: Poisson
+  Inherits from: aif360.detectors.mdss.ScoringFunctions.ScoringFunction.ScoringFunction
+  Methods:
+    - compute_qs (self, observed_sum: float, expectations: <built-in function array>, penalty: float)
+    - dscore (self, observed_sum: float, expectations: <built-in function array>, q: float)
+    - q_dscore (self, observed_sum, expectations, q)
+    - qmle (self, observed_sum: float, expectations: <built-in function array>)
+    - score (self, observed_sum: float, expectations: <built-in function array>, penalty: float, q: float)
+
+Class: ScoringFunction
+  Inherits from: builtins.object
+  Methods:
+    - compute_qs (self, observed_sum: float, expectations: <built-in function array>, penalty: float)
+    - dscore (self, observed_sum: float, expectations: <built-in function array>, q: float)
+    - q_dscore (self, observed_sum: float, expectations: <built-in function array>, q: float)
+    - qmle (self, observed_sum: float, expectations: <built-in function array>)
+    - score (self, observed_sum: float, expectations: <built-in function array>, penalty: float, q: float)
+
+========================================
+
+Module: aif360.detectors.mdss.ScoringFunctions.BerkJones
+--------------------------------------------------------
+Class: BerkJones
+  Inherits from: aif360.detectors.mdss.ScoringFunctions.ScoringFunction.ScoringFunction
+  Methods:
+    - compute_qs (self, observed_sum: float, expectations: <built-in function array>, penalty: float)
+    - dscore (self, observed_sum: float, expectations: <built-in function array>, q: float)
+    - q_dscore (self, observed_sum: float, expectations: <built-in function array>, q: float)
+    - qmle (self, observed_sum: float, expectations: <built-in function array>)
+    - score (self, observed_sum: float, expectations: <built-in function array>, penalty: float, q: float)
+
+Class: ScoringFunction
+  Inherits from: builtins.object
+  Methods:
+    - compute_qs (self, observed_sum: float, expectations: <built-in function array>, penalty: float)
+    - dscore (self, observed_sum: float, expectations: <built-in function array>, q: float)
+    - q_dscore (self, observed_sum: float, expectations: <built-in function array>, q: float)
+    - qmle (self, observed_sum: float, expectations: <built-in function array>)
+    - score (self, observed_sum: float, expectations: <built-in function array>, penalty: float, q: float)
+
+========================================
+
+Module: aif360.detectors.mdss.ScoringFunctions.Bernoulli
+--------------------------------------------------------
+Class: Bernoulli
+  Inherits from: aif360.detectors.mdss.ScoringFunctions.ScoringFunction.ScoringFunction
+  Methods:
+    - compute_qs (self, observed_sum: float, expectations: <built-in function array>, penalty: float)
+    - dscore (self, observed_sum: float, expectations: <built-in function array>, q: float)
+    - q_dscore (self, observed_sum: float, expectations: <built-in function array>, q: float)
+    - qmle (self, observed_sum: float, expectations: <built-in function array>)
+    - score (self, observed_sum: float, expectations: <built-in function array>, penalty: float, q: float)
+
+Class: ScoringFunction
+  Inherits from: builtins.object
+  Methods:
+    - compute_qs (self, observed_sum: float, expectations: <built-in function array>, penalty: float)
+    - dscore (self, observed_sum: float, expectations: <built-in function array>, q: float)
+    - q_dscore (self, observed_sum: float, expectations: <built-in function array>, q: float)
+    - qmle (self, observed_sum: float, expectations: <built-in function array>)
+    - score (self, observed_sum: float, expectations: <built-in function array>, penalty: float, q: float)
+
+========================================
+
+Module: aif360.detectors.mdss.ScoringFunctions.Gaussian
+-------------------------------------------------------
+Class: Gaussian
+  Inherits from: aif360.detectors.mdss.ScoringFunctions.ScoringFunction.ScoringFunction
+  Methods:
+    - compute_qs (self, observed_sum: float, expectations: <built-in function array>, penalty: float)
+    - dscore (self, observed_sum: float, expectations: <built-in function array>, q: float)
+    - q_dscore (self, observed_sum: float, expectations: <built-in function array>, q: float)
+    - qmle (self, observed_sum: float, expectations: <built-in function array>)
+    - score (self, observed_sum: float, expectations: <built-in function array>, penalty: float, q: float)
+
+Class: ScoringFunction
+  Inherits from: builtins.object
+  Methods:
+    - compute_qs (self, observed_sum: float, expectations: <built-in function array>, penalty: float)
+    - dscore (self, observed_sum: float, expectations: <built-in function array>, q: float)
+    - q_dscore (self, observed_sum: float, expectations: <built-in function array>, q: float)
+    - qmle (self, observed_sum: float, expectations: <built-in function array>)
+    - score (self, observed_sum: float, expectations: <built-in function array>, penalty: float, q: float)
+
+========================================
+
+Module: aif360.detectors.mdss.ScoringFunctions.Poisson
+------------------------------------------------------
+Class: Poisson
+  Inherits from: aif360.detectors.mdss.ScoringFunctions.ScoringFunction.ScoringFunction
+  Methods:
+    - compute_qs (self, observed_sum: float, expectations: <built-in function array>, penalty: float)
+    - dscore (self, observed_sum: float, expectations: <built-in function array>, q: float)
+    - q_dscore (self, observed_sum, expectations, q)
+    - qmle (self, observed_sum: float, expectations: <built-in function array>)
+    - score (self, observed_sum: float, expectations: <built-in function array>, penalty: float, q: float)
+
+Class: ScoringFunction
+  Inherits from: builtins.object
+  Methods:
+    - compute_qs (self, observed_sum: float, expectations: <built-in function array>, penalty: float)
+    - dscore (self, observed_sum: float, expectations: <built-in function array>, q: float)
+    - q_dscore (self, observed_sum: float, expectations: <built-in function array>, q: float)
+    - qmle (self, observed_sum: float, expectations: <built-in function array>)
+    - score (self, observed_sum: float, expectations: <built-in function array>, penalty: float, q: float)
+
+========================================
+
+Module: aif360.detectors.mdss.ScoringFunctions.ScoringFunction
+--------------------------------------------------------------
+Class: ScoringFunction
+  Inherits from: builtins.object
+  Methods:
+    - compute_qs (self, observed_sum: float, expectations: <built-in function array>, penalty: float)
+    - dscore (self, observed_sum: float, expectations: <built-in function array>, q: float)
+    - q_dscore (self, observed_sum: float, expectations: <built-in function array>, q: float)
+    - qmle (self, observed_sum: float, expectations: <built-in function array>)
+    - score (self, observed_sum: float, expectations: <built-in function array>, penalty: float, q: float)
+
+========================================
+
+Module: aif360.detectors.mdss.ScoringFunctions.optim
+----------------------------------------------------
+Class: ScoringFunction
+  Inherits from: builtins.object
+  Methods:
+    - compute_qs (self, observed_sum: float, expectations: <built-in function array>, penalty: float)
+    - dscore (self, observed_sum: float, expectations: <built-in function array>, q: float)
+    - q_dscore (self, observed_sum: float, expectations: <built-in function array>, q: float)
+    - qmle (self, observed_sum: float, expectations: <built-in function array>)
+    - score (self, observed_sum: float, expectations: <built-in function array>, penalty: float, q: float)
+
+========================================
+
+Module: aif360.detectors.mdss_detector
+--------------------------------------
+Class: BerkJones
+  Inherits from: aif360.detectors.mdss.ScoringFunctions.ScoringFunction.ScoringFunction
+  Methods:
+    - compute_qs (self, observed_sum: float, expectations: <built-in function array>, penalty: float)
+    - dscore (self, observed_sum: float, expectations: <built-in function array>, q: float)
+    - q_dscore (self, observed_sum: float, expectations: <built-in function array>, q: float)
+    - qmle (self, observed_sum: float, expectations: <built-in function array>)
+    - score (self, observed_sum: float, expectations: <built-in function array>, penalty: float, q: float)
+
+Class: Bernoulli
+  Inherits from: aif360.detectors.mdss.ScoringFunctions.ScoringFunction.ScoringFunction
+  Methods:
+    - compute_qs (self, observed_sum: float, expectations: <built-in function array>, penalty: float)
+    - dscore (self, observed_sum: float, expectations: <built-in function array>, q: float)
+    - q_dscore (self, observed_sum: float, expectations: <built-in function array>, q: float)
+    - qmle (self, observed_sum: float, expectations: <built-in function array>)
+    - score (self, observed_sum: float, expectations: <built-in function array>, penalty: float, q: float)
+
+Class: Gaussian
+  Inherits from: aif360.detectors.mdss.ScoringFunctions.ScoringFunction.ScoringFunction
+  Methods:
+    - compute_qs (self, observed_sum: float, expectations: <built-in function array>, penalty: float)
+    - dscore (self, observed_sum: float, expectations: <built-in function array>, q: float)
+    - q_dscore (self, observed_sum: float, expectations: <built-in function array>, q: float)
+    - qmle (self, observed_sum: float, expectations: <built-in function array>)
+    - score (self, observed_sum: float, expectations: <built-in function array>, penalty: float, q: float)
+
+Class: MDSS
+  Inherits from: builtins.object
+  Methods:
+    - choose_aggregates (self, aggregates: dict, thresholds: list, penalty: float, all_observed_sum: float, all_expectations: list)
+    - get_aggregates (self, coordinates: pandas.core.frame.DataFrame, outcomes: pandas.core.series.Series, expectations: pandas.core.series.Series, current_subset: dict, column_name: str, penalty: float)
+    - scan (self, coordinates: pandas.core.frame.DataFrame, expectations: pandas.core.series.Series, outcomes: pandas.core.series.Series, penalty: float, num_iters: int, verbose: bool = False, seed: int = 0, mode: str = 'binary')
+    - score_current_subset (self, coordinates: pandas.core.frame.DataFrame, expectations: pandas.core.series.Series, outcomes: pandas.core.series.Series, current_subset: dict, penalty: float)
+
+Class: Poisson
+  Inherits from: aif360.detectors.mdss.ScoringFunctions.ScoringFunction.ScoringFunction
+  Methods:
+    - compute_qs (self, observed_sum: float, expectations: <built-in function array>, penalty: float)
+    - dscore (self, observed_sum: float, expectations: <built-in function array>, q: float)
+    - q_dscore (self, observed_sum, expectations, q)
+    - qmle (self, observed_sum: float, expectations: <built-in function array>)
+    - score (self, observed_sum: float, expectations: <built-in function array>, penalty: float, q: float)
+
+Class: ScoringFunction
+  Inherits from: builtins.object
+  Methods:
+    - compute_qs (self, observed_sum: float, expectations: <built-in function array>, penalty: float)
+    - dscore (self, observed_sum: float, expectations: <built-in function array>, q: float)
+    - q_dscore (self, observed_sum: float, expectations: <built-in function array>, q: float)
+    - qmle (self, observed_sum: float, expectations: <built-in function array>)
+    - score (self, observed_sum: float, expectations: <built-in function array>, penalty: float, q: float)
+
+========================================
+
+Module: aif360.explainers
+-------------------------
+Interface: Explainer
+  Inherits from: abc.ABC
+  Attributes:
+    - _abc_impl
+
+Class: MetricJSONExplainer
+  Inherits from: aif360.explainers.metric_text_explainer.MetricTextExplainer
+  Attributes:
+    - _abc_impl
+  Methods:
+    - accuracy (self, privileged=None)
+    - average_abs_odds_difference (self)
+    - average_odds_difference (self)
+    - between_all_groups_coefficient_of_variation (self)
+    - between_all_groups_generalized_entropy_index (self, alpha=2)
+    - between_all_groups_theil_index (self)
+    - between_group_coefficient_of_variation (self)
+    - between_group_generalized_entropy_index (self, alpha=2)
+    - between_group_theil_index (self)
+    - coefficient_of_variation (self)
+    - consistency (self, n_neighbors=5)
+    - disparate_impact (self)
+    - equal_opportunity_difference (self)
+    - error_rate (self, privileged=None)
+    - error_rate_difference (self)
+    - error_rate_ratio (self)
+    - false_discovery_rate (self, privileged=None)
+    - false_discovery_rate_difference (self)
+    - false_discovery_rate_ratio (self)
+    - false_negative_rate (self, privileged=None)
+    - false_negative_rate_difference (self)
+    - false_negative_rate_ratio (self)
+    - false_omission_rate (self, privileged=None)
+    - false_omission_rate_difference (self)
+    - false_omission_rate_ratio (self)
+    - false_positive_rate (self, privileged=None)
+    - false_positive_rate_difference (self)
+    - false_positive_rate_ratio (self)
+    - falses_omission_rate_difference (self)
+    - generalized_entropy_index (self, alpha=2)
+    - mean_difference (self)
+    - negative_predictive_value (self, privileged=None)
+    - num_false_negatives (self, privileged=None)
+    - num_false_positives (self, privileged=None)
+    - num_instances (self, privileged=None)
+    - num_negatives (self, privileged=None)
+    - num_positives (self, privileged=None)
+    - num_pred_negatives (self, privileged=None)
+    - num_pred_positives (self, privileged=None)
+    - num_true_negatives (self, privileged=None)
+    - num_true_positives (self, privileged=None)
+    - positive_predictive_value (self, privileged=None)
+    - power (self, privileged=None)
+    - precision (self, privileged=None)
+    - recall (self, privileged=None)
+    - sensitivity (self, privileged=None)
+    - specificity (self, privileged=None)
+    - statistical_parity_difference (self)
+    - theil_index (self)
+    - true_negative_rate (self, privileged=None)
+    - true_positive_rate (self, privileged=None)
+    - true_positive_rate_difference (self)
+
+Class: MetricTextExplainer
+  Inherits from: aif360.explainers.explainer.Explainer
+  Attributes:
+    - _abc_impl
+  Methods:
+    - accuracy (self, privileged=None)
+    - average_abs_odds_difference (self)
+    - average_odds_difference (self)
+    - between_all_groups_coefficient_of_variation (self)
+    - between_all_groups_generalized_entropy_index (self, alpha=2)
+    - between_all_groups_theil_index (self)
+    - between_group_coefficient_of_variation (self)
+    - between_group_generalized_entropy_index (self, alpha=2)
+    - between_group_theil_index (self)
+    - coefficient_of_variation (self)
+    - consistency (self, n_neighbors=5)
+    - disparate_impact (self)
+    - equal_opportunity_difference (self)
+    - error_rate (self, privileged=None)
+    - error_rate_difference (self)
+    - error_rate_ratio (self)
+    - false_discovery_rate (self, privileged=None)
+    - false_discovery_rate_difference (self)
+    - false_discovery_rate_ratio (self)
+    - false_negative_rate (self, privileged=None)
+    - false_negative_rate_difference (self)
+    - false_negative_rate_ratio (self)
+    - false_omission_rate (self, privileged=None)
+    - false_omission_rate_ratio (self)
+    - false_positive_rate (self, privileged=None)
+    - false_positive_rate_difference (self)
+    - false_positive_rate_ratio (self)
+    - falses_omission_rate_difference (self)
+    - generalized_entropy_index (self, alpha=2)
+    - mean_difference (self)
+    - negative_predictive_value (self, privileged=None)
+    - num_false_negatives (self, privileged=None)
+    - num_false_positives (self, privileged=None)
+    - num_instances (self, privileged=None)
+    - num_negatives (self, privileged=None)
+    - num_positives (self, privileged=None)
+    - num_pred_negatives (self, privileged=None)
+    - num_pred_positives (self, privileged=None)
+    - num_true_negatives (self, privileged=None)
+    - num_true_positives (self, privileged=None)
+    - positive_predictive_value (self, privileged=None)
+    - power (self, privileged=None)
+    - precision (self, privileged=None)
+    - recall (self, privileged=None)
+    - sensitivity (self, privileged=None)
+    - specificity (self, privileged=None)
+    - statistical_parity_difference (self)
+    - theil_index (self)
+    - true_negative_rate (self, privileged=None)
+    - true_positive_rate (self, privileged=None)
+    - true_positive_rate_difference (self)
+
+========================================
+
+Module: aif360.explainers.explainer
+-----------------------------------
+Interface: Explainer
+  Inherits from: abc.ABC
+  Attributes:
+    - _abc_impl
+
+========================================
+
+Module: aif360.explainers.metric_json_explainer
+-----------------------------------------------
+Class: BinaryLabelDatasetMetric
+  Inherits from: aif360.metrics.dataset_metric.DatasetMetric
+  Attributes:
+    - _abc_impl
+  Methods:
+    - _smoothed_base_rates (self, labels, concentration=1.0)
+    - _to_condition (self, privileged)
+    - base_rate (self, privileged=None)
+    - consistency (self, n_neighbors=5)
+    - difference (self, metric_fun)
+    - disparate_impact (self)
+    - mean_difference (self)
+    - num_instances (self, privileged=None)
+    - num_negatives (self, privileged=None)
+    - num_positives (self, privileged=None)
+    - ratio (self, metric_fun)
+    - rich_subgroup (self, predictions, fairness_def='FP')
+    - smoothed_empirical_differential_fairness (self, concentration=1.0)
+    - statistical_parity_difference (self)
+
+Class: MetricJSONExplainer
+  Inherits from: aif360.explainers.metric_text_explainer.MetricTextExplainer
+  Attributes:
+    - _abc_impl
+  Methods:
+    - accuracy (self, privileged=None)
+    - average_abs_odds_difference (self)
+    - average_odds_difference (self)
+    - between_all_groups_coefficient_of_variation (self)
+    - between_all_groups_generalized_entropy_index (self, alpha=2)
+    - between_all_groups_theil_index (self)
+    - between_group_coefficient_of_variation (self)
+    - between_group_generalized_entropy_index (self, alpha=2)
+    - between_group_theil_index (self)
+    - coefficient_of_variation (self)
+    - consistency (self, n_neighbors=5)
+    - disparate_impact (self)
+    - equal_opportunity_difference (self)
+    - error_rate (self, privileged=None)
+    - error_rate_difference (self)
+    - error_rate_ratio (self)
+    - false_discovery_rate (self, privileged=None)
+    - false_discovery_rate_difference (self)
+    - false_discovery_rate_ratio (self)
+    - false_negative_rate (self, privileged=None)
+    - false_negative_rate_difference (self)
+    - false_negative_rate_ratio (self)
+    - false_omission_rate (self, privileged=None)
+    - false_omission_rate_difference (self)
+    - false_omission_rate_ratio (self)
+    - false_positive_rate (self, privileged=None)
+    - false_positive_rate_difference (self)
+    - false_positive_rate_ratio (self)
+    - falses_omission_rate_difference (self)
+    - generalized_entropy_index (self, alpha=2)
+    - mean_difference (self)
+    - negative_predictive_value (self, privileged=None)
+    - num_false_negatives (self, privileged=None)
+    - num_false_positives (self, privileged=None)
+    - num_instances (self, privileged=None)
+    - num_negatives (self, privileged=None)
+    - num_positives (self, privileged=None)
+    - num_pred_negatives (self, privileged=None)
+    - num_pred_positives (self, privileged=None)
+    - num_true_negatives (self, privileged=None)
+    - num_true_positives (self, privileged=None)
+    - positive_predictive_value (self, privileged=None)
+    - power (self, privileged=None)
+    - precision (self, privileged=None)
+    - recall (self, privileged=None)
+    - sensitivity (self, privileged=None)
+    - specificity (self, privileged=None)
+    - statistical_parity_difference (self)
+    - theil_index (self)
+    - true_negative_rate (self, privileged=None)
+    - true_positive_rate (self, privileged=None)
+    - true_positive_rate_difference (self)
+
+Class: MetricTextExplainer
+  Inherits from: aif360.explainers.explainer.Explainer
+  Attributes:
+    - _abc_impl
+  Methods:
+    - accuracy (self, privileged=None)
+    - average_abs_odds_difference (self)
+    - average_odds_difference (self)
+    - between_all_groups_coefficient_of_variation (self)
+    - between_all_groups_generalized_entropy_index (self, alpha=2)
+    - between_all_groups_theil_index (self)
+    - between_group_coefficient_of_variation (self)
+    - between_group_generalized_entropy_index (self, alpha=2)
+    - between_group_theil_index (self)
+    - coefficient_of_variation (self)
+    - consistency (self, n_neighbors=5)
+    - disparate_impact (self)
+    - equal_opportunity_difference (self)
+    - error_rate (self, privileged=None)
+    - error_rate_difference (self)
+    - error_rate_ratio (self)
+    - false_discovery_rate (self, privileged=None)
+    - false_discovery_rate_difference (self)
+    - false_discovery_rate_ratio (self)
+    - false_negative_rate (self, privileged=None)
+    - false_negative_rate_difference (self)
+    - false_negative_rate_ratio (self)
+    - false_omission_rate (self, privileged=None)
+    - false_omission_rate_ratio (self)
+    - false_positive_rate (self, privileged=None)
+    - false_positive_rate_difference (self)
+    - false_positive_rate_ratio (self)
+    - falses_omission_rate_difference (self)
+    - generalized_entropy_index (self, alpha=2)
+    - mean_difference (self)
+    - negative_predictive_value (self, privileged=None)
+    - num_false_negatives (self, privileged=None)
+    - num_false_positives (self, privileged=None)
+    - num_instances (self, privileged=None)
+    - num_negatives (self, privileged=None)
+    - num_positives (self, privileged=None)
+    - num_pred_negatives (self, privileged=None)
+    - num_pred_positives (self, privileged=None)
+    - num_true_negatives (self, privileged=None)
+    - num_true_positives (self, privileged=None)
+    - positive_predictive_value (self, privileged=None)
+    - power (self, privileged=None)
+    - precision (self, privileged=None)
+    - recall (self, privileged=None)
+    - sensitivity (self, privileged=None)
+    - specificity (self, privileged=None)
+    - statistical_parity_difference (self)
+    - theil_index (self)
+    - true_negative_rate (self, privileged=None)
+    - true_positive_rate (self, privileged=None)
+    - true_positive_rate_difference (self)
+
+========================================
+
+Module: aif360.explainers.metric_text_explainer
+-----------------------------------------------
+Interface: Explainer
+  Inherits from: abc.ABC
+  Attributes:
+    - _abc_impl
+
+Interface: Metric
+  Inherits from: abc.ApplyDecorator
+  Attributes:
+    - _abc_impl
+
+Class: MetricTextExplainer
+  Inherits from: aif360.explainers.explainer.Explainer
+  Attributes:
+    - _abc_impl
+  Methods:
+    - accuracy (self, privileged=None)
+    - average_abs_odds_difference (self)
+    - average_odds_difference (self)
+    - between_all_groups_coefficient_of_variation (self)
+    - between_all_groups_generalized_entropy_index (self, alpha=2)
+    - between_all_groups_theil_index (self)
+    - between_group_coefficient_of_variation (self)
+    - between_group_generalized_entropy_index (self, alpha=2)
+    - between_group_theil_index (self)
+    - coefficient_of_variation (self)
+    - consistency (self, n_neighbors=5)
+    - disparate_impact (self)
+    - equal_opportunity_difference (self)
+    - error_rate (self, privileged=None)
+    - error_rate_difference (self)
+    - error_rate_ratio (self)
+    - false_discovery_rate (self, privileged=None)
+    - false_discovery_rate_difference (self)
+    - false_discovery_rate_ratio (self)
+    - false_negative_rate (self, privileged=None)
+    - false_negative_rate_difference (self)
+    - false_negative_rate_ratio (self)
+    - false_omission_rate (self, privileged=None)
+    - false_omission_rate_ratio (self)
+    - false_positive_rate (self, privileged=None)
+    - false_positive_rate_difference (self)
+    - false_positive_rate_ratio (self)
+    - falses_omission_rate_difference (self)
+    - generalized_entropy_index (self, alpha=2)
+    - mean_difference (self)
+    - negative_predictive_value (self, privileged=None)
+    - num_false_negatives (self, privileged=None)
+    - num_false_positives (self, privileged=None)
+    - num_instances (self, privileged=None)
+    - num_negatives (self, privileged=None)
+    - num_positives (self, privileged=None)
+    - num_pred_negatives (self, privileged=None)
+    - num_pred_positives (self, privileged=None)
+    - num_true_negatives (self, privileged=None)
+    - num_true_positives (self, privileged=None)
+    - positive_predictive_value (self, privileged=None)
+    - power (self, privileged=None)
+    - precision (self, privileged=None)
+    - recall (self, privileged=None)
+    - sensitivity (self, privileged=None)
+    - specificity (self, privileged=None)
+    - statistical_parity_difference (self)
+    - theil_index (self)
+    - true_negative_rate (self, privileged=None)
+    - true_positive_rate (self, privileged=None)
+    - true_positive_rate_difference (self)
+
+========================================
+
+Module: aif360.metrics
+----------------------
+Class: BinaryLabelDatasetMetric
+  Inherits from: aif360.metrics.dataset_metric.DatasetMetric
+  Attributes:
+    - _abc_impl
+  Methods:
+    - _smoothed_base_rates (self, labels, concentration=1.0)
+    - _to_condition (self, privileged)
+    - base_rate (self, privileged=None)
+    - consistency (self, n_neighbors=5)
+    - difference (self, metric_fun)
+    - disparate_impact (self)
+    - mean_difference (self)
+    - num_instances (self, privileged=None)
+    - num_negatives (self, privileged=None)
+    - num_positives (self, privileged=None)
+    - ratio (self, metric_fun)
+    - rich_subgroup (self, predictions, fairness_def='FP')
+    - smoothed_empirical_differential_fairness (self, concentration=1.0)
+    - statistical_parity_difference (self)
+
+Class: ClassificationMetric
+  Inherits from: aif360.metrics.binary_label_dataset_metric.BinaryLabelDatasetMetric
+  Attributes:
+    - _abc_impl
+  Methods:
+    - _between_group_generalized_entropy_index (self, groups, alpha=2)
+    - _smoothed_base_rates (self, labels, concentration=1.0)
+    - _to_condition (self, privileged)
+    - accuracy (self, privileged=None)
+    - average_abs_odds_difference (self)
+    - average_odds_difference (self)
+    - average_predictive_value_difference (self)
+    - base_rate (self, privileged=None)
+    - between_all_groups_coefficient_of_variation (self)
+    - between_all_groups_generalized_entropy_index (self, alpha=2)
+    - between_all_groups_theil_index (self)
+    - between_group_coefficient_of_variation (self)
+    - between_group_generalized_entropy_index (self, alpha=2)
+    - between_group_theil_index (self)
+    - binary_confusion_matrix (self, privileged=None)
+    - coefficient_of_variation (self)
+    - consistency (self, n_neighbors=5)
+    - difference (self, metric_fun)
+    - differential_fairness_bias_amplification (self, concentration=1.0)
+    - disparate_impact (self)
+    - equal_opportunity_difference (self)
+    - equalized_odds_difference (self)
+    - error_rate (self, privileged=None)
+    - error_rate_difference (self)
+    - error_rate_ratio (self)
+    - false_discovery_rate (self, privileged=None)
+    - false_discovery_rate_difference (self)
+    - false_discovery_rate_ratio (self)
+    - false_negative_rate (self, privileged=None)
+    - false_negative_rate_difference (self)
+    - false_negative_rate_ratio (self)
+    - false_omission_rate (self, privileged=None)
+    - false_omission_rate_difference (self)
+    - false_omission_rate_ratio (self)
+    - false_positive_rate (self, privileged=None)
+    - false_positive_rate_difference (self)
+    - false_positive_rate_ratio (self)
+    - generalized_binary_confusion_matrix (self, privileged=None)
+    - generalized_entropy_index (self, alpha=2)
+    - generalized_equalized_odds_difference (self)
+    - generalized_false_negative_rate (self, privileged=None)
+    - generalized_false_positive_rate (self, privileged=None)
+    - generalized_true_negative_rate (self, privileged=None)
+    - generalized_true_positive_rate (self, privileged=None)
+    - mean_difference (self)
+    - negative_predictive_value (self, privileged=None)
+    - num_false_negatives (self, privileged=None)
+    - num_false_positives (self, privileged=None)
+    - num_generalized_false_negatives (self, privileged=None)
+    - num_generalized_false_positives (self, privileged=None)
+    - num_generalized_true_negatives (self, privileged=None)
+    - num_generalized_true_positives (self, privileged=None)
+    - num_instances (self, privileged=None)
+    - num_negatives (self, privileged=None)
+    - num_positives (self, privileged=None)
+    - num_pred_negatives (self, privileged=None)
+    - num_pred_positives (self, privileged=None)
+    - num_true_negatives (self, privileged=None)
+    - num_true_positives (self, privileged=None)
+    - performance_measures (self, privileged=None)
+    - positive_predictive_value (self, privileged=None)
+    - power (self, privileged=None)
+    - precision (self, privileged=None)
+    - ratio (self, metric_fun)
+    - recall (self, privileged=None)
+    - rich_subgroup (self, predictions, fairness_def='FP')
+    - selection_rate (self, privileged=None)
+    - sensitivity (self, privileged=None)
+    - smoothed_empirical_differential_fairness (self, concentration=1.0)
+    - specificity (self, privileged=None)
+    - statistical_parity_difference (self)
+    - theil_index (self)
+    - true_negative_rate (self, privileged=None)
+    - true_positive_rate (self, privileged=None)
+    - true_positive_rate_difference (self)
+
+Class: DatasetMetric
+  Inherits from: aif360.metrics.metric.Metric
+  Attributes:
+    - _abc_impl
+  Methods:
+    - _to_condition (self, privileged)
+    - difference (self, metric_fun)
+    - num_instances (self, privileged=None)
+    - ratio (self, metric_fun)
+
+Class: MDSSClassificationMetric
+  Inherits from: aif360.metrics.classification_metric.ClassificationMetric
+  Attributes:
+    - _abc_impl
+  Methods:
+    - _between_group_generalized_entropy_index (self, groups, alpha=2)
+    - _smoothed_base_rates (self, labels, concentration=1.0)
+    - _to_condition (self, privileged)
+    - accuracy (self, privileged=None)
+    - average_abs_odds_difference (self)
+    - average_odds_difference (self)
+    - average_predictive_value_difference (self)
+    - base_rate (self, privileged=None)
+    - between_all_groups_coefficient_of_variation (self)
+    - between_all_groups_generalized_entropy_index (self, alpha=2)
+    - between_all_groups_theil_index (self)
+    - between_group_coefficient_of_variation (self)
+    - between_group_generalized_entropy_index (self, alpha=2)
+    - between_group_theil_index (self)
+    - binary_confusion_matrix (self, privileged=None)
+    - coefficient_of_variation (self)
+    - consistency (self, n_neighbors=5)
+    - difference (self, metric_fun)
+    - differential_fairness_bias_amplification (self, concentration=1.0)
+    - disparate_impact (self)
+    - equal_opportunity_difference (self)
+    - equalized_odds_difference (self)
+    - error_rate (self, privileged=None)
+    - error_rate_difference (self)
+    - error_rate_ratio (self)
+    - false_discovery_rate (self, privileged=None)
+    - false_discovery_rate_difference (self)
+    - false_discovery_rate_ratio (self)
+    - false_negative_rate (self, privileged=None)
+    - false_negative_rate_difference (self)
+    - false_negative_rate_ratio (self)
+    - false_omission_rate (self, privileged=None)
+    - false_omission_rate_difference (self)
+    - false_omission_rate_ratio (self)
+    - false_positive_rate (self, privileged=None)
+    - false_positive_rate_difference (self)
+    - false_positive_rate_ratio (self)
+    - generalized_binary_confusion_matrix (self, privileged=None)
+    - generalized_entropy_index (self, alpha=2)
+    - generalized_equalized_odds_difference (self)
+    - generalized_false_negative_rate (self, privileged=None)
+    - generalized_false_positive_rate (self, privileged=None)
+    - generalized_true_negative_rate (self, privileged=None)
+    - generalized_true_positive_rate (self, privileged=None)
+    - mean_difference (self)
+    - negative_predictive_value (self, privileged=None)
+    - num_false_negatives (self, privileged=None)
+    - num_false_positives (self, privileged=None)
+    - num_generalized_false_negatives (self, privileged=None)
+    - num_generalized_false_positives (self, privileged=None)
+    - num_generalized_true_negatives (self, privileged=None)
+    - num_generalized_true_positives (self, privileged=None)
+    - num_instances (self, privileged=None)
+    - num_negatives (self, privileged=None)
+    - num_positives (self, privileged=None)
+    - num_pred_negatives (self, privileged=None)
+    - num_pred_positives (self, privileged=None)
+    - num_true_negatives (self, privileged=None)
+    - num_true_positives (self, privileged=None)
+    - performance_measures (self, privileged=None)
+    - positive_predictive_value (self, privileged=None)
+    - power (self, privileged=None)
+    - precision (self, privileged=None)
+    - ratio (self, metric_fun)
+    - recall (self, privileged=None)
+    - rich_subgroup (self, predictions, fairness_def='FP')
+    - score_groups (self, privileged=True, penalty=1e-17)
+    - selection_rate (self, privileged=None)
+    - sensitivity (self, privileged=None)
+    - smoothed_empirical_differential_fairness (self, concentration=1.0)
+    - specificity (self, privileged=None)
+    - statistical_parity_difference (self)
+    - theil_index (self)
+    - true_negative_rate (self, privileged=None)
+    - true_positive_rate (self, privileged=None)
+    - true_positive_rate_difference (self)
+
+Interface: Metric
+  Inherits from: abc.ApplyDecorator
+  Attributes:
+    - _abc_impl
+
+Class: RegressionDatasetMetric
+  Inherits from: aif360.metrics.dataset_metric.DatasetMetric
+  Attributes:
+    - _abc_impl
+  Methods:
+    - _dcg (self, scores)
+    - _to_condition (self, privileged)
+    - difference (self, metric_fun)
+    - discounted_cum_gain (self, r: int = None, full_dataset: aif360.datasets.regression_dataset.RegressionDataset = None, normalized=False)
+    - infeasible_index (self, target_prop: dict, r: int = None)
+    - num_instances (self, privileged=None)
+    - ratio (self, metric_fun)
+
+Class: SampleDistortionMetric
+  Inherits from: aif360.metrics.dataset_metric.DatasetMetric
+  Attributes:
+    - _abc_impl
+  Methods:
+    - _to_condition (self, privileged)
+    - average (self, dist, privileged)
+    - average_euclidean_distance (self, privileged=None)
+    - average_mahalanobis_distance (self, privileged=None)
+    - average_manhattan_distance (self, privileged=None)
+    - difference (self, metric_fun)
+    - euclidean_distance (self, privileged=None, returned=False)
+    - mahalanobis_distance (self, privileged=None, returned=False)
+    - manhattan_distance (self, privileged=None, returned=False)
+    - maximum (self, dist, privileged)
+    - maximum_euclidean_distance (self, privileged=None)
+    - maximum_mahalanobis_distance (self, privileged=None)
+    - maximum_manhattan_distance (self, privileged=None)
+    - mean_euclidean_distance_difference (self, privileged=None)
+    - mean_euclidean_distance_ratio (self, privileged=None)
+    - mean_mahalanobis_distance_difference (self, privileged=None)
+    - mean_mahalanobis_distance_ratio (self, privileged=None)
+    - mean_manhattan_distance_difference (self, privileged=None)
+    - mean_manhattan_distance_ratio (self, privileged=None)
+    - num_instances (self, privileged=None)
+    - ratio (self, metric_fun)
+    - total (self, dist, privileged)
+    - total_euclidean_distance (self, privileged=None)
+    - total_mahalanobis_distance (self, privileged=None)
+    - total_manhattan_distance (self, privileged=None)
+
+========================================
+
+Module: aif360.metrics.binary_label_dataset_metric
+--------------------------------------------------
+Class: Auditor
+  Inherits from: builtins.object
+  Methods:
+    - audit (self, predictions)
+    - get_baseline (self, y, predictions)
+    - get_group (self, predictions, metric_baseline)
+    - get_subset (self, predictions)
+    - initialize_costs (self, n)
+    - update_costs (self, c_0, c_1, group, C, iteration, gamma)
+
+Class: BinaryLabelDataset
+  Inherits from: aif360.datasets.structured_dataset.StructuredDataset
+  Attributes:
+    - _abc_impl
+  Methods:
+    - _de_dummy_code_df (df, sep='=', set_category=False)
+    - _parse_feature_names (feature_names, sep='=')
+    - align_datasets (self, other)
+    - convert_to_dataframe (self, de_dummy_code=False, sep='=', set_category=True)
+    - copy (self, deepcopy=False)
+    - export_dataset (self, export_metadata=False)
+    - import_dataset (self, import_metadata=False)
+    - split (self, num_or_size_splits, shuffle=False, seed=None)
+    - subset (self, indexes)
+    - temporarily_ignore (self, *fields)
+    - validate_dataset (self)
+
+Class: BinaryLabelDatasetMetric
+  Inherits from: aif360.metrics.dataset_metric.DatasetMetric
+  Attributes:
+    - _abc_impl
+  Methods:
+    - _smoothed_base_rates (self, labels, concentration=1.0)
+    - _to_condition (self, privileged)
+    - base_rate (self, privileged=None)
+    - consistency (self, n_neighbors=5)
+    - difference (self, metric_fun)
+    - disparate_impact (self)
+    - mean_difference (self)
+    - num_instances (self, privileged=None)
+    - num_negatives (self, privileged=None)
+    - num_positives (self, privileged=None)
+    - ratio (self, metric_fun)
+    - rich_subgroup (self, predictions, fairness_def='FP')
+    - smoothed_empirical_differential_fairness (self, concentration=1.0)
+    - statistical_parity_difference (self)
+
+Class: DatasetMetric
+  Inherits from: aif360.metrics.metric.Metric
+  Attributes:
+    - _abc_impl
+  Methods:
+    - _to_condition (self, privileged)
+    - difference (self, metric_fun)
+    - num_instances (self, privileged=None)
+    - ratio (self, metric_fun)
+
+Class: MulticlassLabelDataset
+  Inherits from: aif360.datasets.structured_dataset.StructuredDataset
+  Attributes:
+    - _abc_impl
+  Methods:
+    - _de_dummy_code_df (df, sep='=', set_category=False)
+    - _parse_feature_names (feature_names, sep='=')
+    - align_datasets (self, other)
+    - convert_to_dataframe (self, de_dummy_code=False, sep='=', set_category=True)
+    - copy (self, deepcopy=False)
+    - export_dataset (self, export_metadata=False)
+    - import_dataset (self, import_metadata=False)
+    - split (self, num_or_size_splits, shuffle=False, seed=None)
+    - subset (self, indexes)
+    - temporarily_ignore (self, *fields)
+    - validate_dataset (self)
+
+========================================
+
+Module: aif360.metrics.classification_metric
+--------------------------------------------
+Class: BinaryLabelDataset
+  Inherits from: aif360.datasets.structured_dataset.StructuredDataset
+  Attributes:
+    - _abc_impl
+  Methods:
+    - _de_dummy_code_df (df, sep='=', set_category=False)
+    - _parse_feature_names (feature_names, sep='=')
+    - align_datasets (self, other)
+    - convert_to_dataframe (self, de_dummy_code=False, sep='=', set_category=True)
+    - copy (self, deepcopy=False)
+    - export_dataset (self, export_metadata=False)
+    - import_dataset (self, import_metadata=False)
+    - split (self, num_or_size_splits, shuffle=False, seed=None)
+    - subset (self, indexes)
+    - temporarily_ignore (self, *fields)
+    - validate_dataset (self)
+
+Class: BinaryLabelDatasetMetric
+  Inherits from: aif360.metrics.dataset_metric.DatasetMetric
+  Attributes:
+    - _abc_impl
+  Methods:
+    - _smoothed_base_rates (self, labels, concentration=1.0)
+    - _to_condition (self, privileged)
+    - base_rate (self, privileged=None)
+    - consistency (self, n_neighbors=5)
+    - difference (self, metric_fun)
+    - disparate_impact (self)
+    - mean_difference (self)
+    - num_instances (self, privileged=None)
+    - num_negatives (self, privileged=None)
+    - num_positives (self, privileged=None)
+    - ratio (self, metric_fun)
+    - rich_subgroup (self, predictions, fairness_def='FP')
+    - smoothed_empirical_differential_fairness (self, concentration=1.0)
+    - statistical_parity_difference (self)
+
+Class: ClassificationMetric
+  Inherits from: aif360.metrics.binary_label_dataset_metric.BinaryLabelDatasetMetric
+  Attributes:
+    - _abc_impl
+  Methods:
+    - _between_group_generalized_entropy_index (self, groups, alpha=2)
+    - _smoothed_base_rates (self, labels, concentration=1.0)
+    - _to_condition (self, privileged)
+    - accuracy (self, privileged=None)
+    - average_abs_odds_difference (self)
+    - average_odds_difference (self)
+    - average_predictive_value_difference (self)
+    - base_rate (self, privileged=None)
+    - between_all_groups_coefficient_of_variation (self)
+    - between_all_groups_generalized_entropy_index (self, alpha=2)
+    - between_all_groups_theil_index (self)
+    - between_group_coefficient_of_variation (self)
+    - between_group_generalized_entropy_index (self, alpha=2)
+    - between_group_theil_index (self)
+    - binary_confusion_matrix (self, privileged=None)
+    - coefficient_of_variation (self)
+    - consistency (self, n_neighbors=5)
+    - difference (self, metric_fun)
+    - differential_fairness_bias_amplification (self, concentration=1.0)
+    - disparate_impact (self)
+    - equal_opportunity_difference (self)
+    - equalized_odds_difference (self)
+    - error_rate (self, privileged=None)
+    - error_rate_difference (self)
+    - error_rate_ratio (self)
+    - false_discovery_rate (self, privileged=None)
+    - false_discovery_rate_difference (self)
+    - false_discovery_rate_ratio (self)
+    - false_negative_rate (self, privileged=None)
+    - false_negative_rate_difference (self)
+    - false_negative_rate_ratio (self)
+    - false_omission_rate (self, privileged=None)
+    - false_omission_rate_difference (self)
+    - false_omission_rate_ratio (self)
+    - false_positive_rate (self, privileged=None)
+    - false_positive_rate_difference (self)
+    - false_positive_rate_ratio (self)
+    - generalized_binary_confusion_matrix (self, privileged=None)
+    - generalized_entropy_index (self, alpha=2)
+    - generalized_equalized_odds_difference (self)
+    - generalized_false_negative_rate (self, privileged=None)
+    - generalized_false_positive_rate (self, privileged=None)
+    - generalized_true_negative_rate (self, privileged=None)
+    - generalized_true_positive_rate (self, privileged=None)
+    - mean_difference (self)
+    - negative_predictive_value (self, privileged=None)
+    - num_false_negatives (self, privileged=None)
+    - num_false_positives (self, privileged=None)
+    - num_generalized_false_negatives (self, privileged=None)
+    - num_generalized_false_positives (self, privileged=None)
+    - num_generalized_true_negatives (self, privileged=None)
+    - num_generalized_true_positives (self, privileged=None)
+    - num_instances (self, privileged=None)
+    - num_negatives (self, privileged=None)
+    - num_positives (self, privileged=None)
+    - num_pred_negatives (self, privileged=None)
+    - num_pred_positives (self, privileged=None)
+    - num_true_negatives (self, privileged=None)
+    - num_true_positives (self, privileged=None)
+    - performance_measures (self, privileged=None)
+    - positive_predictive_value (self, privileged=None)
+    - power (self, privileged=None)
+    - precision (self, privileged=None)
+    - ratio (self, metric_fun)
+    - recall (self, privileged=None)
+    - rich_subgroup (self, predictions, fairness_def='FP')
+    - selection_rate (self, privileged=None)
+    - sensitivity (self, privileged=None)
+    - smoothed_empirical_differential_fairness (self, concentration=1.0)
+    - specificity (self, privileged=None)
+    - statistical_parity_difference (self)
+    - theil_index (self)
+    - true_negative_rate (self, privileged=None)
+    - true_positive_rate (self, privileged=None)
+    - true_positive_rate_difference (self)
+
+Class: MulticlassLabelDataset
+  Inherits from: aif360.datasets.structured_dataset.StructuredDataset
+  Attributes:
+    - _abc_impl
+  Methods:
+    - _de_dummy_code_df (df, sep='=', set_category=False)
+    - _parse_feature_names (feature_names, sep='=')
+    - align_datasets (self, other)
+    - convert_to_dataframe (self, de_dummy_code=False, sep='=', set_category=True)
+    - copy (self, deepcopy=False)
+    - export_dataset (self, export_metadata=False)
+    - import_dataset (self, import_metadata=False)
+    - split (self, num_or_size_splits, shuffle=False, seed=None)
+    - subset (self, indexes)
+    - temporarily_ignore (self, *fields)
+    - validate_dataset (self)
+
+========================================
+
+Module: aif360.metrics.dataset_metric
+-------------------------------------
+Class: DatasetMetric
+  Inherits from: aif360.metrics.metric.Metric
+  Attributes:
+    - _abc_impl
+  Methods:
+    - _to_condition (self, privileged)
+    - difference (self, metric_fun)
+    - num_instances (self, privileged=None)
+    - ratio (self, metric_fun)
+
+Interface: Metric
+  Inherits from: abc.ApplyDecorator
+  Attributes:
+    - _abc_impl
+
+Class: StructuredDataset
+  Inherits from: aif360.datasets.dataset.Dataset
+  Attributes:
+    - _abc_impl
+  Methods:
+    - _de_dummy_code_df (df, sep='=', set_category=False)
+    - _parse_feature_names (feature_names, sep='=')
+    - align_datasets (self, other)
+    - convert_to_dataframe (self, de_dummy_code=False, sep='=', set_category=True)
+    - copy (self, deepcopy=False)
+    - export_dataset (self, export_metadata=False)
+    - import_dataset (self, import_metadata=False)
+    - split (self, num_or_size_splits, shuffle=False, seed=None)
+    - subset (self, indexes)
+    - temporarily_ignore (self, *fields)
+    - validate_dataset (self)
+
+========================================
+
+Module: aif360.metrics.mdss_classification_metric
+-------------------------------------------------
+Class: BerkJones
+  Inherits from: aif360.detectors.mdss.ScoringFunctions.ScoringFunction.ScoringFunction
+  Methods:
+    - compute_qs (self, observed_sum: float, expectations: <built-in function array>, penalty: float)
+    - dscore (self, observed_sum: float, expectations: <built-in function array>, q: float)
+    - q_dscore (self, observed_sum: float, expectations: <built-in function array>, q: float)
+    - qmle (self, observed_sum: float, expectations: <built-in function array>)
+    - score (self, observed_sum: float, expectations: <built-in function array>, penalty: float, q: float)
+
+Class: Bernoulli
+  Inherits from: aif360.detectors.mdss.ScoringFunctions.ScoringFunction.ScoringFunction
+  Methods:
+    - compute_qs (self, observed_sum: float, expectations: <built-in function array>, penalty: float)
+    - dscore (self, observed_sum: float, expectations: <built-in function array>, q: float)
+    - q_dscore (self, observed_sum: float, expectations: <built-in function array>, q: float)
+    - qmle (self, observed_sum: float, expectations: <built-in function array>)
+    - score (self, observed_sum: float, expectations: <built-in function array>, penalty: float, q: float)
+
+Class: BinaryLabelDataset
+  Inherits from: aif360.datasets.structured_dataset.StructuredDataset
+  Attributes:
+    - _abc_impl
+  Methods:
+    - _de_dummy_code_df (df, sep='=', set_category=False)
+    - _parse_feature_names (feature_names, sep='=')
+    - align_datasets (self, other)
+    - convert_to_dataframe (self, de_dummy_code=False, sep='=', set_category=True)
+    - copy (self, deepcopy=False)
+    - export_dataset (self, export_metadata=False)
+    - import_dataset (self, import_metadata=False)
+    - split (self, num_or_size_splits, shuffle=False, seed=None)
+    - subset (self, indexes)
+    - temporarily_ignore (self, *fields)
+    - validate_dataset (self)
+
+Class: ClassificationMetric
+  Inherits from: aif360.metrics.binary_label_dataset_metric.BinaryLabelDatasetMetric
+  Attributes:
+    - _abc_impl
+  Methods:
+    - _between_group_generalized_entropy_index (self, groups, alpha=2)
+    - _smoothed_base_rates (self, labels, concentration=1.0)
+    - _to_condition (self, privileged)
+    - accuracy (self, privileged=None)
+    - average_abs_odds_difference (self)
+    - average_odds_difference (self)
+    - average_predictive_value_difference (self)
+    - base_rate (self, privileged=None)
+    - between_all_groups_coefficient_of_variation (self)
+    - between_all_groups_generalized_entropy_index (self, alpha=2)
+    - between_all_groups_theil_index (self)
+    - between_group_coefficient_of_variation (self)
+    - between_group_generalized_entropy_index (self, alpha=2)
+    - between_group_theil_index (self)
+    - binary_confusion_matrix (self, privileged=None)
+    - coefficient_of_variation (self)
+    - consistency (self, n_neighbors=5)
+    - difference (self, metric_fun)
+    - differential_fairness_bias_amplification (self, concentration=1.0)
+    - disparate_impact (self)
+    - equal_opportunity_difference (self)
+    - equalized_odds_difference (self)
+    - error_rate (self, privileged=None)
+    - error_rate_difference (self)
+    - error_rate_ratio (self)
+    - false_discovery_rate (self, privileged=None)
+    - false_discovery_rate_difference (self)
+    - false_discovery_rate_ratio (self)
+    - false_negative_rate (self, privileged=None)
+    - false_negative_rate_difference (self)
+    - false_negative_rate_ratio (self)
+    - false_omission_rate (self, privileged=None)
+    - false_omission_rate_difference (self)
+    - false_omission_rate_ratio (self)
+    - false_positive_rate (self, privileged=None)
+    - false_positive_rate_difference (self)
+    - false_positive_rate_ratio (self)
+    - generalized_binary_confusion_matrix (self, privileged=None)
+    - generalized_entropy_index (self, alpha=2)
+    - generalized_equalized_odds_difference (self)
+    - generalized_false_negative_rate (self, privileged=None)
+    - generalized_false_positive_rate (self, privileged=None)
+    - generalized_true_negative_rate (self, privileged=None)
+    - generalized_true_positive_rate (self, privileged=None)
+    - mean_difference (self)
+    - negative_predictive_value (self, privileged=None)
+    - num_false_negatives (self, privileged=None)
+    - num_false_positives (self, privileged=None)
+    - num_generalized_false_negatives (self, privileged=None)
+    - num_generalized_false_positives (self, privileged=None)
+    - num_generalized_true_negatives (self, privileged=None)
+    - num_generalized_true_positives (self, privileged=None)
+    - num_instances (self, privileged=None)
+    - num_negatives (self, privileged=None)
+    - num_positives (self, privileged=None)
+    - num_pred_negatives (self, privileged=None)
+    - num_pred_positives (self, privileged=None)
+    - num_true_negatives (self, privileged=None)
+    - num_true_positives (self, privileged=None)
+    - performance_measures (self, privileged=None)
+    - positive_predictive_value (self, privileged=None)
+    - power (self, privileged=None)
+    - precision (self, privileged=None)
+    - ratio (self, metric_fun)
+    - recall (self, privileged=None)
+    - rich_subgroup (self, predictions, fairness_def='FP')
+    - selection_rate (self, privileged=None)
+    - sensitivity (self, privileged=None)
+    - smoothed_empirical_differential_fairness (self, concentration=1.0)
+    - specificity (self, privileged=None)
+    - statistical_parity_difference (self)
+    - theil_index (self)
+    - true_negative_rate (self, privileged=None)
+    - true_positive_rate (self, privileged=None)
+    - true_positive_rate_difference (self)
+
+Class: MDSS
+  Inherits from: builtins.object
+  Methods:
+    - choose_aggregates (self, aggregates: dict, thresholds: list, penalty: float, all_observed_sum: float, all_expectations: list)
+    - get_aggregates (self, coordinates: pandas.core.frame.DataFrame, outcomes: pandas.core.series.Series, expectations: pandas.core.series.Series, current_subset: dict, column_name: str, penalty: float)
+    - scan (self, coordinates: pandas.core.frame.DataFrame, expectations: pandas.core.series.Series, outcomes: pandas.core.series.Series, penalty: float, num_iters: int, verbose: bool = False, seed: int = 0, mode: str = 'binary')
+    - score_current_subset (self, coordinates: pandas.core.frame.DataFrame, expectations: pandas.core.series.Series, outcomes: pandas.core.series.Series, current_subset: dict, penalty: float)
+
+Class: MDSSClassificationMetric
+  Inherits from: aif360.metrics.classification_metric.ClassificationMetric
+  Attributes:
+    - _abc_impl
+  Methods:
+    - _between_group_generalized_entropy_index (self, groups, alpha=2)
+    - _smoothed_base_rates (self, labels, concentration=1.0)
+    - _to_condition (self, privileged)
+    - accuracy (self, privileged=None)
+    - average_abs_odds_difference (self)
+    - average_odds_difference (self)
+    - average_predictive_value_difference (self)
+    - base_rate (self, privileged=None)
+    - between_all_groups_coefficient_of_variation (self)
+    - between_all_groups_generalized_entropy_index (self, alpha=2)
+    - between_all_groups_theil_index (self)
+    - between_group_coefficient_of_variation (self)
+    - between_group_generalized_entropy_index (self, alpha=2)
+    - between_group_theil_index (self)
+    - binary_confusion_matrix (self, privileged=None)
+    - coefficient_of_variation (self)
+    - consistency (self, n_neighbors=5)
+    - difference (self, metric_fun)
+    - differential_fairness_bias_amplification (self, concentration=1.0)
+    - disparate_impact (self)
+    - equal_opportunity_difference (self)
+    - equalized_odds_difference (self)
+    - error_rate (self, privileged=None)
+    - error_rate_difference (self)
+    - error_rate_ratio (self)
+    - false_discovery_rate (self, privileged=None)
+    - false_discovery_rate_difference (self)
+    - false_discovery_rate_ratio (self)
+    - false_negative_rate (self, privileged=None)
+    - false_negative_rate_difference (self)
+    - false_negative_rate_ratio (self)
+    - false_omission_rate (self, privileged=None)
+    - false_omission_rate_difference (self)
+    - false_omission_rate_ratio (self)
+    - false_positive_rate (self, privileged=None)
+    - false_positive_rate_difference (self)
+    - false_positive_rate_ratio (self)
+    - generalized_binary_confusion_matrix (self, privileged=None)
+    - generalized_entropy_index (self, alpha=2)
+    - generalized_equalized_odds_difference (self)
+    - generalized_false_negative_rate (self, privileged=None)
+    - generalized_false_positive_rate (self, privileged=None)
+    - generalized_true_negative_rate (self, privileged=None)
+    - generalized_true_positive_rate (self, privileged=None)
+    - mean_difference (self)
+    - negative_predictive_value (self, privileged=None)
+    - num_false_negatives (self, privileged=None)
+    - num_false_positives (self, privileged=None)
+    - num_generalized_false_negatives (self, privileged=None)
+    - num_generalized_false_positives (self, privileged=None)
+    - num_generalized_true_negatives (self, privileged=None)
+    - num_generalized_true_positives (self, privileged=None)
+    - num_instances (self, privileged=None)
+    - num_negatives (self, privileged=None)
+    - num_positives (self, privileged=None)
+    - num_pred_negatives (self, privileged=None)
+    - num_pred_positives (self, privileged=None)
+    - num_true_negatives (self, privileged=None)
+    - num_true_positives (self, privileged=None)
+    - performance_measures (self, privileged=None)
+    - positive_predictive_value (self, privileged=None)
+    - power (self, privileged=None)
+    - precision (self, privileged=None)
+    - ratio (self, metric_fun)
+    - recall (self, privileged=None)
+    - rich_subgroup (self, predictions, fairness_def='FP')
+    - score_groups (self, privileged=True, penalty=1e-17)
+    - selection_rate (self, privileged=None)
+    - sensitivity (self, privileged=None)
+    - smoothed_empirical_differential_fairness (self, concentration=1.0)
+    - specificity (self, privileged=None)
+    - statistical_parity_difference (self)
+    - theil_index (self)
+    - true_negative_rate (self, privileged=None)
+    - true_positive_rate (self, privileged=None)
+    - true_positive_rate_difference (self)
+
+Class: ScoringFunction
+  Inherits from: builtins.object
+  Methods:
+    - compute_qs (self, observed_sum: float, expectations: <built-in function array>, penalty: float)
+    - dscore (self, observed_sum: float, expectations: <built-in function array>, q: float)
+    - q_dscore (self, observed_sum: float, expectations: <built-in function array>, q: float)
+    - qmle (self, observed_sum: float, expectations: <built-in function array>)
+    - score (self, observed_sum: float, expectations: <built-in function array>, penalty: float, q: float)
+
+========================================
+
+Module: aif360.metrics.metric
+-----------------------------
+Interface: Dataset
+  Inherits from: abc.ABC
+  Attributes:
+    - _abc_impl
+  Methods:
+    - copy (self, deepcopy=False)
+    - export_dataset (self)
+    - split (self, num_or_size_splits, shuffle=False)
+    - validate_dataset (self)
+
+Interface: Metric
+  Inherits from: abc.ApplyDecorator
+  Attributes:
+    - _abc_impl
+
+========================================
+
+Module: aif360.metrics.regression_metric
+----------------------------------------
+Class: DatasetMetric
+  Inherits from: aif360.metrics.metric.Metric
+  Attributes:
+    - _abc_impl
+  Methods:
+    - _to_condition (self, privileged)
+    - difference (self, metric_fun)
+    - num_instances (self, privileged=None)
+    - ratio (self, metric_fun)
+
+Class: RegressionDataset
+  Inherits from: aif360.datasets.structured_dataset.StructuredDataset
+  Attributes:
+    - _abc_impl
+  Methods:
+    - _de_dummy_code_df (df, sep='=', set_category=False)
+    - _parse_feature_names (feature_names, sep='=')
+    - align_datasets (self, other)
+    - convert_to_dataframe (self, de_dummy_code=False, sep='=', set_category=True)
+    - copy (self, deepcopy=False)
+    - export_dataset (self, export_metadata=False)
+    - import_dataset (self, import_metadata=False)
+    - split (self, num_or_size_splits, shuffle=False, seed=None)
+    - subset (self, indexes)
+    - temporarily_ignore (self, *fields)
+    - validate_dataset (self)
+
+Class: RegressionDatasetMetric
+  Inherits from: aif360.metrics.dataset_metric.DatasetMetric
+  Attributes:
+    - _abc_impl
+  Methods:
+    - _dcg (self, scores)
+    - _to_condition (self, privileged)
+    - difference (self, metric_fun)
+    - discounted_cum_gain (self, r: int = None, full_dataset: aif360.datasets.regression_dataset.RegressionDataset = None, normalized=False)
+    - infeasible_index (self, target_prop: dict, r: int = None)
+    - num_instances (self, privileged=None)
+    - ratio (self, metric_fun)
+
+========================================
+
+Module: aif360.metrics.sample_distortion_metric
+-----------------------------------------------
+Class: DatasetMetric
+  Inherits from: aif360.metrics.metric.Metric
+  Attributes:
+    - _abc_impl
+  Methods:
+    - _to_condition (self, privileged)
+    - difference (self, metric_fun)
+    - num_instances (self, privileged=None)
+    - ratio (self, metric_fun)
+
+Class: SampleDistortionMetric
+  Inherits from: aif360.metrics.dataset_metric.DatasetMetric
+  Attributes:
+    - _abc_impl
+  Methods:
+    - _to_condition (self, privileged)
+    - average (self, dist, privileged)
+    - average_euclidean_distance (self, privileged=None)
+    - average_mahalanobis_distance (self, privileged=None)
+    - average_manhattan_distance (self, privileged=None)
+    - difference (self, metric_fun)
+    - euclidean_distance (self, privileged=None, returned=False)
+    - mahalanobis_distance (self, privileged=None, returned=False)
+    - manhattan_distance (self, privileged=None, returned=False)
+    - maximum (self, dist, privileged)
+    - maximum_euclidean_distance (self, privileged=None)
+    - maximum_mahalanobis_distance (self, privileged=None)
+    - maximum_manhattan_distance (self, privileged=None)
+    - mean_euclidean_distance_difference (self, privileged=None)
+    - mean_euclidean_distance_ratio (self, privileged=None)
+    - mean_mahalanobis_distance_difference (self, privileged=None)
+    - mean_mahalanobis_distance_ratio (self, privileged=None)
+    - mean_manhattan_distance_difference (self, privileged=None)
+    - mean_manhattan_distance_ratio (self, privileged=None)
+    - num_instances (self, privileged=None)
+    - ratio (self, metric_fun)
+    - total (self, dist, privileged)
+    - total_euclidean_distance (self, privileged=None)
+    - total_mahalanobis_distance (self, privileged=None)
+    - total_manhattan_distance (self, privileged=None)
+
+Class: StructuredDataset
+  Inherits from: aif360.datasets.dataset.Dataset
+  Attributes:
+    - _abc_impl
+  Methods:
+    - _de_dummy_code_df (df, sep='=', set_category=False)
+    - _parse_feature_names (feature_names, sep='=')
+    - align_datasets (self, other)
+    - convert_to_dataframe (self, de_dummy_code=False, sep='=', set_category=True)
+    - copy (self, deepcopy=False)
+    - export_dataset (self, export_metadata=False)
+    - import_dataset (self, import_metadata=False)
+    - split (self, num_or_size_splits, shuffle=False, seed=None)
+    - subset (self, indexes)
+    - temporarily_ignore (self, *fields)
+    - validate_dataset (self)
+
+========================================
+
+Module: aif360.sklearn.datasets
+-------------------------------
+Class: NumericConversionWarning
+  Inherits from: builtins.UserWarning
+  Attributes:
+    - args
+  Methods:
+    - add_note (self, object, /)
+    - with_traceback (self, object, /)
+
+========================================
+
+Module: aif360.sklearn.datasets.lawschool_dataset
+-------------------------------------------------
+Class: Dataset
+  Inherits from: builtins.tuple
+  Attributes:
+    - X
+    - _field_defaults
+    - _fields
+    - y
+  Methods:
+    - _asdict (self)
+    - _make (iterable)
+    - _replace (self, /, **kwds)
+    - count (self, value, /)
+    - index (self, value, start=0, stop=9223372036854775807, /)
+
+========================================
+
+Module: aif360.sklearn.datasets.utils
+-------------------------------------
+Class: Dataset
+  Inherits from: builtins.tuple
+  Attributes:
+    - X
+    - _field_defaults
+    - _fields
+    - y
+  Methods:
+    - _asdict (self)
+    - _make (iterable)
+    - _replace (self, /, **kwds)
+    - count (self, value, /)
+    - index (self, value, start=0, stop=9223372036854775807, /)
+
+Class: NumericConversionWarning
+  Inherits from: builtins.UserWarning
+  Attributes:
+    - args
+  Methods:
+    - add_note (self, object, /)
+    - with_traceback (self, object, /)
+
+Class: WeightedDataset
+  Inherits from: builtins.tuple
+  Attributes:
+    - X
+    - _field_defaults
+    - _fields
+    - sample_weight
+    - y
+  Methods:
+    - _asdict (self)
+    - _make (iterable)
+    - _replace (self, /, **kwds)
+    - count (self, value, /)
+    - index (self, value, start=0, stop=9223372036854775807, /)
+
+========================================
+
+Module: aif360.sklearn.detectors
+--------------------------------
+Class: FACTS
+  Inherits from: sklearn.base.BaseEstimator
+  Attributes:
+    - _doc_link_module
+    - _doc_link_template
+    - _doc_link_url_param_generator
+    - _repr_html_
+  Methods:
+    - _build_request_for_signature (router, method)
+    - _check_feature_names (self, *args, **kwargs)
+    - _check_n_features (self, *args, **kwargs)
+    - _get_default_requests ()
+    - _get_doc_link (self)
+    - _get_metadata_request (self)
+    - _get_param_names ()
+    - _get_tags (self)
+    - _more_tags (self)
+    - _repr_html_inner (self)
+    - _repr_mimebundle_ (self, **kwargs)
+    - _validate_data (self, *args, **kwargs)
+    - _validate_params (self)
+    - bias_scan (self, metric: str = 'equal-effectiveness', viewpoint: str = 'macro', sort_strategy: str = 'max-cost-diff-decr', top_count: int = 10, filter_sequence: List[str] = [], phi: float = 0.5, c: float = 0.5)
+    - fit (self, X: pandas.core.frame.DataFrame, verbose: bool = True)
+    - get_metadata_routing (self)
+    - get_params (self, deep=True)
+    - print_recourse_report (self, population_sizes=None, missing_subgroup_val='N/A', show_subgroup_costs=False, show_action_costs=False, show_cumulative_plots=False, show_bias=None, show_unbiased_subgroups=True, correctness_metric=False)
+    - set_fit_request (self: aif360.sklearn.detectors.facts.FACTS, *, verbose: Union[bool, NoneType, str] = '$UNCHANGED$') -> aif360.sklearn.detectors.facts.FACTS
+    - set_params (self, **params)
+
+========================================
+
+Module: aif360.sklearn.detectors.detectors
+------------------------------------------
+Class: ScoringFunction
+  Inherits from: builtins.object
+  Methods:
+    - compute_qs (self, observed_sum: float, expectations: <built-in function array>, penalty: float)
+    - dscore (self, observed_sum: float, expectations: <built-in function array>, q: float)
+    - q_dscore (self, observed_sum: float, expectations: <built-in function array>, q: float)
+    - qmle (self, observed_sum: float, expectations: <built-in function array>)
+    - score (self, observed_sum: float, expectations: <built-in function array>, penalty: float, q: float)
+
+========================================
+
+Module: aif360.sklearn.detectors.facts
+--------------------------------------
+Class: FACTS
+  Inherits from: sklearn.base.BaseEstimator
+  Attributes:
+    - _doc_link_module
+    - _doc_link_template
+    - _doc_link_url_param_generator
+    - _repr_html_
+  Methods:
+    - _build_request_for_signature (router, method)
+    - _check_feature_names (self, *args, **kwargs)
+    - _check_n_features (self, *args, **kwargs)
+    - _get_default_requests ()
+    - _get_doc_link (self)
+    - _get_metadata_request (self)
+    - _get_param_names ()
+    - _get_tags (self)
+    - _more_tags (self)
+    - _repr_html_inner (self)
+    - _repr_mimebundle_ (self, **kwargs)
+    - _validate_data (self, *args, **kwargs)
+    - _validate_params (self)
+    - bias_scan (self, metric: str = 'equal-effectiveness', viewpoint: str = 'macro', sort_strategy: str = 'max-cost-diff-decr', top_count: int = 10, filter_sequence: List[str] = [], phi: float = 0.5, c: float = 0.5)
+    - fit (self, X: pandas.core.frame.DataFrame, verbose: bool = True)
+    - get_metadata_routing (self)
+    - get_params (self, deep=True)
+    - print_recourse_report (self, population_sizes=None, missing_subgroup_val='N/A', show_subgroup_costs=False, show_action_costs=False, show_cumulative_plots=False, show_bias=None, show_unbiased_subgroups=True, correctness_metric=False)
+    - set_fit_request (self: aif360.sklearn.detectors.facts.FACTS, *, verbose: Union[bool, NoneType, str] = '$UNCHANGED$') -> aif360.sklearn.detectors.facts.FACTS
+    - set_params (self, **params)
+
+Class: ParameterProxy
+  Inherits from: builtins.object
+  Methods:
+    - setFeatureChange (self, fc: Dict)
+
+========================================
+
+Module: aif360.sklearn.detectors.facts.metrics
+----------------------------------------------
+Class: Predicate
+  Inherits from: builtins.object
+  Methods:
+    - contains (self, other: object) -> bool
+    - from_dict (d: Dict[str, str]) -> 'Predicate'
+    - satisfies (self, x: Mapping[str, Any]) -> bool
+    - satisfies_v (self, X: pandas.core.frame.DataFrame) -> pandas.core.series.Series
+    - to_dict (self) -> Dict[str, str]
+    - width (self)
+
+========================================
+
+Module: aif360.sklearn.detectors.facts.optimization
+---------------------------------------------------
+Class: Predicate
+  Inherits from: builtins.object
+  Methods:
+    - contains (self, other: object) -> bool
+    - from_dict (d: Dict[str, str]) -> 'Predicate'
+    - satisfies (self, x: Mapping[str, Any]) -> bool
+    - satisfies_v (self, X: pandas.core.frame.DataFrame) -> pandas.core.series.Series
+    - to_dict (self) -> Dict[str, str]
+    - width (self)
+
+========================================
+
+Module: aif360.sklearn.detectors.facts.parameters
+-------------------------------------------------
+Class: ParameterProxy
+  Inherits from: builtins.object
+  Methods:
+    - setFeatureChange (self, fc: Dict)
+
+========================================
+
+Module: aif360.sklearn.detectors.facts.predicate
+------------------------------------------------
+Class: ParameterProxy
+  Inherits from: builtins.object
+  Methods:
+    - setFeatureChange (self, fc: Dict)
+
+Class: Predicate
+  Inherits from: builtins.object
+  Methods:
+    - contains (self, other: object) -> bool
+    - from_dict (d: Dict[str, str]) -> 'Predicate'
+    - satisfies (self, x: Mapping[str, Any]) -> bool
+    - satisfies_v (self, X: pandas.core.frame.DataFrame) -> pandas.core.series.Series
+    - to_dict (self) -> Dict[str, str]
+    - width (self)
+
+========================================
+
+Module: aif360.sklearn.detectors.facts.rule_filters
+---------------------------------------------------
+Class: Predicate
+  Inherits from: builtins.object
+  Methods:
+    - contains (self, other: object) -> bool
+    - from_dict (d: Dict[str, str]) -> 'Predicate'
+    - satisfies (self, x: Mapping[str, Any]) -> bool
+    - satisfies_v (self, X: pandas.core.frame.DataFrame) -> pandas.core.series.Series
+    - to_dict (self) -> Dict[str, str]
+    - width (self)
+
+========================================
+
+Module: aif360.sklearn.detectors.facts.utils
+--------------------------------------------
+Class: Predicate
+  Inherits from: builtins.object
+  Methods:
+    - contains (self, other: object) -> bool
+    - from_dict (d: Dict[str, str]) -> 'Predicate'
+    - satisfies (self, x: Mapping[str, Any]) -> bool
+    - satisfies_v (self, X: pandas.core.frame.DataFrame) -> pandas.core.series.Series
+    - to_dict (self) -> Dict[str, str]
+    - width (self)
+
+========================================
+
+Module: aif360.sklearn.inprocessing
+-----------------------------------
+Class: AdversarialDebiasing
+  Inherits from: sklearn.base.BaseEstimator, sklearn.base.ClassifierMixin
+  Attributes:
+    - _doc_link_module
+    - _doc_link_template
+    - _doc_link_url_param_generator
+    - _estimator_type
+    - _repr_html_
+  Methods:
+    - _build_request_for_signature (router, method)
+    - _check_feature_names (self, *args, **kwargs)
+    - _check_n_features (self, *args, **kwargs)
+    - _get_default_requests ()
+    - _get_doc_link (self)
+    - _get_metadata_request (self)
+    - _get_param_names ()
+    - _get_tags (self)
+    - _more_tags (self)
+    - _repr_html_inner (self)
+    - _repr_mimebundle_ (self, **kwargs)
+    - _validate_data (self, *args, **kwargs)
+    - _validate_params (self)
+    - decision_function (self, X)
+    - fit (self, X, y)
+    - get_metadata_routing (self)
+    - get_params (self, deep=True)
+    - predict (self, X)
+    - predict_proba (self, X)
+    - score (self, X, y, sample_weight=None)
+    - set_params (self, **params)
+    - set_score_request (self: aif360.sklearn.inprocessing.adversarial_debiasing.AdversarialDebiasing, *, sample_weight: Union[bool, NoneType, str] = '$UNCHANGED$') -> aif360.sklearn.inprocessing.adversarial_debiasing.AdversarialDebiasing
+
+Class: ExponentiatedGradientReduction
+  Inherits from: sklearn.base.BaseEstimator, sklearn.base.ClassifierMixin
+  Attributes:
+    - _doc_link_module
+    - _doc_link_template
+    - _doc_link_url_param_generator
+    - _estimator_type
+    - _repr_html_
+  Methods:
+    - _build_request_for_signature (router, method)
+    - _check_feature_names (self, *args, **kwargs)
+    - _check_n_features (self, *args, **kwargs)
+    - _get_default_requests ()
+    - _get_doc_link (self)
+    - _get_metadata_request (self)
+    - _get_param_names ()
+    - _get_tags (self)
+    - _more_tags (self)
+    - _repr_html_inner (self)
+    - _repr_mimebundle_ (self, **kwargs)
+    - _validate_data (self, *args, **kwargs)
+    - _validate_params (self)
+    - fit (self, X, y)
+    - get_metadata_routing (self)
+    - get_params (self, deep=True)
+    - predict (self, X)
+    - predict_proba (self, X)
+    - score (self, X, y, sample_weight=None)
+    - set_params (self, **params)
+    - set_score_request (self: aif360.sklearn.inprocessing.exponentiated_gradient_reduction.ExponentiatedGradientReduction, *, sample_weight: Union[bool, NoneType, str] = '$UNCHANGED$') -> aif360.sklearn.inprocessing.exponentiated_gradient_reduction.ExponentiatedGradientReduction
+
+Class: GridSearchReduction
+  Inherits from: sklearn.base.BaseEstimator, sklearn.base.ClassifierMixin
+  Attributes:
+    - _doc_link_module
+    - _doc_link_template
+    - _doc_link_url_param_generator
+    - _estimator_type
+    - _repr_html_
+  Methods:
+    - _build_request_for_signature (router, method)
+    - _check_feature_names (self, *args, **kwargs)
+    - _check_n_features (self, *args, **kwargs)
+    - _get_default_requests ()
+    - _get_doc_link (self)
+    - _get_metadata_request (self)
+    - _get_param_names ()
+    - _get_tags (self)
+    - _more_tags (self)
+    - _repr_html_inner (self)
+    - _repr_mimebundle_ (self, **kwargs)
+    - _validate_data (self, *args, **kwargs)
+    - _validate_params (self)
+    - fit (self, X, y)
+    - get_metadata_routing (self)
+    - get_params (self, deep=True)
+    - predict (self, X)
+    - predict_proba (self, X)
+    - score (self, X, y, sample_weight=None)
+    - set_params (self, **params)
+    - set_score_request (self: aif360.sklearn.inprocessing.grid_search_reduction.GridSearchReduction, *, sample_weight: Union[bool, NoneType, str] = '$UNCHANGED$') -> aif360.sklearn.inprocessing.grid_search_reduction.GridSearchReduction
+
+Class: SenSR
+  Inherits from: aif360.sklearn.inprocessing.infairness.InFairnessNet
+  Attributes:
+    - _estimator_type
+  Methods:
+    - evaluation_step (self, batch, training=False)
+    - fit (self, X, y, **fit_params)
+    - get_loss (self, y_pred, y_true, X=None, training=False)
+    - initialize_module (self)
+    - predict (self, X)
+    - train_step_single (self, batch, **fit_params)
+    - validation_step (self, batch, **fit_params)
+
+Class: SenSeI
+  Inherits from: aif360.sklearn.inprocessing.infairness.InFairnessNet
+  Attributes:
+    - _estimator_type
+  Methods:
+    - evaluation_step (self, batch, training=False)
+    - fit (self, X, y, **fit_params)
+    - get_loss (self, y_pred, y_true, X=None, training=False)
+    - initialize_module (self)
+    - predict (self, X)
+    - train_step_single (self, batch, **fit_params)
+    - validation_step (self, batch, **fit_params)
+
+========================================
+
+Module: aif360.sklearn.inprocessing.adversarial_debiasing
+---------------------------------------------------------
+Class: AdversarialDebiasing
+  Inherits from: sklearn.base.BaseEstimator, sklearn.base.ClassifierMixin
+  Attributes:
+    - _doc_link_module
+    - _doc_link_template
+    - _doc_link_url_param_generator
+    - _estimator_type
+    - _repr_html_
+  Methods:
+    - _build_request_for_signature (router, method)
+    - _check_feature_names (self, *args, **kwargs)
+    - _check_n_features (self, *args, **kwargs)
+    - _get_default_requests ()
+    - _get_doc_link (self)
+    - _get_metadata_request (self)
+    - _get_param_names ()
+    - _get_tags (self)
+    - _more_tags (self)
+    - _repr_html_inner (self)
+    - _repr_mimebundle_ (self, **kwargs)
+    - _validate_data (self, *args, **kwargs)
+    - _validate_params (self)
+    - decision_function (self, X)
+    - fit (self, X, y)
+    - get_metadata_routing (self)
+    - get_params (self, deep=True)
+    - predict (self, X)
+    - predict_proba (self, X)
+    - score (self, X, y, sample_weight=None)
+    - set_params (self, **params)
+    - set_score_request (self: aif360.sklearn.inprocessing.adversarial_debiasing.AdversarialDebiasing, *, sample_weight: Union[bool, NoneType, str] = '$UNCHANGED$') -> aif360.sklearn.inprocessing.adversarial_debiasing.AdversarialDebiasing
+
+========================================
+
+Module: aif360.sklearn.inprocessing.exponentiated_gradient_reduction
+--------------------------------------------------------------------
+Class: ExponentiatedGradientReduction
+  Inherits from: sklearn.base.BaseEstimator, sklearn.base.ClassifierMixin
+  Attributes:
+    - _doc_link_module
+    - _doc_link_template
+    - _doc_link_url_param_generator
+    - _estimator_type
+    - _repr_html_
+  Methods:
+    - _build_request_for_signature (router, method)
+    - _check_feature_names (self, *args, **kwargs)
+    - _check_n_features (self, *args, **kwargs)
+    - _get_default_requests ()
+    - _get_doc_link (self)
+    - _get_metadata_request (self)
+    - _get_param_names ()
+    - _get_tags (self)
+    - _more_tags (self)
+    - _repr_html_inner (self)
+    - _repr_mimebundle_ (self, **kwargs)
+    - _validate_data (self, *args, **kwargs)
+    - _validate_params (self)
+    - fit (self, X, y)
+    - get_metadata_routing (self)
+    - get_params (self, deep=True)
+    - predict (self, X)
+    - predict_proba (self, X)
+    - score (self, X, y, sample_weight=None)
+    - set_params (self, **params)
+    - set_score_request (self: aif360.sklearn.inprocessing.exponentiated_gradient_reduction.ExponentiatedGradientReduction, *, sample_weight: Union[bool, NoneType, str] = '$UNCHANGED$') -> aif360.sklearn.inprocessing.exponentiated_gradient_reduction.ExponentiatedGradientReduction
+
+========================================
+
+Module: aif360.sklearn.inprocessing.grid_search_reduction
+---------------------------------------------------------
+Class: GridSearchReduction
+  Inherits from: sklearn.base.BaseEstimator, sklearn.base.ClassifierMixin
+  Attributes:
+    - _doc_link_module
+    - _doc_link_template
+    - _doc_link_url_param_generator
+    - _estimator_type
+    - _repr_html_
+  Methods:
+    - _build_request_for_signature (router, method)
+    - _check_feature_names (self, *args, **kwargs)
+    - _check_n_features (self, *args, **kwargs)
+    - _get_default_requests ()
+    - _get_doc_link (self)
+    - _get_metadata_request (self)
+    - _get_param_names ()
+    - _get_tags (self)
+    - _more_tags (self)
+    - _repr_html_inner (self)
+    - _repr_mimebundle_ (self, **kwargs)
+    - _validate_data (self, *args, **kwargs)
+    - _validate_params (self)
+    - fit (self, X, y)
+    - get_metadata_routing (self)
+    - get_params (self, deep=True)
+    - predict (self, X)
+    - predict_proba (self, X)
+    - score (self, X, y, sample_weight=None)
+    - set_params (self, **params)
+    - set_score_request (self: aif360.sklearn.inprocessing.grid_search_reduction.GridSearchReduction, *, sample_weight: Union[bool, NoneType, str] = '$UNCHANGED$') -> aif360.sklearn.inprocessing.grid_search_reduction.GridSearchReduction
+
+========================================
+
+Module: aif360.sklearn.inprocessing.infairness
+----------------------------------------------
+Class: Dataset
+  Inherits from: builtins.object
+
+Class: InFairnessNet
+  Inherits from: builtins.object
+  Attributes:
+    - _estimator_type
+  Methods:
+    - evaluation_step (self, batch, training=False)
+    - fit (self, X, y, **fit_params)
+    - get_loss (self, y_pred, y_true, X=None, training=False)
+    - predict (self, X)
+    - train_step_single (self, batch, **fit_params)
+    - validation_step (self, batch, **fit_params)
+
+Class: SenSR
+  Inherits from: aif360.sklearn.inprocessing.infairness.InFairnessNet
+  Attributes:
+    - _estimator_type
+  Methods:
+    - evaluation_step (self, batch, training=False)
+    - fit (self, X, y, **fit_params)
+    - get_loss (self, y_pred, y_true, X=None, training=False)
+    - initialize_module (self)
+    - predict (self, X)
+    - train_step_single (self, batch, **fit_params)
+    - validation_step (self, batch, **fit_params)
+
+Class: SenSeI
+  Inherits from: aif360.sklearn.inprocessing.infairness.InFairnessNet
+  Attributes:
+    - _estimator_type
+  Methods:
+    - evaluation_step (self, batch, training=False)
+    - fit (self, X, y, **fit_params)
+    - get_loss (self, y_pred, y_true, X=None, training=False)
+    - initialize_module (self)
+    - predict (self, X)
+    - train_step_single (self, batch, **fit_params)
+    - validation_step (self, batch, **fit_params)
+
+========================================
+
+Module: aif360.sklearn.metrics
+------------------------------
+Class: BerkJones
+  Inherits from: aif360.detectors.mdss.ScoringFunctions.ScoringFunction.ScoringFunction
+  Methods:
+    - compute_qs (self, observed_sum: float, expectations: <built-in function array>, penalty: float)
+    - dscore (self, observed_sum: float, expectations: <built-in function array>, q: float)
+    - q_dscore (self, observed_sum: float, expectations: <built-in function array>, q: float)
+    - qmle (self, observed_sum: float, expectations: <built-in function array>)
+    - score (self, observed_sum: float, expectations: <built-in function array>, penalty: float, q: float)
+
+Class: Bernoulli
+  Inherits from: aif360.detectors.mdss.ScoringFunctions.ScoringFunction.ScoringFunction
+  Methods:
+    - compute_qs (self, observed_sum: float, expectations: <built-in function array>, penalty: float)
+    - dscore (self, observed_sum: float, expectations: <built-in function array>, q: float)
+    - q_dscore (self, observed_sum: float, expectations: <built-in function array>, q: float)
+    - qmle (self, observed_sum: float, expectations: <built-in function array>)
+    - score (self, observed_sum: float, expectations: <built-in function array>, penalty: float, q: float)
+
+Class: MDSS
+  Inherits from: builtins.object
+  Methods:
+    - choose_aggregates (self, aggregates: dict, thresholds: list, penalty: float, all_observed_sum: float, all_expectations: list)
+    - get_aggregates (self, coordinates: pandas.core.frame.DataFrame, outcomes: pandas.core.series.Series, expectations: pandas.core.series.Series, current_subset: dict, column_name: str, penalty: float)
+    - scan (self, coordinates: pandas.core.frame.DataFrame, expectations: pandas.core.series.Series, outcomes: pandas.core.series.Series, penalty: float, num_iters: int, verbose: bool = False, seed: int = 0, mode: str = 'binary')
+    - score_current_subset (self, coordinates: pandas.core.frame.DataFrame, expectations: pandas.core.series.Series, outcomes: pandas.core.series.Series, current_subset: dict, penalty: float)
+
+========================================
+
+Module: aif360.sklearn.metrics.metrics
+--------------------------------------
+Class: BerkJones
+  Inherits from: aif360.detectors.mdss.ScoringFunctions.ScoringFunction.ScoringFunction
+  Methods:
+    - compute_qs (self, observed_sum: float, expectations: <built-in function array>, penalty: float)
+    - dscore (self, observed_sum: float, expectations: <built-in function array>, q: float)
+    - q_dscore (self, observed_sum: float, expectations: <built-in function array>, q: float)
+    - qmle (self, observed_sum: float, expectations: <built-in function array>)
+    - score (self, observed_sum: float, expectations: <built-in function array>, penalty: float, q: float)
+
+Class: Bernoulli
+  Inherits from: aif360.detectors.mdss.ScoringFunctions.ScoringFunction.ScoringFunction
+  Methods:
+    - compute_qs (self, observed_sum: float, expectations: <built-in function array>, penalty: float)
+    - dscore (self, observed_sum: float, expectations: <built-in function array>, q: float)
+    - q_dscore (self, observed_sum: float, expectations: <built-in function array>, q: float)
+    - qmle (self, observed_sum: float, expectations: <built-in function array>)
+    - score (self, observed_sum: float, expectations: <built-in function array>, penalty: float, q: float)
+
+Class: MDSS
+  Inherits from: builtins.object
+  Methods:
+    - choose_aggregates (self, aggregates: dict, thresholds: list, penalty: float, all_observed_sum: float, all_expectations: list)
+    - get_aggregates (self, coordinates: pandas.core.frame.DataFrame, outcomes: pandas.core.series.Series, expectations: pandas.core.series.Series, current_subset: dict, column_name: str, penalty: float)
+    - scan (self, coordinates: pandas.core.frame.DataFrame, expectations: pandas.core.series.Series, outcomes: pandas.core.series.Series, penalty: float, num_iters: int, verbose: bool = False, seed: int = 0, mode: str = 'binary')
+    - score_current_subset (self, coordinates: pandas.core.frame.DataFrame, expectations: pandas.core.series.Series, outcomes: pandas.core.series.Series, current_subset: dict, penalty: float)
+
+========================================
+
+Module: aif360.sklearn.postprocessing
+-------------------------------------
+Class: CalibratedEqualizedOdds
+  Inherits from: sklearn.base.BaseEstimator, sklearn.base.ClassifierMixin
+  Attributes:
+    - _doc_link_module
+    - _doc_link_template
+    - _doc_link_url_param_generator
+    - _estimator_type
+    - _repr_html_
+  Methods:
+    - _build_request_for_signature (router, method)
+    - _check_feature_names (self, *args, **kwargs)
+    - _check_n_features (self, *args, **kwargs)
+    - _get_default_requests ()
+    - _get_doc_link (self)
+    - _get_metadata_request (self)
+    - _get_param_names ()
+    - _get_tags (self)
+    - _more_tags (self)
+    - _repr_html_inner (self)
+    - _repr_mimebundle_ (self, **kwargs)
+    - _validate_data (self, *args, **kwargs)
+    - _validate_params (self)
+    - _weighted_cost (self, y_true, probas_pred, pos_label=1, sample_weight=None)
+    - fit (self, X, y, labels=None, pos_label=1, sample_weight=None)
+    - get_metadata_routing (self)
+    - get_params (self, deep=True)
+    - predict (self, X)
+    - predict_proba (self, X)
+    - score (self, X, y, sample_weight=None)
+    - set_fit_request (self: aif360.sklearn.postprocessing.calibrated_equalized_odds.CalibratedEqualizedOdds, *, labels: Union[bool, NoneType, str] = '$UNCHANGED$', pos_label: Union[bool, NoneType, str] = '$UNCHANGED$', sample_weight: Union[bool, NoneType, str] = '$UNCHANGED$') -> aif360.sklearn.postprocessing.calibrated_equalized_odds.CalibratedEqualizedOdds
+    - set_params (self, **params)
+    - set_score_request (self: aif360.sklearn.postprocessing.calibrated_equalized_odds.CalibratedEqualizedOdds, *, sample_weight: Union[bool, NoneType, str] = '$UNCHANGED$') -> aif360.sklearn.postprocessing.calibrated_equalized_odds.CalibratedEqualizedOdds
+
+Class: PostProcessingMeta
+  Inherits from: sklearn.base.BaseEstimator, sklearn.base.MetaEstimatorMixin
+  Attributes:
+    - _doc_link_module
+    - _doc_link_template
+    - _doc_link_url_param_generator
+    - _estimator_type
+    - _repr_html_
+    - classes_
+  Methods:
+    - _build_request_for_signature (router, method)
+    - _check_feature_names (self, *args, **kwargs)
+    - _check_n_features (self, *args, **kwargs)
+    - _get_default_requests ()
+    - _get_doc_link (self)
+    - _get_metadata_request (self)
+    - _get_param_names ()
+    - _get_tags (self)
+    - _more_tags (self)
+    - _repr_html_inner (self)
+    - _repr_mimebundle_ (self, **kwargs)
+    - _validate_data (self, *args, **kwargs)
+    - _validate_params (self)
+    - fit (self, X, y, sample_weight=None, **fit_params)
+    - get_metadata_routing (self)
+    - get_params (self, deep=True)
+    - predict (self, X)
+    - predict_log_proba (self, X)
+    - predict_proba (self, X)
+    - score (self, X, y, sample_weight=None)
+    - set_fit_request (self: aif360.sklearn.postprocessing.PostProcessingMeta, *, sample_weight: Union[bool, NoneType, str] = '$UNCHANGED$') -> aif360.sklearn.postprocessing.PostProcessingMeta
+    - set_params (self, **params)
+    - set_score_request (self: aif360.sklearn.postprocessing.PostProcessingMeta, *, sample_weight: Union[bool, NoneType, str] = '$UNCHANGED$') -> aif360.sklearn.postprocessing.PostProcessingMeta
+
+Class: RejectOptionClassifier
+  Inherits from: sklearn.base.BaseEstimator, sklearn.base.ClassifierMixin
+  Attributes:
+    - _doc_link_module
+    - _doc_link_template
+    - _doc_link_url_param_generator
+    - _estimator_type
+    - _repr_html_
+  Methods:
+    - _build_request_for_signature (router, method)
+    - _check_feature_names (self, *args, **kwargs)
+    - _check_n_features (self, *args, **kwargs)
+    - _get_default_requests ()
+    - _get_doc_link (self)
+    - _get_metadata_request (self)
+    - _get_param_names ()
+    - _get_tags (self)
+    - _more_tags (self)
+    - _repr_html_inner (self)
+    - _repr_mimebundle_ (self, **kwargs)
+    - _validate_data (self, *args, **kwargs)
+    - _validate_params (self)
+    - fit (self, X, y, labels=None, pos_label=1, priv_group=1, sample_weight=None)
+    - fit_predict (self, X, y=None, **fit_params)
+    - get_metadata_routing (self)
+    - get_params (self, deep=True)
+    - predict (self, X)
+    - predict_proba (self, X)
+    - score (self, X, y, sample_weight=None)
+    - set_fit_request (self: aif360.sklearn.postprocessing.reject_option_classification.RejectOptionClassifier, *, labels: Union[bool, NoneType, str] = '$UNCHANGED$', pos_label: Union[bool, NoneType, str] = '$UNCHANGED$', priv_group: Union[bool, NoneType, str] = '$UNCHANGED$', sample_weight: Union[bool, NoneType, str] = '$UNCHANGED$') -> aif360.sklearn.postprocessing.reject_option_classification.RejectOptionClassifier
+    - set_params (self, **params)
+    - set_score_request (self: aif360.sklearn.postprocessing.reject_option_classification.RejectOptionClassifier, *, sample_weight: Union[bool, NoneType, str] = '$UNCHANGED$') -> aif360.sklearn.postprocessing.reject_option_classification.RejectOptionClassifier
+
+Class: RejectOptionClassifierCV
+  Inherits from: sklearn.model_selection._search.GridSearchCV
+  Attributes:
+    - _abc_impl
+    - _doc_link_module
+    - _doc_link_template
+    - _doc_link_url_param_generator
+    - _estimator_type
+    - _parameter_constraints
+    - _repr_html_
+    - classes_
+    - n_features_in_
+  Methods:
+    - _build_request_for_signature (router, method)
+    - _check_feature_names (self, *args, **kwargs)
+    - _check_n_features (self, *args, **kwargs)
+    - _check_refit_for_multimetric (self, scores)
+    - _format_results (self, candidate_params, n_splits, out, more_results=None)
+    - _get_default_requests ()
+    - _get_doc_link (self)
+    - _get_metadata_request (self)
+    - _get_param_names ()
+    - _get_routed_params_for_fit (self, params)
+    - _get_scorers (self)
+    - _get_tags (self)
+    - _more_tags (self)
+    - _repr_html_inner (self)
+    - _repr_mimebundle_ (self, **kwargs)
+    - _run_search (self, evaluate_candidates)
+    - _select_best_index (refit, refit_metric, results)
+    - _sk_visual_block_ (self)
+    - _validate_data (self, *args, **kwargs)
+    - _validate_params (self)
+    - decision_function (self, X)
+    - fit (self, X, y, **fit_params)
+    - get_metadata_routing (self)
+    - get_params (self, deep=True)
+    - inverse_transform (self, X=None, Xt=None)
+    - predict (self, X)
+    - predict_log_proba (self, X)
+    - predict_proba (self, X)
+    - score (self, X, y=None, **params)
+    - score_samples (self, X)
+    - set_params (self, **params)
+    - transform (self, X)
+
+========================================
+
+Module: aif360.sklearn.postprocessing.calibrated_equalized_odds
+---------------------------------------------------------------
+Class: CalibratedEqualizedOdds
+  Inherits from: sklearn.base.BaseEstimator, sklearn.base.ClassifierMixin
+  Attributes:
+    - _doc_link_module
+    - _doc_link_template
+    - _doc_link_url_param_generator
+    - _estimator_type
+    - _repr_html_
+  Methods:
+    - _build_request_for_signature (router, method)
+    - _check_feature_names (self, *args, **kwargs)
+    - _check_n_features (self, *args, **kwargs)
+    - _get_default_requests ()
+    - _get_doc_link (self)
+    - _get_metadata_request (self)
+    - _get_param_names ()
+    - _get_tags (self)
+    - _more_tags (self)
+    - _repr_html_inner (self)
+    - _repr_mimebundle_ (self, **kwargs)
+    - _validate_data (self, *args, **kwargs)
+    - _validate_params (self)
+    - _weighted_cost (self, y_true, probas_pred, pos_label=1, sample_weight=None)
+    - fit (self, X, y, labels=None, pos_label=1, sample_weight=None)
+    - get_metadata_routing (self)
+    - get_params (self, deep=True)
+    - predict (self, X)
+    - predict_proba (self, X)
+    - score (self, X, y, sample_weight=None)
+    - set_fit_request (self: aif360.sklearn.postprocessing.calibrated_equalized_odds.CalibratedEqualizedOdds, *, labels: Union[bool, NoneType, str] = '$UNCHANGED$', pos_label: Union[bool, NoneType, str] = '$UNCHANGED$', sample_weight: Union[bool, NoneType, str] = '$UNCHANGED$') -> aif360.sklearn.postprocessing.calibrated_equalized_odds.CalibratedEqualizedOdds
+    - set_params (self, **params)
+    - set_score_request (self: aif360.sklearn.postprocessing.calibrated_equalized_odds.CalibratedEqualizedOdds, *, sample_weight: Union[bool, NoneType, str] = '$UNCHANGED$') -> aif360.sklearn.postprocessing.calibrated_equalized_odds.CalibratedEqualizedOdds
+
+========================================
+
+Module: aif360.sklearn.postprocessing.reject_option_classification
+------------------------------------------------------------------
+Class: RejectOptionClassifier
+  Inherits from: sklearn.base.BaseEstimator, sklearn.base.ClassifierMixin
+  Attributes:
+    - _doc_link_module
+    - _doc_link_template
+    - _doc_link_url_param_generator
+    - _estimator_type
+    - _repr_html_
+  Methods:
+    - _build_request_for_signature (router, method)
+    - _check_feature_names (self, *args, **kwargs)
+    - _check_n_features (self, *args, **kwargs)
+    - _get_default_requests ()
+    - _get_doc_link (self)
+    - _get_metadata_request (self)
+    - _get_param_names ()
+    - _get_tags (self)
+    - _more_tags (self)
+    - _repr_html_inner (self)
+    - _repr_mimebundle_ (self, **kwargs)
+    - _validate_data (self, *args, **kwargs)
+    - _validate_params (self)
+    - fit (self, X, y, labels=None, pos_label=1, priv_group=1, sample_weight=None)
+    - fit_predict (self, X, y=None, **fit_params)
+    - get_metadata_routing (self)
+    - get_params (self, deep=True)
+    - predict (self, X)
+    - predict_proba (self, X)
+    - score (self, X, y, sample_weight=None)
+    - set_fit_request (self: aif360.sklearn.postprocessing.reject_option_classification.RejectOptionClassifier, *, labels: Union[bool, NoneType, str] = '$UNCHANGED$', pos_label: Union[bool, NoneType, str] = '$UNCHANGED$', priv_group: Union[bool, NoneType, str] = '$UNCHANGED$', sample_weight: Union[bool, NoneType, str] = '$UNCHANGED$') -> aif360.sklearn.postprocessing.reject_option_classification.RejectOptionClassifier
+    - set_params (self, **params)
+    - set_score_request (self: aif360.sklearn.postprocessing.reject_option_classification.RejectOptionClassifier, *, sample_weight: Union[bool, NoneType, str] = '$UNCHANGED$') -> aif360.sklearn.postprocessing.reject_option_classification.RejectOptionClassifier
+
+Class: RejectOptionClassifierCV
+  Inherits from: sklearn.model_selection._search.GridSearchCV
+  Attributes:
+    - _abc_impl
+    - _doc_link_module
+    - _doc_link_template
+    - _doc_link_url_param_generator
+    - _estimator_type
+    - _parameter_constraints
+    - _repr_html_
+    - classes_
+    - n_features_in_
+  Methods:
+    - _build_request_for_signature (router, method)
+    - _check_feature_names (self, *args, **kwargs)
+    - _check_n_features (self, *args, **kwargs)
+    - _check_refit_for_multimetric (self, scores)
+    - _format_results (self, candidate_params, n_splits, out, more_results=None)
+    - _get_default_requests ()
+    - _get_doc_link (self)
+    - _get_metadata_request (self)
+    - _get_param_names ()
+    - _get_routed_params_for_fit (self, params)
+    - _get_scorers (self)
+    - _get_tags (self)
+    - _more_tags (self)
+    - _repr_html_inner (self)
+    - _repr_mimebundle_ (self, **kwargs)
+    - _run_search (self, evaluate_candidates)
+    - _select_best_index (refit, refit_metric, results)
+    - _sk_visual_block_ (self)
+    - _validate_data (self, *args, **kwargs)
+    - _validate_params (self)
+    - decision_function (self, X)
+    - fit (self, X, y, **fit_params)
+    - get_metadata_routing (self)
+    - get_params (self, deep=True)
+    - inverse_transform (self, X=None, Xt=None)
+    - predict (self, X)
+    - predict_log_proba (self, X)
+    - predict_proba (self, X)
+    - score (self, X, y=None, **params)
+    - score_samples (self, X)
+    - set_params (self, **params)
+    - transform (self, X)
+
+========================================
+
+Module: aif360.sklearn.preprocessing
+------------------------------------
+Class: FairAdapt
+  Inherits from: sklearn.base.BaseEstimator
+  Attributes:
+    - _doc_link_module
+    - _doc_link_template
+    - _doc_link_url_param_generator
+    - _repr_html_
+  Methods:
+    - _build_request_for_signature (router, method)
+    - _check_feature_names (self, *args, **kwargs)
+    - _check_n_features (self, *args, **kwargs)
+    - _get_default_requests ()
+    - _get_doc_link (self)
+    - _get_metadata_request (self)
+    - _get_param_names ()
+    - _get_tags (self)
+    - _more_tags (self)
+    - _repr_html_inner (self)
+    - _repr_mimebundle_ (self, **kwargs)
+    - _validate_data (self, *args, **kwargs)
+    - _validate_params (self)
+    - fit_transform (self, X_train, y_train, X_test)
+    - get_metadata_routing (self)
+    - get_params (self, deep=True)
+    - set_params (self, **params)
+
+Class: LearnedFairRepresentations
+  Inherits from: sklearn.base.BaseEstimator, sklearn.base.ClassifierMixin, sklearn.base.TransformerMixin
+  Attributes:
+    - _doc_link_module
+    - _doc_link_template
+    - _doc_link_url_param_generator
+    - _estimator_type
+    - _repr_html_
+    - _sklearn_auto_wrap_output_keys
+  Methods:
+    - _build_request_for_signature (router, method)
+    - _check_feature_names (self, *args, **kwargs)
+    - _check_n_features (self, *args, **kwargs)
+    - _get_default_requests ()
+    - _get_doc_link (self)
+    - _get_metadata_request (self)
+    - _get_param_names ()
+    - _get_tags (self)
+    - _more_tags (self)
+    - _repr_html_inner (self)
+    - _repr_mimebundle_ (self, **kwargs)
+    - _validate_data (self, *args, **kwargs)
+    - _validate_params (self)
+    - fit (self, X, y, priv_group=1, sample_weight=None)
+    - fit_transform (self, X, y=None, **fit_params)
+    - get_metadata_routing (self)
+    - get_params (self, deep=True)
+    - predict (self, X)
+    - predict_proba (self, X)
+    - score (self, X, y, sample_weight=None)
+    - set_fit_request (self: aif360.sklearn.preprocessing.learning_fair_representations.LearnedFairRepresentations, *, priv_group: Union[bool, NoneType, str] = '$UNCHANGED$', sample_weight: Union[bool, NoneType, str] = '$UNCHANGED$') -> aif360.sklearn.preprocessing.learning_fair_representations.LearnedFairRepresentations
+    - set_output (self, *, transform=None)
+    - set_params (self, **params)
+    - set_score_request (self: aif360.sklearn.preprocessing.learning_fair_representations.LearnedFairRepresentations, *, sample_weight: Union[bool, NoneType, str] = '$UNCHANGED$') -> aif360.sklearn.preprocessing.learning_fair_representations.LearnedFairRepresentations
+    - transform (self, X)
+
+Class: Reweighing
+  Inherits from: sklearn.base.BaseEstimator
+  Attributes:
+    - _doc_link_module
+    - _doc_link_template
+    - _doc_link_url_param_generator
+    - _repr_html_
+  Methods:
+    - _build_request_for_signature (router, method)
+    - _check_feature_names (self, *args, **kwargs)
+    - _check_n_features (self, *args, **kwargs)
+    - _get_default_requests ()
+    - _get_doc_link (self)
+    - _get_metadata_request (self)
+    - _get_param_names ()
+    - _get_tags (self)
+    - _more_tags (self)
+    - _repr_html_inner (self)
+    - _repr_mimebundle_ (self, **kwargs)
+    - _validate_data (self, *args, **kwargs)
+    - _validate_params (self)
+    - fit (self, X, y, sample_weight=None)
+    - fit_transform (self, X, y, sample_weight=None)
+    - get_metadata_routing (self)
+    - get_params (self, deep=True)
+    - set_fit_request (self: aif360.sklearn.preprocessing.reweighing.Reweighing, *, sample_weight: Union[bool, NoneType, str] = '$UNCHANGED$') -> aif360.sklearn.preprocessing.reweighing.Reweighing
+    - set_params (self, **params)
+
+Class: ReweighingMeta
+  Inherits from: sklearn.base.BaseEstimator, sklearn.base.MetaEstimatorMixin
+  Attributes:
+    - _doc_link_module
+    - _doc_link_template
+    - _doc_link_url_param_generator
+    - _estimator_type
+    - _repr_html_
+    - classes_
+  Methods:
+    - _build_request_for_signature (router, method)
+    - _check_feature_names (self, *args, **kwargs)
+    - _check_n_features (self, *args, **kwargs)
+    - _get_default_requests ()
+    - _get_doc_link (self)
+    - _get_metadata_request (self)
+    - _get_param_names ()
+    - _get_tags (self)
+    - _more_tags (self)
+    - _repr_html_inner (self)
+    - _repr_mimebundle_ (self, **kwargs)
+    - _validate_data (self, *args, **kwargs)
+    - _validate_params (self)
+    - fit (self, X, y, sample_weight=None)
+    - get_metadata_routing (self)
+    - get_params (self, deep=True)
+    - predict (self, X)
+    - predict_log_proba (self, X)
+    - predict_proba (self, X)
+    - score (self, X, y, sample_weight=None)
+    - set_fit_request (self: aif360.sklearn.preprocessing.reweighing.ReweighingMeta, *, sample_weight: Union[bool, NoneType, str] = '$UNCHANGED$') -> aif360.sklearn.preprocessing.reweighing.ReweighingMeta
+    - set_params (self, **params)
+    - set_score_request (self: aif360.sklearn.preprocessing.reweighing.ReweighingMeta, *, sample_weight: Union[bool, NoneType, str] = '$UNCHANGED$') -> aif360.sklearn.preprocessing.reweighing.ReweighingMeta
+
+========================================
+
+Module: aif360.sklearn.preprocessing.fairadapt
+----------------------------------------------
+Class: FairAdapt
+  Inherits from: sklearn.base.BaseEstimator
+  Attributes:
+    - _doc_link_module
+    - _doc_link_template
+    - _doc_link_url_param_generator
+    - _repr_html_
+  Methods:
+    - _build_request_for_signature (router, method)
+    - _check_feature_names (self, *args, **kwargs)
+    - _check_n_features (self, *args, **kwargs)
+    - _get_default_requests ()
+    - _get_doc_link (self)
+    - _get_metadata_request (self)
+    - _get_param_names ()
+    - _get_tags (self)
+    - _more_tags (self)
+    - _repr_html_inner (self)
+    - _repr_mimebundle_ (self, **kwargs)
+    - _validate_data (self, *args, **kwargs)
+    - _validate_params (self)
+    - fit_transform (self, X_train, y_train, X_test)
+    - get_metadata_routing (self)
+    - get_params (self, deep=True)
+    - set_params (self, **params)
+
+========================================
+
+Module: aif360.sklearn.preprocessing.learning_fair_representations
+------------------------------------------------------------------
+Class: LearnedFairRepresentations
+  Inherits from: sklearn.base.BaseEstimator, sklearn.base.ClassifierMixin, sklearn.base.TransformerMixin
+  Attributes:
+    - _doc_link_module
+    - _doc_link_template
+    - _doc_link_url_param_generator
+    - _estimator_type
+    - _repr_html_
+    - _sklearn_auto_wrap_output_keys
+  Methods:
+    - _build_request_for_signature (router, method)
+    - _check_feature_names (self, *args, **kwargs)
+    - _check_n_features (self, *args, **kwargs)
+    - _get_default_requests ()
+    - _get_doc_link (self)
+    - _get_metadata_request (self)
+    - _get_param_names ()
+    - _get_tags (self)
+    - _more_tags (self)
+    - _repr_html_inner (self)
+    - _repr_mimebundle_ (self, **kwargs)
+    - _validate_data (self, *args, **kwargs)
+    - _validate_params (self)
+    - fit (self, X, y, priv_group=1, sample_weight=None)
+    - fit_transform (self, X, y=None, **fit_params)
+    - get_metadata_routing (self)
+    - get_params (self, deep=True)
+    - predict (self, X)
+    - predict_proba (self, X)
+    - score (self, X, y, sample_weight=None)
+    - set_fit_request (self: aif360.sklearn.preprocessing.learning_fair_representations.LearnedFairRepresentations, *, priv_group: Union[bool, NoneType, str] = '$UNCHANGED$', sample_weight: Union[bool, NoneType, str] = '$UNCHANGED$') -> aif360.sklearn.preprocessing.learning_fair_representations.LearnedFairRepresentations
+    - set_output (self, *, transform=None)
+    - set_params (self, **params)
+    - set_score_request (self: aif360.sklearn.preprocessing.learning_fair_representations.LearnedFairRepresentations, *, sample_weight: Union[bool, NoneType, str] = '$UNCHANGED$') -> aif360.sklearn.preprocessing.learning_fair_representations.LearnedFairRepresentations
+    - transform (self, X)
+
+========================================
+
+Module: aif360.sklearn.preprocessing.reweighing
+-----------------------------------------------
+Class: Reweighing
+  Inherits from: sklearn.base.BaseEstimator
+  Attributes:
+    - _doc_link_module
+    - _doc_link_template
+    - _doc_link_url_param_generator
+    - _repr_html_
+  Methods:
+    - _build_request_for_signature (router, method)
+    - _check_feature_names (self, *args, **kwargs)
+    - _check_n_features (self, *args, **kwargs)
+    - _get_default_requests ()
+    - _get_doc_link (self)
+    - _get_metadata_request (self)
+    - _get_param_names ()
+    - _get_tags (self)
+    - _more_tags (self)
+    - _repr_html_inner (self)
+    - _repr_mimebundle_ (self, **kwargs)
+    - _validate_data (self, *args, **kwargs)
+    - _validate_params (self)
+    - fit (self, X, y, sample_weight=None)
+    - fit_transform (self, X, y, sample_weight=None)
+    - get_metadata_routing (self)
+    - get_params (self, deep=True)
+    - set_fit_request (self: aif360.sklearn.preprocessing.reweighing.Reweighing, *, sample_weight: Union[bool, NoneType, str] = '$UNCHANGED$') -> aif360.sklearn.preprocessing.reweighing.Reweighing
+    - set_params (self, **params)
+
+Class: ReweighingMeta
+  Inherits from: sklearn.base.BaseEstimator, sklearn.base.MetaEstimatorMixin
+  Attributes:
+    - _doc_link_module
+    - _doc_link_template
+    - _doc_link_url_param_generator
+    - _estimator_type
+    - _repr_html_
+    - classes_
+  Methods:
+    - _build_request_for_signature (router, method)
+    - _check_feature_names (self, *args, **kwargs)
+    - _check_n_features (self, *args, **kwargs)
+    - _get_default_requests ()
+    - _get_doc_link (self)
+    - _get_metadata_request (self)
+    - _get_param_names ()
+    - _get_tags (self)
+    - _more_tags (self)
+    - _repr_html_inner (self)
+    - _repr_mimebundle_ (self, **kwargs)
+    - _validate_data (self, *args, **kwargs)
+    - _validate_params (self)
+    - fit (self, X, y, sample_weight=None)
+    - get_metadata_routing (self)
+    - get_params (self, deep=True)
+    - predict (self, X)
+    - predict_log_proba (self, X)
+    - predict_proba (self, X)
+    - score (self, X, y, sample_weight=None)
+    - set_fit_request (self: aif360.sklearn.preprocessing.reweighing.ReweighingMeta, *, sample_weight: Union[bool, NoneType, str] = '$UNCHANGED$') -> aif360.sklearn.preprocessing.reweighing.ReweighingMeta
+    - set_params (self, **params)
+    - set_score_request (self: aif360.sklearn.preprocessing.reweighing.ReweighingMeta, *, sample_weight: Union[bool, NoneType, str] = '$UNCHANGED$') -> aif360.sklearn.preprocessing.reweighing.ReweighingMeta
+
+========================================
+

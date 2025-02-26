@@ -5,6 +5,7 @@ from collections import namedtuple
 from inflection import underscore
 from uuid import uuid4
 import re
+from api.knowledge import knowledge
 
 from backend.config import config
 
@@ -29,12 +30,12 @@ async def populate(ontology):
                 # )
                 for n in ontology.nodes:
                     await tx.run("CREATE (n:Node {name: $name, label: $name})", name=n.type)
-                    await tx.run("""
-                                    MATCH (n:Node)
-                                    WHERE n.name IS NOT NULL
-                                    CALL apoc.create.addLabels(n, [n.name]) YIELD node
-                                    RETURN node
-                                """)
+                    # await tx.run("""
+                    #                 MATCH (n:Node)
+                    #                 WHERE n.name IS NOT NULL
+                    #                 CALL apoc.create.addLabels(n, [n.name]) YIELD node
+                    #                 RETURN node
+                    #             """)
 
                 for e in ontology.edges:
                     if e.type == 'hasname': continue
@@ -92,239 +93,15 @@ async def populate(ontology):
 
 # TODO: Skip triggers fallback
 
-Predicate = Literal['IsSubclassOf', 'Implements', 'IsEquivalentTo', 'HasParameter', 'AppliesTo', 'Has', 'IsAn', 'IsA',
+Predicate = Literal['IsSubclassOf', 'Implements', 'IsEquivalentTo', 'HasParameter', 'AppliesTo', 'IsAn', 'IsA',
                     'IsOfType', 'Fallback', 'WithDescription', 'WithParameter', 'Ensures', 'ContributesTo', 'Calls',
-                    'MightIntroduce', 'IsThreatTo', 'IsDimensionOf', 'AttributesTo', 'ShouldEnsure', 'MightMitigate', 'IsSynonymOf', 'IsProtectedAttribute']
+                    'MightIntroduce', 'IsThreatTo', 'IsDimensionOf', 'AttributesTo', 'ShouldEnsure', 'MightMitigate', 'IsSynonymOf', 'IsProtectedAttribute', 'BelongsTo', 'InheritsFrom',
+                    'ContainArgument', 'OfReturnType', 'ContainAttribute', 'ContainMethod']
 Statement = namedtuple('Statement', 'subject predicate object')
 
 separator = ';'
 camel_case = re.compile(r'(?<!^)(?=[A-Z])')
-knowledge = """
-# Data Science Task is a Core Concept
-Data Preprocessing is subclass of Data Science Task
-Supervised Learning is subclass of Data Science Task
-Unsupervised Learning is subclass of Data Science Task
-# TODO: binary vs multiclass classification
-Classification is subclass of Supervised Learning
-Regression is subclass of Supervised Learning
-Clustering is subclass of Unsupervised Learning
-Data Collection is subclass of Data Science Task
-Data Loading is subclass of Data Science Task
-Data Cleaning is subclass of Data Preprocessing
-Data Augmentation is subclass of Data Preprocessing
-Data Integration is subclass of Data Preprocessing
-Data Exploration is subclass of Data Science Task
-Data Visualization is subclass of Data Science Task
-Statistical Analysis is subclass of Data Science Task
-Natural Language Processing is subclass of Data Science Task
-Image Processing is subclass of Data Science Task
-Video Processing is subclass of Data Science Task
-Time Series Analysis is subclass of Data Science Task
-Anomaly Detection is subclass of Data Science Task
-Fraud Detection is subclass of Anomaly Detection
-Network Intrusion Detection is subclass of Anomaly Detection
-Model Selection is subclass of Data Science Task
-Model Evaluation is subclass of Data Science Task
-Model Deployment is subclass of Data Science Task
 
-TrainTestSplit is subclass of Model Selection
-KFold is subclass of Model Selection
-StratifiedKFold is subclass of Model Selection
-Data Normalization is subclass of Data Preprocessing
-MinMaxScaler is subclass of Data Normalization
-StandardScaler is subclass of Data Normalization
-Data Encoding is subclass of Data Preprocessing
-OneHotEncoder is subclass of Data Encoding
-SVM is subclass of Classification
-
-Predictive Performance is a Measure
-Accuracy is a Metric
-Recall is a Metric
-ROC AUC Score is a Metric
-Accuracy contributes to Predictive Performance
-Recall contributes to Predictive Performance
-ROC AUC Score contributes to Predictive Performance
-
-# Evaluation Procedure is a Core Concept
-
-# TODO: 'conditions' vs 'preferences'
-# E.g., for smaller datasets, use cross-validation or LOOCV to make the best use of limited data
-
-# Interface is a Core Concept
-Sklearn Estimator is an Interface
-Sklearn Estimator calls __init__; calls fit; calls predict
-
-Sklearn Transformer is an Interface
-Sklearn Transformer calls __init__; calls fit; calls transform
-
-Function is an Interface
-
-TrainTestSplit might introduce Bias
-
-# TODO: libraries and versions
-sklearn.model_selection.train_test_split is an Operator
-sklearn.model_selection.train_test_split implements TrainTestSplit
-sklearn.model_selection.train_test_split is a Function
-
-sklearn.model_selection.KFold is an Operator
-sklearn.model_selection.KFold implements KFold
-sklearn.model_selection.KFold is a Function
-
-sklearn.model_selection.StratifiedKFold is an Operator
-sklearn.model_selection.StratifiedKFold implements StratifiedKFold
-sklearn.model_selection.StratifiedKFold is a Function
-
-sklearn.preprocessing.MinMaxScaler is an Operator
-sklearn.preprocessing.MinMaxScaler is a Sklearn Transformer
-sklearn.preprocessing.MinMaxScaler implements MinMaxScaler
-
-sklearn.preprocessing.StandardScaler is an Operator
-sklearn.preprocessing.StandardScaler is a Sklearn Transformer
-sklearn.preprocessing.StandardScaler implements StandardScaler
-
-sklearn.preprocessing.OneHotEncoder is an Operator
-sklearn.preprocessing.OneHotEncoder is a Sklearn Transformer
-sklearn.preprocessing.OneHotEncoder implements OneHotEncoder
-
-sklearn.svm.SVC is an Operator
-sklearn.svm.SVC is a Sklearn Estimator
-sklearn.svm.SVC implements SVM
-
-# Requirement is a Core Concept
-# https://digital-strategy.ec.europa.eu/en/library/ethics-guidelines-trustworthy-ai
-# TODO: Add 'has context' with descriptions and definitions
-
-Fairness is a Requirement
-Lawfulness is a Requirement
-Human Agency is a Requirement
-Human Oversight is a Requirement
-Safety is a Requirement
-Technical Robustness is a Requirement
-Privacy is a Requirement
-Data Governance is a Requirement
-Transparency is a Requirement
-Diversity is a Requirement
-Non-discrimination is a Requirement
-Fairness is a Requirement
-Societal Well-being is a Requirement
-Environmental Well-being is a Requirement
-Accountability is a Requirement
-Acceptance is a Requirement
-
-#Concepts of Fairness
-Equality is subclass of Fairness
-Equity is subclass of Fairness
-Transparency is subclass of Fairness
-Confidentiality is subclass of Fairness
-Voice is subclass of Fairness
-Timeliness is subclass of Fairness
-Impartiality is subclass of Fairness
-Rationality is subclass of Fairness
-Accountability is subclass of Fairness
-Flexibility is subclass of Fairness
-Dignity is subclass of Fairness
-Bias is threat to Fairness
-Equality is dimension of Fairness
-Equity is dimension of Fairness
-
-#Measures of fairness
-Fairness is a Measure
-Demographic Parity contributes to Fairness
-Statistical Parity is synonym of Demographic Parity
-Equalized odds contributes to Fairness
-Equal Opportunity contributes to Fairness
-Predictive Parity contributes to Fairness
-Error-Rate Parity contributes to Fairness
-Accuracy Parity contributes to Fairness
-Individual Fairness contributes to Fairness
-Distance-based Fairness is synonym of Individual Fairness
-Counterfactual Fairness contributes to Fairness
-Causal Fairness contributes to Fairness
-Calibration Fairness contributes to Fairness
-Ranking Fairness contributes to Fairness
-Equal mis-opportunity contributes to Fairness
-Predictive Equality is synonym of Equal mis-opportunity
-Balanced Group contributes to Fairness
-Average odds contributes to Fairness
-
-#Metrics of Fairness
-
-
-Bias is a Risk
-Algorithmic Bias is subclass of Bias
-Historical Bias is subclass of Bias
-Data Bias is subclass of Bias
-Representation Bias is subclass of Bias
-Measurement Bias is subclass of Bias
-Omitted variable Bias is subclass of Bias
-Evaluation Bias is subclass of Bias
-Aggregation Bias is subclass of Bias
-User interaction bias is subclass of Bias
-Population Bias is subclass of Bias
-Deployment Bias is subclass of Bias
-Feedback Loop contributes to Bias
-Unconscious Bias is subclass of Bias
-Cognitive Bias is subclass of Bias
-Confirmation Bias is subclass of Bias
-Selection Bias is subclass of Bias
-Reporting Bias is subclass of Bias
-
-
-Person is an Entity
-First Name attributes to Person
-Middle Name attributes to Person
-Last Name attributes to Person
-Date of Birth attributes to Person
-Age attributes to Person
-Gender attributes to Person
-Sex attributes to Person
-Race attributes to Person
-Ethnicity attributes to Person
-Disability status attributes to Person
-Religion attributes to Person
-Sexual orientation attributes to Person
-National origin attributes to Person
-Marital status attributes to Person
-Socioeconomic status attributes to Person
-
-Gender is a Protected Attribute
-Race is a Protected Attribute
-Sexual orientation is a Protected Attribute
-Race is a Protected Attribute
-Religion is a Protected Attribute
-Ethnicity is a Protected Attribute
-Sex is a Protected Attribute
-Disability status is a Protected Attribute
-National origin is a Protected Attribute
-
-Classification should ensure Fairness
-
-Tabular Data is subclass of Data
-
-# Metrics, e.g., https://www.kaggle.com/code/alexisbcook/ai-fairness
-Demographic Parity is subclass of Equality
-Demographic Parity contributes to Equality
-Equality of Opportunity  is subclass of Equality
-Equality of Opportunity contributes to Equality
-Equal Accuracy is subclass of Equality
-Equal Accuracy contributes to Equality
-Group Unaware is subclass of Equality
-Group Unaware contributes to Equality
-
-# https://github.com/understandable-machine-intelligence-lab/Quantus
-Explainability is a Requirement
-Explanation Robustness is subclass of Explainability
-Explanation Consistency is a Measure
-Quantus_Consistency is a Metric
-Explanation Consistency contributes to Explanation Robustness
-Quantus_Consistency implements Explanation Consistency
-Quantus_Consistency applies to Tabular Data
-
-# X implements Demographic parity
-
-Immediate Alternatives is a Mitigation Action
-Immediate Alternatives might mitigate Bias
-"""
 
 
 class UnknownRelation(Exception):
@@ -332,22 +109,27 @@ class UnknownRelation(Exception):
 
 
 def parse(statement: str) -> Sequence[Statement]:
-    assert 'has name' not in get_args(Predicate)
-    edges = list(map(underscore, get_args(Predicate)))
-    part, *rest = statement.split(separator)
-    for edge in edges:
-        e = edge.replace('_', ' ')
-        if e in part:
-            s, o = part.split(e)
-            if rest:
-                _id = uuid4().hex
-                return [Statement(subject=s.strip(), predicate=edge, object=_id),
-                        Statement(subject=_id, predicate='has name', object=o.strip())] \
-                        + parse(_id + separator.join(rest))
-            else:
-                return [Statement(subject=s.strip(), predicate=edge, object=o.strip())]
-            
-    raise UnknownRelation(statement)
+
+    try:
+        assert 'has name' not in get_args(Predicate)
+        edges = list(map(underscore, get_args(Predicate)))
+        part, *rest = statement.split(separator)
+        for edge in edges:
+            e = edge.replace('_', ' ')
+            if e in part:
+                s, o = part.split(e)
+                if rest:
+                    _id = uuid4().hex
+                    return [Statement(subject=s.strip(), predicate=edge, object=_id),
+                            Statement(subject=_id, predicate='has name', object=o.strip())] \
+                            + parse(_id + separator.join(rest))
+                else:
+                    return [Statement(subject=s.strip(), predicate=edge, object=o.strip())]
+                
+        raise UnknownRelation(statement)
+    except Exception as error: 
+        #print(f"An error occurred: {error}")
+        print(part)
 
 
 @dataclass

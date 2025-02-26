@@ -21,7 +21,7 @@ class Pipeline:
 
 
 lower = lambda ll: [l.lower() for l in ll]
-approx_match = lambda token, options: difflib.get_close_matches(token.lower(), lower(options), n=5, cutoff=0.2)
+approx_match = lambda token, options: difflib.get_close_matches(token, options, n=5, cutoff=0.2)
 exact_match = lambda token, options: token if token.lower() in lower(options) else False
 cleanup = lambda obj, key: [[el['label'] if isinstance(el, dict) else el for el in path[key]] for path in obj]
 
@@ -77,7 +77,7 @@ async def debug(pipeline: Pipeline) -> None:
         #find the exact match first
         exactmatch = exact_match(step, state.tasks)
         if exactmatch != False and exactmatch is not None:
-            operator = exactmatch.lower()
+            operator = exactmatch
 
         else:
             approxmatches = approx_match(step, state.tasks)
@@ -94,10 +94,12 @@ async def debug(pipeline: Pipeline) -> None:
             if operator == "None of the above":
                 emit(Event('TaskNotFound', {'task': step}))
 
-        paths = cleanup((await execute_query(queries['get pathways'](operator, 'data_science_task'))), 'path')
+        paths = cleanup((await execute_query(queries['get directed pathways'](operator, 'Data Science Task'))), 'path')
+        print(paths)
         paths = [l.split(':') for l in set(":".join(el) for el in paths)]
         if paths:
             emit(Event('TaskRecognized', {'task': step, 'paths': paths}))
+            #sleep(2)
             tasks.append(operator)
             print(tasks)
             to_check.extend(paths)
@@ -106,20 +108,30 @@ async def debug(pipeline: Pipeline) -> None:
 
     actions_to_check = []
     for task in tasks:
-        risks = cleanup((await execute_query(queries['get pathways'](task, 'risk'))), 'path')
+        risks = cleanup((await execute_query(queries['get directed pathways'](task, 'Risk'))), 'path')
         if risks:
-            emit(Event('RisksIdentified', {'task': task, 'risks': risks}))
+            emit(Event('RiskRelationshipsIdentified', {'task': task, 'risks': risks}))
+            name_of_risks = [risk[2] for risk in risks]
+            emit(Event('RisksIdentified', {'task': task, 'risks': name_of_risks}))
             for risk in risks:
-                actions_to_check.extend(zip(repeat(task), risk[::2][1:-1]))
+                actions_to_check.extend(zip(repeat(task), risk[::2][1:-2]))
 
+    riskAndMitigationActions = {}
     for task, risk in actions_to_check:
-        candidates = (await execute_query(Query(f"""MATCH p=(s)-[:`might mitigate`]->(:`{risk}`) RETURN s;""")))
+        #TODO: Finish this one today.
+        #print(task, risk)
+        candidates = (await execute_query(Query(f"""MATCH p=(s)-[:`might_mitigate`]->(r) where r.label = "{risk}" RETURN s;""")))
+        #candidates = (await execute_query(actions["Immediate Alternatives"](task)))
         candidates = [s['s']['label'] for s in candidates]
+        #candidates = candidates[0]['connected_nodes']
+
         if candidates:
-            emit(Event('MitigationActionsIdentified', {'task': task, 'risk': risk, 'actions': candidates}))
-            for candidate in candidates:
-                alternatives = cleanup(await execute_query(actions[candidate](task)), 'connected_nodes')
-                emit(Event('SuggestionRendered', {'task': task, 'risk': risk, 'action': candidate, 'actions': alternatives}))
+            riskAndMitigationActions[risk] = candidates
+            #emit(Event('MitigationActionsIdentified', {'task': task, 'risk': risk, 'actions': candidates}))
+            #for candidate in candidates:
+                #alternatives = cleanup(await execute_query(actions[candidate](task)), 'connected_nodes')
+                #emit(Event('SuggestionRendered', {'task': task, 'risk': risk, 'action': candidate, 'actions': alternatives}))
+    emit(Event('MitigationActionsIdentified', {'risk_and_actions': riskAndMitigationActions}))
 
 
 async def main():
@@ -133,10 +145,10 @@ async def checkData():
     sleep(2)
     emit(Event('FeaturesNamesExtracted', {'features': list(data.columns)}))
     sleep(2)
-    state = list((await execute_query(queries['get attributes of a person'])))#[0].get('nodes', []) | select(lambda n: from_camel(n['label'])))
-    print(state)
+    state = list((await execute_query(queries['get protected attributes'])))#[0].get('nodes', []) | select(lambda n: from_camel(n['label'])))
     attributes = [from_camel(n['nodes']['label']) for n in state]
-    print("ATTRIBUTES: ", attributes)
+    emit(Event('FindingProtectedAttributes', {'attributes': attributes}))
+    sleep(2)
     features = list(data.columns)
     protectedFeatures = []
 
@@ -149,22 +161,23 @@ async def checkData():
             approxmatches = approx_match(feature, attributes)
             if not approxmatches:
                 emit(Event('No matches found', {'task': feature}))
+                continue
             else:
-                questions = [inquirer.List('task', message=colored("Approximate matches found for feature {}, please select the best option".format(feature), "magenta"), choices=approxmatches + ["Not a protected feature"])]
+                questions = [inquirer.List('task', message=colored("Approximate matches found for feature {}, please select the best option".format(feature), "magenta"), choices=approxmatches + ["Not a protected attribute"])]
                 answers = inquirer.prompt(questions)
             protectedFeature = answers['task']
-            if protectedFeature != "Not a protected feature":
+            if protectedFeature != "Not a protected attribute":
                 protectedFeatures.append(protectedFeature)
             else:
-                emit(Event('NotAProtectedFeature', {'feature': feature}))
-    emit(Event('ProtectedFeaturesIdentified', {'features': protectedFeatures}))
+                emit(Event('NotAProtectedFeature', {'attribute': feature}))
+    emit(Event('ProtectedAttributesIdentified', {'attributes': protectedFeatures}))
 
 
-async def getPathways():
-    path =  await execute_query(queries['get undirected pathways']('Data Science Task', 'Bias'))
+async def tryStuff():
+    path =  await execute_query(queries['get protected attributes'])
     print(path)
     
 if __name__ == "__main__":
-    asyncio.run(getPathways())
+    #asyncio.run(tryStuff())
     #asyncio.run(checkData())
-    #asyncio.run(main())
+    asyncio.run(main())

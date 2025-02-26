@@ -30,12 +30,23 @@ queries = {
         }), 
     'get tasks': Query("""
             CALL apoc.cypher.run( 
-            'MATCH (p:`' +$label+ '`)
+            'MATCH (p)
+            WHERE p.label = $label
             CALL apoc.path.subgraphAll(p, {maxLevel: -1}) YIELD nodes, relationships 
             RETURN nodes, relationships', 
             {label: $label} ) YIELD value 
             RETURN value.nodes AS nodes, value.relationships AS relationships
-        """, parameters={'label': 'Data Science Task'}),   
+        """, parameters={'label': 'Data Science Task'}),
+
+
+    'get tasks 2': Query("""CALL apoc.cypher.run(
+  apoc.text.format(
+    'MATCH (p:`%s`) CALL apoc.path.subgraphAll(p, {maxLevel: -1}) YIELD nodes, relationships RETURN nodes, relationships',
+    [$label]
+  ),
+  {}
+) YIELD value
+RETURN value.nodes AS nodes, value.relationships AS relationships""", parameters= {'label': 'Data Science Task'}),
 
 
         #TODO: recursively scan for all the children of the data_science_task node 
@@ -112,7 +123,21 @@ queries = {
     'get undirected pathways': lambda source, destination: Query("""
         CALL apoc.cypher.run(
         '
-        MATCH p = (start {label: $source})-[*1..5]-(end {label: $destination})
+        MATCH p = (start {label: $source})-[*1..10]-(end {label: $destination})
+        RETURN p
+        ',
+        {source: $source, destination: $destination}
+        ) YIELD value
+        RETURN value.p AS path
+        """, parameters={
+            'source': source,
+            'destination': destination
+        }),
+    
+    'get directed pathways': lambda source, destination: Query("""
+        CALL apoc.cypher.run(
+        '
+        MATCH p = (start {label: $source})-[*1..10]->(end {label: $destination})
         RETURN p
         ',
         {source: $source, destination: $destination}
@@ -130,6 +155,14 @@ queries = {
     ) YIELD value
     RETURN value.n as nodes;
 """, parameters={}),
+
+    'get protected attributes': Query("""
+    CALL apoc.cypher.run(
+    "MATCH (n)-[r]->(p) where p.label='Protected Attribute' RETURN n",
+    {}
+    ) YIELD value
+    RETURN value.n as nodes;
+""", parameters={})
         # CALL apoc.cypher.run(
         #     'MATCH (n:' + $label + ')
         #     CALL apoc.path.expand( n, null, null, 0, $depth )
@@ -145,7 +178,7 @@ queries = {
 }
 
 actions = {
-    'immediate alternatives': lambda label: Query("""
+    'Immediate Alternatives': lambda label: Query("""
             CALL apoc.cypher.run(' 
                 // Step 1: Find the target node of the is_subclass_of relationship 
                 MATCH (start {label: $start_node})-[:is_subclass_of]->(target) 
@@ -170,8 +203,8 @@ async def execute_query(query: Query):
     async with AsyncGraphDatabase.driver(config.local.uri, auth=(config.local.username, config.local.password)) as driver:
         async with driver.session(database=config.local.dbname) as session:
             try:
-                print("QUERY BODYA AND PARAMETERS")
-                print(query.body, query.parameters)
+                #print("QUERY BODY AND PARAMETERS")
+                #print(query.body, query.parameters)
                 result = await session.run(query.body, query.parameters)
                 records = []
                 async for record in result:
