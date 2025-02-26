@@ -12,6 +12,16 @@ from api.kg import Query, execute_query, queries, actions, from_camel, to_camel
 from api.events import Event, emit
 from time import sleep
 from termcolor import colored
+from api.eda import basicStatistics
+import json
+import seaborn as sns
+import matplotlib.pyplot as plt
+import math
+import plotly.graph_objects as go
+import plotly.subplots as sp
+import numpy as np
+from aif360.metrics import BinaryLabelDatasetMetric
+from aif360.datasets import BinaryLabelDataset
 
 
 @dataclass
@@ -99,7 +109,7 @@ async def debug(pipeline: Pipeline) -> None:
         paths = [l.split(':') for l in set(":".join(el) for el in paths)]
         if paths:
             emit(Event('TaskRecognized', {'task': step, 'paths': paths}))
-            #sleep(2)
+            #sleep(0.5)
             tasks.append(operator)
             print(tasks)
             to_check.extend(paths)
@@ -139,19 +149,26 @@ async def main():
 
 async def checkData():
     #load the dataset without the index column
-    #TODO: the protected features need to be in the knowledge base. For now, we will use the attributes of a person as a placeholder
-    data = pd.read_csv('credit.csv', index_col=0)
+    fileName = 'credit.csv'
+    data = pd.read_csv(fileName)
     emit(Event('DataLoaded', {'data': data}))
-    sleep(2)
+    sleep(0.5)
     emit(Event('FeaturesNamesExtracted', {'features': list(data.columns)}))
-    sleep(2)
+    sleep(0.5)
     state = list((await execute_query(queries['get protected attributes'])))#[0].get('nodes', []) | select(lambda n: from_camel(n['label'])))
     attributes = [from_camel(n['nodes']['label']) for n in state]
-    emit(Event('FindingProtectedAttributes', {'attributes': attributes}))
-    sleep(2)
+    emit(Event('ProtectedAttributes', {'attributes': attributes}))
+    prelimQs = [inquirer.List('q1', message=colored("Data {} has informaton about people.".format(fileName), "magenta"), choices=["Yes", "No"]), 
+                 inquirer.List('q2', message=colored("Data {} has at least one of the protected attributes listed below, or has any proxy attribute that may identify any one of the protected attributes. \n {}".format(fileName, attributes), "magenta"), choices=["Yes", "No"])]
+    prelimAs = inquirer.prompt(prelimQs)
+    if prelimAs['q1'] == "No" and prelimAs['q2'] == "No":
+        emit(Event('Alert', {'message': "Data does not contain any information about people. Check for fairness is not required."}))
+        return
+
+    sleep(0.5)
     features = list(data.columns)
     protectedFeatures = []
-
+    emit(Event('FindingProtectedAttributes', {'attributes': attributes}))
     for feature in features:
         exactmatch = exact_match(feature, attributes)
         if exactmatch != False and exactmatch is not None:
@@ -167,10 +184,105 @@ async def checkData():
                 answers = inquirer.prompt(questions)
             protectedFeature = answers['task']
             if protectedFeature != "Not a protected attribute":
-                protectedFeatures.append(protectedFeature)
+                protectedFeatures.append(feature)
             else:
                 emit(Event('NotAProtectedFeature', {'attribute': feature}))
     emit(Event('ProtectedAttributesIdentified', {'attributes': protectedFeatures}))
+    sleep(0.5)
+    emit(Event('AuditingData', {'data': data, 'protected': protectedFeatures}))
+    sleep(0.5)
+    distinct_values = await basicStatistics(data=data)
+
+    ##check for categorical data
+    haveCategorical = input("Do you have any categorical data? (yes/no): ")
+    if haveCategorical.lower() == "yes":
+        #ask for file name where information about categorical data is stored
+        filePath = input("Please enter the file path where information about categorical data is stored: ")
+        emit(Event('CategoricalInformation', {'File': filePath}))
+        sleep(0.5)
+        #load the json file
+        with open(filePath, 'r') as f:
+            categoricalIndicator = json.load(f)
+        emit(Event('CategoricalIndicatorsLoaded', {'data': categoricalIndicator}))
+        sleep(0.5)
+        #based on the categorical indicators assign Categorical or Continuous to the features
+        categorical_columns = []
+        numerical_columns = []
+        for feature in features:
+            if categoricalIndicator[feature] == True:
+                categorical_columns.append(feature)
+                data[feature] = data[feature].astype('category')
+            else:
+                numerical_columns.append(feature)
+        emit(Event('CategoricalDataAssigned', {'data': data}))
+        emit(Event('SummaryStatistics', {'data_types': data.dtypes}))
+
+        protectedCategorical = [i for i in protectedFeatures if i in categorical_columns]
+        protectedNumerical = [i for i in protectedFeatures if i in numerical_columns]
+
+        #plots
+        # Create a figure with subplots
+        total_plots = len(protectedCategorical) + len(protectedNumerical)
+
+        # Create a scrollable figure using Plotly subplots
+        fig = sp.make_subplots(rows=total_plots, cols=1, subplot_titles=protectedCategorical + protectedNumerical)
+
+        # Add categorical features as bar charts
+        for i, col in enumerate(protectedCategorical):
+            counts = data[col].value_counts()
+            fig.add_trace(
+                go.Bar(x=counts.index, y=counts.values, name=col),
+                row=i+1, col=1
+            )
+
+        # Add numerical features as histograms
+        # for i, col in enumerate(protectedNumerical):
+        #     fig.add_trace(
+        #         go.Histogram(x=data[col], nbinsx=20, name=col),
+        #         row=len(categorical_columns) + i + 1, col=1
+        #     )
+
+        # Update layout for scrolling
+        fig.update_layout(
+            height=300 * total_plots,  # Adjust height to fit all subplots
+            showlegend=False,
+            title_text="Feature Distribution Visualization",
+            xaxis=dict(title="Values"),
+            yaxis=dict(title="Count"),
+            hovermode="x",
+        )
+
+        # Show the figure by asking the user if they want to see the plots
+        show_plots = input("Do you want to see the plots? (yes/no): ")
+        if show_plots.lower() == "yes":
+            fig.show()
+
+        #ask for privileged and unprivileged groups for each protected attribute and provide the options to choose from the distinct values
+        #TODO: maybe find automatically which groups are privileged and which are not. 
+
+        privQ = [inquirer.List(feature, message=colored("Select the privileged group for feature '{}'".format(feature), "magenta"), choices=data[feature].unique().tolist()) for feature in protectedCategorical]
+        privA = inquirer.prompt(privQ)
+
+        unprivQ = [inquirer.List(feature, message=colored("Select the unprivileged group for feature '{}'".format(feature), "magenta"), choices=data[feature].unique().tolist()) for feature in protectedCategorical]
+        uprivA = inquirer.prompt(unprivQ)
+
+        label_column = input("Enter the name of the label column: ")
+        protected_attributes = protectedFeatures
+        
+        aifDataset = BinaryLabelDataset(favorable_label=1, unfavorable_label=0, df=data, label_names=[label_column], protected_attribute_names=protected_attributes)
+        print(type(privA), type(uprivA))
+        metric = BinaryLabelDatasetMetric(aifDataset, 
+                                  privileged_groups=[privA], 
+                                  unprivileged_groups=[uprivA])
+
+        print(f"Disparate Impact: {metric.disparate_impact()}")
+        print(f"Statistical Parity Difference: {metric.statistical_parity_difference()}")
+        print(f"Mean Difference: {metric.mean_difference()}")
+
+    
+
+
+
 
 
 async def tryStuff():
@@ -179,5 +291,5 @@ async def tryStuff():
     
 if __name__ == "__main__":
     #asyncio.run(tryStuff())
-    #asyncio.run(checkData())
-    asyncio.run(main())
+    asyncio.run(checkData())
+    #asyncio.run(main())
