@@ -2,6 +2,7 @@ import inspect
 import pkgutil
 import importlib
 import sklearn
+import aif360
 
 def gather_module_classes(package):
     """
@@ -135,8 +136,8 @@ def generate_relationship_sentences(modules_info, output_filename):
     print(f"Relationship sentences have been saved to {output_filename}")
 
 # Gather all classes from scikit-learn (including submodules)
-modules_info = gather_module_classes(sklearn)
+modules_info = gather_module_classes(aif360)
 
 # Generate the relationship sentences and save them to a file.
-output_file = "sklearn_relationships.txt"
+output_file = "aif360_relationships.txt"
 generate_relationship_sentences(modules_info, output_file)

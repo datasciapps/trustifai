@@ -25,15 +25,15 @@ def emit(*events: Sequence[Event]):
             fn(event)
 
 
-async def _map(func, iterable, max_workers):
-    semaphore, results = asyncio.Semaphore(max_workers), []
+# async def _map(func, iterable, max_workers):
+#     semaphore, results = asyncio.Semaphore(max_workers), []
     
-    async def task(item):
-        async with semaphore:
-            loop = asyncio.get_running_loop()
-            return await loop.run_in_executor(executor, func, item)
+#     async def task(item):
+#         async with semaphore:
+#             loop = asyncio.get_running_loop()
+#             return await loop.run_in_executor(executor, func, item)
         
-    async with ThreadPoolExecutor(max_workers=max_workers) as executor:
-        tasks = [task(item) for item in iterable]
-        results = await asyncio.gather(*tasks)
-    return results
+#     async with ThreadPoolExecutor(max_workers=max_workers) as executor:
+#         tasks = [task(item) for item in iterable]
+#         results = await asyncio.gather(*tasks)
+#     return results
