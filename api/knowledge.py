@@ -416,6 +416,12 @@ Counterfactual Token Fairness contributes to Fairness
 #Bias
 Bias is a Risk
 Algorithmic Bias is subclass of Bias
+Demographic Bias is subclass of Bias
+Popularity Bias is subclass of Bias
+Homophily is subclass of Bias
+Nationality Bias is subclass of Bias
+Self-selection Bias is subclass of Bias
+Underlying Distribution Skew is subclass of Bias
 Historical Bias is subclass of Bias
 Sampling Bias is subclass of Bias
 Data Leakage might introduce Bias
@@ -580,7 +586,7 @@ Fairness through Unawareness is synonym of Blinding
 Ommision is synonym of Blinding
 Immunity is subclass of Blinding
 Partial Blinding is synonym of Blinding
-Causal Methods is a Pre-processing Method
+Causal Methods is a Pre-processing Method  
 Causal Bayesian Networks is subclass of Causal Methods
 Counterfactual Fairness is subclass of Causal Methods
 Learn Stochastic Decision Policies is subclass of Causal Methods

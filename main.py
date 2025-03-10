@@ -279,6 +279,8 @@ async def checkData():
         print(f"Statistical Parity Difference: {metric.statistical_parity_difference()}")
         print(f"Mean Difference: {metric.mean_difference()}")
 
+        return
+
     
 
 
@@ -292,4 +294,4 @@ async def tryStuff():
 if __name__ == "__main__":
     #asyncio.run(tryStuff())
     asyncio.run(checkData())
-    #asyncio.run(main())
+    asyncio.run(main())
